@@ -53,8 +53,6 @@ class Main {
             default:
                 System.out.println("Érvénytelen use-case, adj meg egy érvényes betűt!");
         }
-
-
         scanner.close();
     }
 }
