@@ -1,35 +1,35 @@
 package szkeleton_6;
 
-public class usecasek {
-    static void tekton_tor() {
+public class UseCases {
+    static void tektontTor() {
         System.out.println("usecase1");
     }
 
-    static void rovart_mozgat() {
+    static void rovartMozgat() {
         System.out.println("usecase1");
     }
 
-    static void rovart_etet() {
+    static void rovartEtet() {
         System.out.println("usecase1");
     }
 
-    static void gombafonalat_vag() {
+    static void gombafonalatVag() {
         System.out.println("usecase1");
     }
 
-    static void gombafonalat_noveszt() {
+    static void gombafonalatNoveszt() {
         System.out.println("usecase1");
     }
 
-    static void gombatestet_noveszt() {
+    static void gombatestetNoveszt() {
         System.out.println("usecase1");
     }
 
-    static void gombatestet_fejleszt() {
+    static void gombatestetFejleszt() {
         System.out.println("usecase1");
     }
 
-    static void sporat_szor() {
+    static void sporatSzor() {
         System.out.println("usecase1");
     }
 }
