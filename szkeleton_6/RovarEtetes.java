@@ -27,7 +27,7 @@ public class RovarEtetes {
                 System.out.println("Sikertelen rovaretetés forgatókönyve\n");
                 break;
             case '0':
-                main.main(new String[]{"a"});
+                main.main(new String[0]);
                 return;
             default:
                 System.out.println("Érvénytelen aleset, adj meg egy érvényes betűt!");
