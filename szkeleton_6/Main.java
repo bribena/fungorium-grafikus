@@ -5,7 +5,6 @@ import java.util.Scanner;
 class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        UseCases useCases = new UseCases();
         char choice;
 
         System.out.println("Főmenü / Use-cas-ek:\n\n" +
@@ -24,28 +23,36 @@ class Main {
 
         switch (choice) {
             case 'a':
-                useCases.rovartEtet();
+                RovarEtetes rovarEtetes = new RovarEtetes();
+                rovarEtetes.rovartEtet();
                 break;
             case 'b':
-                useCases.rovartMozgat();
+                RovarMozgatas rovarMozgatas = new RovarMozgatas();
+                rovarMozgatas.rovartMozgat();
                 break;
             case 'c':
-                useCases.gombafonalatVag();
+                GombafonalVagas gombafonalVagas = new GombafonalVagas();
+                gombafonalVagas.gombafonalatVag();
                 break;
             case 'd':
-                useCases.sporatSzor();
+                SporaSzoras sporaSzoras = new SporaSzoras();
+                sporaSzoras.sporatSzor();
                 break;
             case 'e':
-                useCases.gombatestetNoveszt();
+                GombatestNovesztes gombatestNovesztes = new GombatestNovesztes();
+                gombatestNovesztes.gombatestetNoveszt();
                 break;
             case 'f':
-                useCases.gombafonalatNoveszt();
+                GombafonalNovesztes gombafonalNovesztes = new GombafonalNovesztes();
+                gombafonalNovesztes.gombafonalatNoveszt();
                 break;
             case 'g':
-                useCases.gombatestetFejleszt();
+                GombatestFejlesztes gombatestFejlesztes = new GombatestFejlesztes();
+                gombatestFejlesztes.gombatestetFejleszt();
                 break;
             case 'h':
-                useCases.tektontTor();
+                TektonTores tektonTores = new TektonTores();
+                tektonTores.tektontTor();
                 break;
             case '0':
                 System.out.println("Kilépés...");
