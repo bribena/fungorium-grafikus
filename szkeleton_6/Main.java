@@ -18,9 +18,7 @@ class Main {
                     "h. Tektontörés\n" +
                     "0. Kilépés\n"
             );
-
             choice = scanner.next().charAt(0);
-
             switch (choice) {
                 case 'a':
                     RovarEtetes rovarEtetes = new RovarEtetes();
