@@ -5,8 +5,9 @@ import java.util.Scanner;
 class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        char choice;
-        do{
+        
+        while (true)
+        {
             System.out.println("Főmenü / Use-cas-ek:\n\n" +
                     "a. Rovaretetés\n" +
                     "b. Rovarmozgatás\n" +
@@ -19,7 +20,7 @@ class Main {
                     "0. Kilépés\n"
             );
 
-            choice = scanner.next().charAt(0);
+            char choice = scanner.next().charAt(0);
 
             switch (choice) {
                 case 'a':
@@ -56,10 +57,17 @@ class Main {
                     break;
                 case '0':
                     System.out.println("Kilépés...");
-                    return;
+                    break;
                 default:
                     System.out.println("Érvénytelen use-case, adj meg egy érvényes betűt!");
-            }}while(choice != '0');
+            }
+            
+            if (choice == '0')
+            {
+                break;
+            }
+        }
+
         scanner.close();
     }
 }
