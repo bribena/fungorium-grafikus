@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class MultipleChoice {
     private final char[] abc = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    Map<String, Runnable> functions;
-    Object[] keys = {};
-    String title;
-    Scanner scanner = new Scanner(System.in);
+    private Map<String, Runnable> functions;
+    private Object[] keys = {};
+    private String title;
+    private Scanner scanner = new Scanner(System.in);
 
     public MultipleChoice(String t, Map<String, Runnable> f)
     {

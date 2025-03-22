@@ -29,7 +29,7 @@ class Main {
                     break;
                 case 'b':
                     RovarMozgatas rovarMozgatas = new RovarMozgatas();
-                    rovarMozgatas.rovartMozgat();
+                    rovarMozgatas.run();
                     break;
                 case 'c':
                     GombafonalVagas gombafonalVagas = new GombafonalVagas();
