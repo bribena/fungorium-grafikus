@@ -17,8 +17,14 @@ public class GombafonalNovesztes extends UseCase {
 
     public void defaultStart()
     {
+        System.out.println("Inicializálás:");
+        System.out.println("Program -> gf1: Gombafonal: konstruktor");
+        System.out.println("Program -> fung: Fungorium: konstruktor");
+        System.out.println("Program -> tr1: Tektonrész: konstruktor");
+        System.out.println("Program -> tr2: Tektonrész: konstruktor");
+
         System.out.println("Futás:");
-        System.out.println("Felhasználó -> gf1: Gombafonal: gombafonalatNöveszt(tr1: Tektonrész, tr2: Tektonrész)");
+        System.out.println("Felhasználó -> gf1: Gombafonal: gombafonalatNöveszt(tr1: Tektonrész, tr2: Tektonrész)\n");
     }
 
     public void sikeres()

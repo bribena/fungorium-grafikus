@@ -17,6 +17,13 @@ public class TektonTores extends UseCase{
 
     public void sikeresSorsolas()
     {
+        System.out.println("Inicializálás:");
+        System.out.println("Program -> szomszéd Tektonrész: konstruktor");
+        System.out.println("Program -> r1: Rovar: konstruktor");
+        System.out.println("Program -> fung: Fungorium: konstruktor");
+        System.out.println("Program -> gf1: Gombafonal: konstruktor");
+        System.out.println("Program -> szomszédFonal: Gombafonal: konstruktor");
+
         System.out.println("Futás:");
         System.out.println("Program -> fung: Fungorium: frissités()");
         System.out.println("fung: Fungorium -> tr1: Tektonrész: setTektonID(int)");

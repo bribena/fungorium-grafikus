@@ -13,6 +13,10 @@ public class GombafonalVagas extends UseCase {
 
     public void defaultStart()
     {
+        System.out.println("Inicializálás:");
+        System.out.println("Program -> gf1: Gombafonal: konstruktor");
+        System.out.println("Program -> r1: Rovar: konstruktor");
+
         System.out.println("Futás:");
         System.out.println("Felhasználó -> r1: Rovar: fonalatVág(tr1: Tektonrész, gf1: Gombafonal)");
     }

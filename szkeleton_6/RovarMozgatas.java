@@ -13,6 +13,11 @@ public class RovarMozgatas extends UseCase {
 
     public void defaultStart()
     {
+        System.out.println("Inicializálás:");
+        System.out.println("Program -> aholVan Tektonrész: konstruktor");
+        System.out.println("Program -> aholVan Tektonrész: konstruktor");
+        System.out.println("Program -> r1: Rovar: konstruktor");
+
         System.out.println("Futás:");
         System.out.println("Felhasználó -> r1: Rovar: mozog(aholVan: Tektonrész, hova: Tektonrész)");
         System.out.println("r1: Rovar -> hova: Tektonrész: entitásokVisszaadása()");
