@@ -33,7 +33,7 @@ class Main {
                     break;
                 case 'c':
                     GombafonalVagas gombafonalVagas = new GombafonalVagas();
-                    gombafonalVagas.gombafonalatVag();
+                    gombafonalVagas.run();
                     break;
                 case 'd':
                     SporaSzoras sporaSzoras = new SporaSzoras();
