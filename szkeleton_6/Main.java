@@ -49,7 +49,7 @@ class Main {
                     break;
                 case 'g':
                     GombatestFejlesztes gombatestFejlesztes = new GombatestFejlesztes();
-                    gombatestFejlesztes.gombatestetFejleszt();
+                    gombatestFejlesztes.run();
                     break;
                 case 'h':
                     TektonTores tektonTores = new TektonTores();
