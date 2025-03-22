@@ -53,7 +53,7 @@ class Main {
                     break;
                 case 'h':
                     TektonTores tektonTores = new TektonTores();
-                    tektonTores.tektontTor();
+                    tektonTores.run();
                     break;
                 case '0':
                     System.out.println("Kilépés...");
