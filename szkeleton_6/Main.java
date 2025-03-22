@@ -41,7 +41,7 @@ class Main {
                     break;
                 case 'e':
                     GombatestNovesztes gombatestNovesztes = new GombatestNovesztes();
-                    gombatestNovesztes.gombatestetNoveszt();
+                    gombatestNovesztes.run();
                     break;
                 case 'f':
                     GombafonalNovesztes gombafonalNovesztes = new GombafonalNovesztes();
