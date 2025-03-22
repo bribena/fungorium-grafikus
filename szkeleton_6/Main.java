@@ -25,7 +25,7 @@ class Main {
             switch (choice) {
                 case 'a':
                     RovarEtetes rovarEtetes = new RovarEtetes();
-                    rovarEtetes.rovartEtet();
+                    rovarEtetes.run();
                     break;
                 case 'b':
                     RovarMozgatas rovarMozgatas = new RovarMozgatas();

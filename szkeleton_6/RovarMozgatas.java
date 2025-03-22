@@ -16,7 +16,7 @@ public class RovarMozgatas extends UseCase {
         System.out.println("Futás:");
         System.out.println("Felhasználó -> r1: Rovar: mozog(aholVan: Tektonrész, hova: Tektonrész)");
         System.out.println("r1: Rovar -> hova: Tektonrész: entitásokVisszaadása()");
-        System.out.println("Rovar <- hova: Tektonrész: entitások: List<Entitás>");
+        System.out.println("r1: Rovar <- hova: Tektonrész: entitások: List<Entitás>");
     }
     
     public void sikeres()

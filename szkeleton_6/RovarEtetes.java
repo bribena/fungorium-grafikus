@@ -1,37 +1,36 @@
 package szkeleton_6;
 
-import java.util.Scanner;
+public class RovarEtetes extends UseCase {
+    public RovarEtetes()
+    {
+        Runnable sikeres = this::sikeres;
+        functions.put("Sikeres", sikeres);
+        Runnable sikertelen = this::sikertelen;
+        functions.put("Sikertelen", sikertelen);
 
-public class RovarEtetes {
-    void rovartEtet() {
-        Main main = new Main();
-        Scanner scanner = new Scanner(System.in);
-        char choice;
+        mc = new MultipleChoice("Forgatókönyv kimenetelei: ", functions);
+    }
 
-        System.out.println("Rovaretetés\n\n" +
-                "a. Sikeres spórafogyasztás\n" +
-                "b. Sikeres spórafogyasztás + hatásfrissülés\n" +
-                "c. Sikertelen fogyasztás\n" +
-                "0. Vissza a főmenübe\n");
+    public void defaultStart()
+    {
+        System.out.println("Futás:");
+        System.out.println("Felhasználó -> r1: Rovar: eszik(aholVan: Tektonrész)");
+        System.out.println("r1: Rovar -> aholVan: Tektonrész: entitásokVisszaadása()");
+        System.out.println("r1: Rovar <- hova: Tektonrész: entitások: List<Entitás>");
+    }
 
-        choice = scanner.next().charAt(0);
+    public void sikeres()
+    {
+        defaultStart();
+        System.out.println("r1: Rovar -> s1: Spóra: spóraszámVisszaadása()");
+        System.out.println("r1: Rovar <- s1: Spóra: spóraszám: int");
+        System.out.println("r1: Rovar -> s1: Spóra: spóraszámÁllítás(spóraszám - megevett mennyiség: int)");
+        System.out.println("r1: Rovar -> r1: Rovar: spórafeldolgozás(megevett mennyiség: int)");
+    }
 
-        switch (choice) {
-            case 'a':
-                System.out.println("Sikeres rovaretetés forgatókönyve\n");
-                break;
-            case 'b':
-                System.out.println("Sikeres rovaretetés forgatókönyve hatásfrissítéssel\n");
-                break;
-            case 'c':
-                System.out.println("Sikertelen rovaretetés forgatókönyve\n");
-                break;
-            case '0':
-                main.main(new String[0]);
-                return;
-            default:
-                System.out.println("Érvénytelen aleset, adj meg egy érvényes betűt!");
-        }
-        scanner.close();
+    public void sikertelen()
+    {
+        defaultStart();
+        System.out.println("Felhasználó <- r1: Rovar: nem történt evés");
     }
 }
