@@ -12,7 +12,7 @@ class Main {
                     "a. Rovaretetés\n" +
                     "b. Rovarmozgatás\n" +
                     "c. Fonalvágás\n" +
-                    "d. Spórafogyasztás\n" +
+                    "d. Spóraszórás\n" +
                     "e. Gombatestnövesztés\n" +
                     "f. Gombafonalnövesztés\n" +
                     "g. Gombatestfejlesztés\n" +
@@ -37,7 +37,7 @@ class Main {
                     break;
                 case 'd':
                     SporaSzoras sporaSzoras = new SporaSzoras();
-                    sporaSzoras.sporatSzor();
+                    sporaSzoras.run();
                     break;
                 case 'e':
                     GombatestNovesztes gombatestNovesztes = new GombatestNovesztes();
