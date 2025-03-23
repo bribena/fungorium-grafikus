@@ -10,7 +10,7 @@ public class RovarEtetes extends UseCase {
 
         mc = new MultipleChoice("Forgatókönyv kimenetelei: ", functions);
     }
-
+    
     public void defaultStart()
     {
         System.out.println("Inicializálás:");
