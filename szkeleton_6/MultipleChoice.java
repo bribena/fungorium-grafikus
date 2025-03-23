@@ -23,7 +23,7 @@ public class MultipleChoice {
 
         for (int i = 0; i < functions.size(); i++)
         {
-            System.out.println(abc[i]+". "+keys[i]); 
+            System.out.println(abc[i] + ". " + keys[i]);
         }
 
         System.out.println("0. Vissza");

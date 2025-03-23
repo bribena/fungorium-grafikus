@@ -38,8 +38,8 @@ public class SporaSzoras extends UseCase {
         defaultStart();
         for(int i = 1; i <= 4; i++)
         {
-            System.out.println("gt1: Gombatest -> tr"+i+": Tektonrész: entitásokVisszaadása()");
-            System.out.println("gt1: Gombatest <- tr"+i+": Tektonrész: List<Entitások>");
+            System.out.println("gt1: Gombatest -> tr" + i + ": Tektonrész: entitásokVisszaadása()");
+            System.out.println("gt1: Gombatest <- tr" + i + ": Tektonrész: List<Entitások>");
         }
         System.out.println("Felhasználó <- gt1: Gombatest: true");
     }
