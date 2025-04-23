@@ -6,3 +6,5 @@
 *.jar
 #Ignore .idea folder
 .idea/
+# Bocs, kraftoltam xd
+shell.nix
