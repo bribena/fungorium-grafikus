@@ -4,11 +4,13 @@ public class Rovar implements Entitás {
     private Rovarfaj faj;
     private int[] hatások;
 
-    public void frissítés()
+    public boolean frissítés()
     {
         for(int i = 0; i < hatások.length; i++){
             hatások[i]--;
+            return true;
         }
+        return false;
     }
 
     public void spóraFeldolgozás(int mennyi) {
