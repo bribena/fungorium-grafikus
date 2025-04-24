@@ -1,8 +1,10 @@
 package prototipus_9;
 
 public class Gombatest implements Entitás {
-    public void frissítés()
-    {
-        
+
+    @Override
+    public boolean frissítés() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'frissítés'");
     }
 }

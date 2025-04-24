@@ -4,11 +4,6 @@ public class Spóra implements Entitás {
     private int spóraSzám;
     private Gombafaj faj;
 
-    public boolean frissítés()
-    {
-        
-    }
-
     public int spóraszámVisszaadása()
     {
         return spóraSzám;
@@ -17,5 +12,11 @@ public class Spóra implements Entitás {
     public Gombafaj getFaj()
     {
         return faj;
+    }
+
+    @Override
+    public boolean frissítés() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'frissítés'");
     }
 }
