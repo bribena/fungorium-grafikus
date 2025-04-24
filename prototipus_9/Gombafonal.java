@@ -75,7 +75,7 @@ public class Gombafonal implements Entitás {
                 Spóra spóra = (Spóra)entitások.get(i);
                 if (spóra.getFaj() == faj && spóra.spóraszámVisszaadása() > 5) // ez majd valami valtozobol jojjon
                 {
-                    Gombatest test = new Gombatest(); // majd valtoztatast igenyel a konstruktor
+                    Gombatest test = new Gombatest(false); // majd valtoztatast igenyel a konstruktor
                     if (aholVan.entitásHozzáadás(test)) // a tektonrész eldönti hogy lehelyezhető-e
                     {
                         gombaTestek.add(test);
