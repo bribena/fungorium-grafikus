@@ -46,7 +46,7 @@ public class Main {
                 case "help":
                     for (int i = 0; i < parancsok.length; i++)
                     {
-                        System.err.println(parancsok[i]);
+                        System.out.println(parancsok[i]);
                     }
                     break;
                 case "exit":
