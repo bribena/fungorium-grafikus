@@ -81,8 +81,8 @@ public abstract class Tektonrész {
         return false;
     }
 
-    // viasszaadja a paraméterként kapott tektonrészen lévő fonalak listáját
-    List<Entitás> getGombafonalak(Tektonrész t)
+    // viasszaadja a saját magán levő fonalak listáját
+    public List<Entitás> getGombafonalak()
     {
         List<Entitás> fonalak = new ArrayList<>();
 

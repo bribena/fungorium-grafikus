@@ -12,7 +12,7 @@ public class EgyfonalasTektonrész extends Tektonrész {
 
         List<Entitás> entitások = entitásokVisszaadása();
 
-        if (getGombafonalak(this).size() > 0 && entitás.getClass() == Gombafonal.class)
+        if (getGombafonalak().size() > 0 && entitás.getClass() == Gombafonal.class)
         {
             return false;
         }
