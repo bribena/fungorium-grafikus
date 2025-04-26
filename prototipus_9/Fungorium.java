@@ -235,6 +235,35 @@ public class Fungorium {
     }
 
     /**
+     * Tektonrész randomizáló. Nagyon csúnya lesz, van egy olyan sejtésem...
+     */
+    private void tektonrészRandomizálás() {
+        for (int x = 0; x < 20; ++x) {
+            for (int y = 0; y < 20; ++y) {
+                int i = r.nextInt(5);
+                switch (i) {
+                    case 0:
+                        tektonrészek[x][y] = new TöbbfonalasTektonrész(tektonrészek[x][y]);
+                        break;
+                    case 1:
+                        tektonrészek[x][y] = new EgyfonalasTektonrész(tektonrészek[x][y]);
+                        break;
+                    case 2:
+                        tektonrészek[x][y] = new FonalfelszívóTektonrész(tektonrészek[x][y]);
+                        break;
+                    case 3:
+                        tektonrészek[x][y] = new ÉletbentartóTektonrész(tektonrészek[x][y]);
+                        break;
+                    case 4:
+                        tektonrészek[x][y] = new GombatestTiltóTektonrész(tektonrészek[x][y]);
+                        break;
+                }
+            }
+        }
+    }
+
+
+    /**
      * Végrehajtja a törést.
      */
     private void törés() {
@@ -274,7 +303,8 @@ public class Fungorium {
         /** GOMBAFONAL SZAKÍTÁS */
         fonalSzakítás();
 
-        /** TODO: TEKTONRÉSZ EFFEKT RANDOMIZÁLÁS */
+        /** TEKTONRÉSZ EFFEKT RANDOMIZÁLÁS */
+        tektonrészRandomizálás();
     }
 
 
