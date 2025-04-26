@@ -8,6 +8,14 @@ public abstract class Tektonrész {
     protected boolean[] tektonSzéleE = {false, false, false, false}; // tárolja, hogy melyik irányban van rés
     protected List<Entitás> entitások = new ArrayList<>(); // a Tektonrészen levő entitásokat tárolja
 
+    protected Tektonrész() {}
+
+    protected Tektonrész(Tektonrész tr) {
+        tektonID = tr.tektonID;
+        tektonSzéleE = tr.tektonSzéleE;
+        entitások = tr.entitások;
+    }
+
     public int getTektonID() {
         return tektonID;
     }

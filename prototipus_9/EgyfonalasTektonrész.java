@@ -3,6 +3,11 @@ package prototipus_9;
 import java.util.List;
 
 public class EgyfonalasTektonrész extends Tektonrész {
+    public EgyfonalasTektonrész() {}
+    public EgyfonalasTektonrész(Tektonrész tr) {
+        super(tr);
+    }
+
     public boolean entitásHozzáadás(Entitás entitás)
     {
         if(vanGomba() && entitás.getClass() == Gombatest.class)
