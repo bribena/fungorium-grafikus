@@ -82,15 +82,15 @@ public abstract class Tektonrész {
     }
 
     // viasszaadja a saját magán levő fonalak listáját
-    public List<Entitás> getGombafonalak()
+    public List<Gombafonal> getGombafonalak()
     {
-        List<Entitás> fonalak = new ArrayList<>();
+        List<Gombafonal> fonalak = new ArrayList<>();
 
         for (int i = 0; i < entitások.size(); i++)
         {
-            if (entitások.get(i).getClass() == Gombafonal.class)
+            if (entitások.get(i) instanceof Gombafonal)
             {
-                fonalak.add(entitások.get(i));
+                fonalak.add((Gombafonal)entitások.get(i));
             }
         }
 
