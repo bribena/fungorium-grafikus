@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Tektonrész {
-    private int tektonID = -1;
-    private boolean[] TektonSzéleE; // tárolja, hogy melyik irányban van rés
-    private List<Entitás> entitások = new ArrayList<>(); // a Tektonrészen levő entitásokat tárolja
+    protected int tektonID = -1;
+    protected boolean[] tektonSzéleE = {false, false, false, false}; // tárolja, hogy melyik irányban van rés
+    protected List<Entitás> entitások = new ArrayList<>(); // a Tektonrészen levő entitásokat tárolja
 
     public int getTektonID() {
         return tektonID;
@@ -95,5 +95,17 @@ public abstract class Tektonrész {
         }
 
         return fonalak;
+    }
+
+    /**
+     * Visszaadja, hogy melyik irányban van rés.
+     * [0]: Felfelé,
+     * [1]: Jobbra,
+     * [2]: Lefelé,
+     * [3]: Balra.
+     * Bármelyik érték igaz, ha van ott rés.
+     */
+    public boolean[] getTektonSzéleE() {
+        return tektonSzéleE;
     }
 }
