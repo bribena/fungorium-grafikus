@@ -1,7 +1,9 @@
 package prototipus_9;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /** A Fungorium bolygó, avagy a pálya osztálya. */
@@ -43,6 +45,21 @@ public class Fungorium {
                 tektonrészek[i + 10][j + 10].setTektonID(3);
             }
         }
+
+        // Szélek beállítása
+        for (int i = 0; i < 20; ++i) {
+            // Perem
+            tektonrészek[i][0].getTektonSzéleE()[0] = true;
+            tektonrészek[0][i].getTektonSzéleE()[3] = true;
+            tektonrészek[i][19].getTektonSzéleE()[1] = true;
+            tektonrészek[19][i].getTektonSzéleE()[2] = true;
+
+            // Belső
+            tektonrészek[i][9].getTektonSzéleE()[1] = true;
+            tektonrészek[i][10].getTektonSzéleE()[3] = true;
+            tektonrészek[9][i].getTektonSzéleE()[2] = true;
+            tektonrészek[10][i].getTektonSzéleE()[0] = true;
+        }
     }
     
     /**
@@ -55,6 +72,16 @@ public class Fungorium {
         return tektonrészek[x][y];
     }
 
+    public int[] getTektonrészKoordináta(Tektonrész t) {
+        for (int x = 0; x < 20; ++x) {
+            for (int y = 0; y < 20; ++y) {
+                if (tektonrészek[x][y] == t) {
+                    return new int[] {x, y};
+                }
+            }
+        }
+        return new int[] {-1, -1};
+    }
 
     /**
      * x, y koordináta összefogása a töréshez.
@@ -122,14 +149,132 @@ public class Fungorium {
     }
 
     /**
+     * Törés utáni fonalszakítás
+     * Elvesztettem a fonalat (hahahahaha), nem tudom, hogy működni fog-e...
+     */
+    private void fonalSzakítás() {
+        for (int x = 0; x < 20; ++x) {
+            for (int y = 0; y < 20; ++y) {
+                Tektonrész current = tektonrészek[x][y];
+                List<Gombafonal> currFonalak = current.getGombafonalak();
+                if (currFonalak.isEmpty()) {
+                    continue;
+                }
+
+                Tektonrész[] szomszédok = getTektonrészSzomszédok(x, y);
+                for (Gombafonal f : currFonalak) {
+                    for (int i = 0; i < szomszédok.length; ++i) {
+                        Tektonrész szomszéd = szomszédok[i];
+                        List<Gombafonal> szomszFonal = szomszéd.getGombafonalak();
+                        if (szomszFonal.isEmpty() || szomszéd.getTektonID() == current.getTektonID()) {
+                            continue;
+                        }
+
+                        for (Gombafonal szF : szomszFonal) {
+                            if (f.getKapcsolodoFonalak()[i] == szF) {
+                                f.getKapcsolodoFonalak()[i] = null;
+                                for (int j = 0; i < 4; ++i) {
+                                    if (szF.getKapcsolodoFonalak()[j] == f) {
+                                        szF.getKapcsolodoFonalak()[j] = null;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // 9 kapcsoszárójel azért az ingerküszöbömet erősen kínozza
+
+    /**
+     * Koordináta alapján visszaadja egy Tektonrész szomszédjait.
+     * [0]: Felfelé,
+     * [1]: Jobbra,
+     * [2]: Lefelé,
+     * [3]: Balra.
+     */
+    private Tektonrész[] getTektonrészSzomszédok(int x, int y) {
+        Tektonrész[] ret = new Tektonrész[4];
+        for (int i = 0; i < 4; ++i) {
+            ret[i] =  new TöbbfonalasTektonrész();
+        }
+
+        if (x > 0) {
+            ret[3] = tektonrészek[x - 1][y];
+        }
+        if (y > 0) {
+            ret[0] = tektonrészek[x][y - 1];
+        }
+        if (x < 20) {
+            ret[1] = tektonrészek[x + 1][y];
+        }
+        if (y < 20) {
+            ret[2] = tektonrészek[x][y + 1];
+        }
+
+        return ret;
+    }
+
+    /**
+     * Törés utáni korrigálás a szélekre
+     */
+    private void szélKorrigálás() {
+        for (int x = 0; x < 20; ++x) {
+            for (int y = 0; y < 20; ++y) {
+                Tektonrész[] szomszédok = getTektonrészSzomszédok(x, y);
+
+                for (int i = 0; i < szomszédok.length; ++i) {
+                    if (szomszédok[i].getTektonID() != tektonrészek[x][y].getTektonID()) {
+                        tektonrészek[x][y].getTektonSzéleE()[i] = true;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Végrehajtja a törést.
      */
     private void törés() {
         List<Point> points = indexekMeghatározása();
 
-        /** TODO: Tektonrészek szétválogatása... */
+        /** Tektonrészek szétválogatása... */
+        Point kezdo = points.get(0);
+        Point veg = points.get(points.size() - 1);
+
+        Map<Integer, Integer> idMap = new HashMap<>();
+
+        for (Point p : points) {
+            if (kezdo.y != veg.y) {
+                for (int x = (int)p.x + 1; x < 20; ++x) {
+                    Tektonrész current = tektonrészek[x][(int)p.y];
+
+                    if (!idMap.containsKey(current.getTektonID())) {
+                        idMap.put(current.getTektonID(), ++maxTektonID);
+                    }
+                    current.setTektonID(idMap.get(current.getTektonID()));
+                }
+            }
+            else {
+                for (int y = (int)p.y + 1; y < 20; ++y) {
+                    Tektonrész current = tektonrészek[(int)p.x][y];
+
+                    if (!idMap.containsKey(current.getTektonID())) {
+                        idMap.put(current.getTektonID(), ++maxTektonID);
+                    }
+                    current.setTektonID(idMap.get(current.getTektonID()));
+                }
+            }
+        }
+
+        szélKorrigálás();
         
-        /** TODO: GOMBAFONAL SZAKÍTÁS */
+        /** GOMBAFONAL SZAKÍTÁS */
+        fonalSzakítás();
+
+        /** TODO: TEKTONRÉSZ EFFEKT RANDOMIZÁLÁS */
     }
 
 
