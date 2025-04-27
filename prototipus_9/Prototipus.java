@@ -10,6 +10,7 @@ public class Prototipus {
     private final Map<Integer, Integer> tektonok = new HashMap<>();
     private final Set<Integer> gombafonalak = Set.of(1,2,3,4,5);
     private final Map<Integer, Boolean> gombatestek = new HashMap<>();
+    private final Map<Integer, String> rovarok = new HashMap<>();
 
     {
         gombatestek.put(6, true);
@@ -106,28 +107,78 @@ public class Prototipus {
             System.out.printf("gombaf noveszt %d %d %d -> OK: %d novesztve %d es %d kozott",  fonalId, forrasId, celId, fonalId, forrasId, celId);
         } else if (!tektonok.containsKey(forrasId) || !tektonok.containsKey(celId)) {
             System.out.printf("gombaf noveszt %d %d %d -> FAIL: gombafonal nem novesztheto %d es %d kozott",  fonalId, forrasId, celId, forrasId, celId);
-
         }
     }
 
     private void gombaf_rovarbol(int fonalId, int jatekosId, int rovarId)
     {
-
+        if(gombafonalak.contains(fonalId) && rovarok.containsKey(rovarId) &&
+                (gombaszok.contains(jatekosId) || rovaraszok.contains(jatekosId))){
+            System.out.printf("gombaf rovarbol %d %d %d -> OK: uj gomba %d letrehozva %d helyen\n", fonalId, jatekosId, rovarId, fonalId, rovarId);
+        } else if (!(gombaszok.contains(jatekosId) || rovaraszok.contains(jatekosId))) {
+            System.out.printf("gombaf rovarbol %d %d %d -> FAIL: hibas jatekos nev (%d)\n", fonalId, jatekosId, rovarId, jatekosId);
+        } else if (!rovarok.containsKey(rovarId)) {
+            System.out.printf("gombaf rovarbol %d %d %d -> FAIL: hibas rovar nev (%d)\n", fonalId, jatekosId, rovarId, rovarId);
+        } else if (rovarok.containsKey(rovarId) && rovarok.get(rovarId) == "0") {
+            System.out.printf("gombaf rovarbol %d %d %d -> FAIL: %d nem bena\n", fonalId, jatekosId, rovarId, rovarId);
+        }
     }
 
-    private void spora_szam(int ertek)
+    private void spora_szam(int ertek, int tektonId)
     {
         if(ertek < 0){
             System.out.printf("spora szam %d -> FAIL: hibas sporaszam\n", ertek);
         }else {
-            sporaSzam = ertek;
-            System.out.printf("spora szam %d -> OK: sporaszam beallitva: %d\n", ertek, ertek);
+            tektonok.replace(tektonId, ertek);
+            System.out.printf("spora szam %d -> OK: sporaszam beallitva %d tektonon: %d\n", ertek, ertek, ertek);
         }
     }
 
     private void rovar_hatas(int rovarId, String hatas, int ertek)
     {
-
+        if(rovarok.containsKey(rovarId)){
+            if(hatas == "gyors"){
+                String ujHatas =    Integer.toString(ertek) +
+                                    rovarok.get(rovarId).substring(1,2) +
+                                    rovarok.get(rovarId).substring(2,3) +
+                                    rovarok.get(rovarId).substring(3,4);
+                                    rovarok.get(rovarId).substring(4);
+                rovarok.replace(rovarId, ujHatas);
+            } else if (hatas == "lassu") {
+                String ujHatas =    rovarok.get(rovarId).substring(0,1) +
+                                    Integer.toString(ertek) +
+                                    rovarok.get(rovarId).substring(2,3) +
+                                    rovarok.get(rovarId).substring(3,4);
+                                    rovarok.get(rovarId).substring(4);
+                rovarok.replace(rovarId, ujHatas);
+            } else if (hatas == "gyenge") {
+                String ujHatas =    rovarok.get(rovarId).substring(0,1) +
+                                    rovarok.get(rovarId).substring(1,2) +
+                                    Integer.toString(ertek) +
+                                    rovarok.get(rovarId).substring(3,4);
+                                    rovarok.get(rovarId).substring(4);
+                rovarok.replace(rovarId, ujHatas);
+            } else if (hatas == "bena") {
+                String ujHatas =    rovarok.get(rovarId).substring(0,1) +
+                                    rovarok.get(rovarId).substring(1,2) +
+                                    rovarok.get(rovarId).substring(2,3) +
+                                    Integer.toString(ertek) +
+                                    rovarok.get(rovarId).substring(4);
+                rovarok.replace(rovarId, ujHatas);
+            } else if (hatas == "osztodik") {
+                String ujHatas =    rovarok.get(rovarId).substring(0,1) +
+                                    rovarok.get(rovarId).substring(1,2) +
+                                    rovarok.get(rovarId).substring(2,3) +
+                                    rovarok.get(rovarId).substring(3,4);
+                                    Integer.toString(ertek);
+                rovarok.replace(rovarId, ujHatas);
+            }
+            System.out.printf("rovar hatas %d %s %d -> OK: %s beallitva %d-re", rovarId, hatas, ertek, hatas, ertek);
+        } else if (!rovarok.containsKey(rovarId)) {
+            System.out.printf("rovar hatas %d %s %d -> FAIL: hibas rovar nev (%d)", rovarId, hatas, ertek, rovarId);
+        } else if (ertek < 0) {
+            System.out.printf("rovar hatas %d %s %d -> FAIL: invalid ertek (%d)", rovarId, hatas, ertek, ertek);
+        }
     }
 
     private void rovar_vag(int rovarId, int forrasId, int celId)
@@ -277,7 +328,7 @@ public class Prototipus {
                 case "spora":
                     if (parancs.get(1).equals("szam"))
                     {
-                        spora_szam(Integer.parseInt(parancs.get(2)));
+                        spora_szam(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)));
                     }
                     break;
                 case "rovar":
