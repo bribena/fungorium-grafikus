@@ -251,13 +251,28 @@ public class Prototipus {
         }
     }
 
+    /**
+     * Egy gombatest megpróbál spórát szórni.
+     * Ellenőrzi a gombatest létezését és fejlettségét.
+     * 
+     * @param gombaId A gombatest azonosítója
+     */
     private void gomba_szoras(int gombaId) {
-        // ellenorizzuk, hogy a gombaId benne van-e a gombak listaban
+        // 1. Ellenőrizzük, hogy létezik-e a gombatest
         if (!gombatestek.containsKey(gombaId)) {
-            System.out.printf("gomba szoras %d -> FAIL: hibas gombanev (%d)\n", gombaId, gombaId);
-        } else {
-            // ha minden oke, sikeres
+            System.out.printf("gomba szoras %d -> FAIL: hibás gomba név (%d)\n", gombaId, gombaId);
+            return;
+        }
+
+        // 2. Megnézzük, hogy fejlődött-e a gomba
+        boolean fejlett = gombatestek.get(gombaId);
+
+        if (fejlett) {
+            // 3. Ha fejlődött, sikeres szórás
             System.out.printf("gomba szoras %d -> OK: %d sporat szort\n", gombaId, gombaId);
+        } else {
+            // 4. Ha még nem fejlődött ki, nem tud szórni
+            System.out.printf("gomba szoras %d -> FAIL: %d nem tud sporat szorni\n", gombaId, gombaId);
         }
     }
 
