@@ -14,6 +14,7 @@ public class Prototipus {
     private final Map<Integer, Boolean> gombatestek = new HashMap<>();
     private final Map<Integer, String> rovarok = new HashMap<>();
     private final Map<Integer, String> tektonTipusok = new HashMap<>();
+    private final Map<Integer, List<Integer>> fonalKapcsolatok = new HashMap<>();
 
     {
         gombatestek.put(6, true);
@@ -252,6 +253,8 @@ public class Prototipus {
 
     private void gombaf_noveszt(int fonalId, int forrasId, int celId) {
         if (gombafonalak.contains(fonalId) && tektonok.containsKey(forrasId) && tektonok.containsKey(celId)) {
+            gombafonalak.add(fonalId);
+            fonalKapcsolatok.put(fonalId, List.of(forrasId, celId));
             System.out.printf("gombaf noveszt %d %d %d -> OK: %d novesztve %d es %d kozott", fonalId, forrasId, celId,
                     fonalId, forrasId, celId);
         } else if (!tektonok.containsKey(forrasId) || !tektonok.containsKey(celId)) {
@@ -333,8 +336,59 @@ public class Prototipus {
         }
     }
 
+    /**
+     * Egy rovar megpróbálja elvágni a két megadott tekton közötti gombafonalat.
+     * Ellenőrzi a rovar állapotát és a fonal létezését a kapcsolat alapján.
+     * 
+     * @param rovarId  A rovar azonosítója
+     * @param forrasId A forrás tekton azonosítója
+     * @param celId    A cél tekton azonosítója
+     */
     private void rovar_vag(int rovarId, int forrasId, int celId) {
+        // 1. Ellenőrizzük, hogy a rovar létezik-e
+        if (!rovarok.containsKey(rovarId)) {
+            System.out.printf("rovar vag %d %d %d -> FAIL: hibás rovar azonosító (%d)\n", rovarId, forrasId, celId,
+                    rovarId);
+            return;
+        }
 
+        // 2. Ellenőrizzük, hogy a rovar nem "bena" vagy "gyenge"
+        String statusz = rovarok.get(rovarId);
+        int bena = Character.getNumericValue(statusz.charAt(3)); // "béna" státusz: 4. karakter
+        int gyenge = Character.getNumericValue(statusz.charAt(2)); // "gyenge" státusz: 3. karakter
+
+        if (bena > 0 || gyenge > 0) {
+            System.out.printf("rovar vag %d %d %d -> FAIL: rovar bena/gyenge, nem vaghat (%d)\n", rovarId, forrasId,
+                    celId, rovarId);
+            return;
+        }
+
+        // 3. Keresünk olyan fonalat, ami a forrasId és celId között húzódik
+        boolean sikeresVagas = false;
+        int torlendoFonalId = -1;
+
+        for (Map.Entry<Integer, List<Integer>> entry : fonalKapcsolatok.entrySet()) {
+            List<Integer> par = entry.getValue();
+            if ((par.get(0) == forrasId && par.get(1) == celId) || (par.get(0) == celId && par.get(1) == forrasId)) {
+                // Megtaláltuk a fonalat
+                torlendoFonalId = entry.getKey();
+                sikeresVagas = true;
+                break;
+            }
+        }
+
+        if (sikeresVagas) {
+            // 4. Töröljük a fonalat mindkét helyről
+            gombafonalak.remove(torlendoFonalId);
+            fonalKapcsolatok.remove(torlendoFonalId);
+
+            System.out.printf("rovar vag %d %d %d -> OK: fonal elvágva %d és %d között\n", rovarId, forrasId, celId,
+                    forrasId, celId);
+        } else {
+            // 5. Ha nincs ilyen fonal
+            System.out.printf("rovar vag %d %d %d -> FAIL: nincs fonal %d es %d kozott\n", rovarId, forrasId, celId,
+                    forrasId, celId);
+        }
     }
 
     private void rovar_mozog(int rovarId, int forrasId, int celId) {
