@@ -439,8 +439,40 @@ public class Prototipus {
         }
     }
 
+    /**
+     * Egy rovar megpróbál spórát enni a megadott tektonról.
+     * Ha nem "bena", akkor 1 spórával csökkenti a spórák számát.
+     * 
+     * @param rovarId  A rovar azonosítója
+     * @param tektonId A tektonrész azonosítója
+     */
     private void rovar_eszik(int rovarId, int tektonId) {
+        // 1. Ellenőrizzük, hogy a rovar létezik-e
+        if (!rovarok.containsKey(rovarId)) {
+            System.out.printf("rovar eszik %d %d -> FAIL: hibás rovar azonosító (%d)\n", rovarId, tektonId, rovarId);
+            return;
+        }
 
+        // 2. Ellenőrizzük, hogy a rovar nem "bena"
+        String statusz = rovarok.get(rovarId);
+        int bena = Character.getNumericValue(statusz.charAt(3)); // 4. karakter: "bena"
+
+        if (bena > 0) {
+            System.out.printf("rovar eszik %d %d -> FAIL: rovar bena, nem ehet (%d)\n", rovarId, tektonId, rovarId);
+            return;
+        }
+
+        // 3. Ha létezik a tekton, csökkentjük a spórák számát 1-gyel
+        if (tektonok.containsKey(tektonId)) {
+            int aktualisSpora = tektonok.get(tektonId);
+            if (aktualisSpora > 0) {
+                tektonok.put(tektonId, aktualisSpora - 1);
+            }
+            // Ha 0 spóra van, akkor is kiírjuk az OK üzenetet
+        }
+
+        // 4. OK üzenet
+        System.out.printf("rovar eszik %d %d -> OK: sporak elfogyasztva %d-rol\n", rovarId, tektonId, tektonId);
     }
 
     private void parancsFeldolgoz(List<String> parancs) {
