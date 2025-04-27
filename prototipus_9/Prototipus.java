@@ -391,8 +391,52 @@ public class Prototipus {
         }
     }
 
+    /**
+     * Egy rovar megpróbál átmászni a forrás tektonról a cél tektonra.
+     * Ellenőrzi a rovar állapotát és a fonal meglétét.
+     * 
+     * @param rovarId  A rovar azonosítója
+     * @param forrasId A forrás tekton azonosítója
+     * @param celId    A cél tekton azonosítója
+     */
     private void rovar_mozog(int rovarId, int forrasId, int celId) {
+        // 1. Ellenőrizzük, hogy a rovar létezik-e
+        if (!rovarok.containsKey(rovarId)) {
+            System.out.printf("rovar mozog %d %d %d -> FAIL: hibás rovar azonosító (%d)\n", rovarId, forrasId, celId,
+                    rovarId);
+            return;
+        }
 
+        // 2. Ellenőrizzük, hogy a rovar nem "bena"
+        String statusz = rovarok.get(rovarId);
+        int bena = Character.getNumericValue(statusz.charAt(3)); // 4. karakter: "bena"
+
+        if (bena > 0) {
+            System.out.printf("rovar mozog %d %d %d -> FAIL: rovar bena, nem mozoghat (%d)\n", rovarId, forrasId, celId,
+                    rovarId);
+            return;
+        }
+
+        // 3. Ellenőrizzük, hogy van-e fonal közöttük
+        boolean vanFonal = false;
+
+        for (Map.Entry<Integer, List<Integer>> entry : fonalKapcsolatok.entrySet()) {
+            List<Integer> par = entry.getValue();
+            if ((par.get(0) == forrasId && par.get(1) == celId) || (par.get(0) == celId && par.get(1) == forrasId)) {
+                vanFonal = true;
+                break;
+            }
+        }
+
+        if (vanFonal) {
+            // 4. Sikeres mozgás
+            System.out.printf("rovar mozog %d %d %d -> OK: rovar mozog %d -rol %d -ra\n", rovarId, forrasId, celId,
+                    forrasId, celId);
+        } else {
+            // 5. Ha nincs fonal
+            System.out.printf("rovar mozog %d %d %d -> FAIL: nincs fonal %d es %d kozott\n", rovarId, forrasId, celId,
+                    forrasId, celId);
+        }
     }
 
     private void rovar_eszik(int rovarId, int tektonId) {
