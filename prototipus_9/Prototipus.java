@@ -5,10 +5,18 @@ import java.util.regex.Pattern;
 
 public class Prototipus {
     private int sporaSzam = 0;
-    private Set<Integer> gombaszok = new HashSet<>();
-    private Set<Integer> rovaraszok = new HashSet<>();
-    private Set<Integer> tektonok = new HashSet<>();
-    private Set<Integer> gombafonalak = Set.of(1,2,3,4,5);
+    private final Set<Integer> gombaszok = new HashSet<>();
+    private final Set<Integer> rovaraszok = new HashSet<>();
+    private final Map<Integer, Integer> tektonok = new HashMap<>();
+    private final Set<Integer> gombafonalak = Set.of(1,2,3,4,5);
+    private final Map<Integer, Boolean> gombatestek = new HashMap<>();
+
+    {
+        gombatestek.put(6, true);
+        gombatestek.put(3, false);
+        gombatestek.put(4, false);
+        gombatestek.put(2, true);
+    }
 
     private void futtat(String file)
     {
@@ -53,7 +61,7 @@ public class Prototipus {
     private void tekton_uj(int id, String tipus)
     {
         if(TektonreszTipus.exsists(tipus)){
-            tektonok.add(id);
+            tektonok.put(id, 0);
             System.out.printf("tekton uj %d %s -> OK: %d tekton letrehozva (%s)\n", id, tipus, id, tipus);
         }else{
             System.out.printf("tekton uj %d %s -> FAIL: %d letrehozasa sikertelen, ismeretlen fajta\n", id, tipus, id);
@@ -72,7 +80,14 @@ public class Prototipus {
 
     private void gomba_fejleszt(int gombaId)
     {
-
+        if(gombatestek.containsKey(gombaId) && !gombatestek.get(gombaId)){
+            gombatestek.replace(gombaId, true);
+            System.out.printf("gomba fejleszt %d -> OK: %d fejlesztve", gombaId, gombaId);
+        } else if (gombatestek.containsKey(gombaId) && gombatestek.get(gombaId)) {
+            System.out.printf("gomba fejleszt %d -> FAIL: %d mar fejlesztve van", gombaId, gombaId);
+        } else if (!gombatestek.containsKey(gombaId)) {
+            System.out.printf("gomba fejleszt %d -> FAIL: hibas gombanev (%d)", gombaId, gombaId);
+        }
     }
 
     private void gomba_szoras(int gombaId)
@@ -87,9 +102,9 @@ public class Prototipus {
 
     private void gombaf_noveszt(int fonalId, int forrasId, int celId)
     {
-        if(gombafonalak.contains(fonalId) && tektonok.contains(forrasId) && tektonok.contains(celId)){
+        if(gombafonalak.contains(fonalId) && tektonok.containsKey(forrasId) && tektonok.containsKey(celId)){
             System.out.printf("gombaf noveszt %d %d %d -> OK: %d novesztve %d es %d kozott",  fonalId, forrasId, celId, fonalId, forrasId, celId);
-        } else if (!tektonok.contains(forrasId) || !tektonok.contains(celId)) {
+        } else if (!tektonok.containsKey(forrasId) || !tektonok.containsKey(celId)) {
             System.out.printf("gombaf noveszt %d %d %d -> FAIL: gombafonal nem novesztheto %d es %d kozott",  fonalId, forrasId, celId, forrasId, celId);
 
         }
