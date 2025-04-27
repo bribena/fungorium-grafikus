@@ -276,14 +276,45 @@ public class Prototipus {
         }
     }
 
+    /**
+     * Két tektonrész közötti gombafonalat szakítja el.
+     * Ellenőrzi a tektonok létezését és a fonal meglétét.
+     * 
+     * @param forrasId A forrás tekton azonosítója
+     * @param celId    A cél tekton azonosítója
+     */
     private void gombaf_szakit(int forrasId, int celId) {
-        // ha nem leteznek a tektonok, fail
+        // 1. Ellenőrizzük, hogy mindkét tekton létezik-e
         if (!tektonok.containsKey(forrasId) || !tektonok.containsKey(celId)) {
-            System.out.printf("gombaf szakit %d %d -> FAIL: hibas tekton azonositok (vagy nincs fonal koztuk)",
-                    forrasId, celId);
+            System.out.printf("gombaf szakit %d %d -> FAIL: hibas tekton azonostio(k)\n", forrasId, celId);
+            return;
         }
-        System.out.printf("gombaf szakit %d %d -> OK: gombafonal elszakitva a ket megadott tekton kozott", forrasId,
-                celId);
+
+        // 2. Keresünk fonalat, ami a forrasId és celId között van
+        boolean sikeresVagas = false;
+        int torlendoFonalId = -1;
+
+        for (Map.Entry<Integer, List<Integer>> entry : fonalKapcsolatok.entrySet()) {
+            List<Integer> par = entry.getValue();
+            if ((par.get(0) == forrasId && par.get(1) == celId) || (par.get(0) == celId && par.get(1) == forrasId)) {
+                torlendoFonalId = entry.getKey();
+                sikeresVagas = true;
+                break;
+            }
+        }
+
+        if (sikeresVagas) {
+            // 3. Ha van fonal, eltávolítjuk
+            gombafonalak.remove(torlendoFonalId);
+            fonalKapcsolatok.remove(torlendoFonalId);
+
+            // 4. OK üzenet
+            System.out.printf("gombaf szakit %d %d -> OK: gombafonal elszakitva a ket megadott tekton kozott\n",
+                    forrasId, celId);
+        } else {
+            // 5. Ha nincs fonal, FAIL üzenet
+            System.out.printf("gombaf szakit %d %d -> FAIL: hibas tekton azonostio(k)\n", forrasId, celId);
+        }
     }
 
     private void gombaf_noveszt(int fonalId, int forrasId, int celId) {
