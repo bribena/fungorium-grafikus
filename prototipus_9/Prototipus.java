@@ -97,8 +97,39 @@ public class Prototipus {
         }
     }
 
+    /**
+     * Egy adott tekton azonosító mentén logikailag törést hajt végre:
+     * új tekton azonosítót generál, amit spóraszámmal 0-ként tárol.
+     * A pálya fizikai modellje (Fungorium) nincs kezelve itt.
+     * 
+     * @param tektonId A törni kívánt tekton azonosítója
+     */
     private void fungorium_tor(int tektonId) {
+        // 1. Ellenőrizzük, hogy létezik-e ilyen tekton az adatainkban
+        if (!tektonok.containsKey(tektonId)) {
+            System.out.printf("fungorium tor %d -> FAIL: hibás tekton azonosító %d\n", tektonId, tektonId);
+            return;
+        }
 
+        // 2. Sorsolás: véletlenszerűen eldöntjük, hogy megtörténik-e a törés
+        Random rand = new Random();
+        double esely = rand.nextDouble(); // 0.0 és 1.0 közötti random szám
+
+        if (esely >= 0.75) { // Ha sikertelen a törés
+            System.out.printf("fungorium tor %d -> FAIL: sikertelen törés (sikertelen sorsolás)\n", tektonId, tektonId);
+            return;
+        }
+
+        // 3. Sikeres törés:
+        // - Új Tekton ID létrehozása
+        int ujTektonId = tektonok.keySet().stream().max(Integer::compareTo).orElse(0) + 1;
+
+        // - Új tekton spóraszám 0 lesz
+        tektonok.put(ujTektonId, 0);
+
+        // - Kimeneti üzenet
+        System.out.printf("fungorium tor %d -> OK: %d mentén törve (új tekton id: %d)\n", tektonId, tektonId,
+                ujTektonId);
     }
 
     private void gombasz_uj(int id) {
