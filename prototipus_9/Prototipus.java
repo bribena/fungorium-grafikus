@@ -15,6 +15,7 @@ public class Prototipus {
     private final Map<Integer, String> rovarok = new HashMap<>();
     private final Map<Integer, String> tektonTipusok = new HashMap<>();
     private final Map<Integer, List<Integer>> fonalKapcsolatok = new HashMap<>();
+    private final Map<Integer, List<Integer>> szomszedsagok = new HashMap<>(); // Tektonok szomszédsági listája
 
     {
         gombatestek.put(6, true);
@@ -169,8 +170,27 @@ public class Prototipus {
         }
     }
 
-    private void tekton_szomszed(int t1_id, int t2_id) {
-        System.out.printf("tekton szomszed %d %d -> OK: %d es %d mostmar szomszedosak\n", t1_id, t2_id, t1_id, t2_id);
+    /**
+     * Két tektonrész között szomszédsági kapcsolatot hoz létre.
+     * 
+     * @param t1 Az első tekton azonosítója
+     * @param t2 A második tekton azonosítója
+     */
+    private void tekton_szomszed(int t1, int t2) {
+        // 1. Hozzáadjuk t2-t t1 szomszédjaihoz
+        szomszedsagok.putIfAbsent(t1, new ArrayList<>());
+        if (!szomszedsagok.get(t1).contains(t2)) {
+            szomszedsagok.get(t1).add(t2);
+        }
+
+        // 2. Hozzáadjuk t1-et t2 szomszédjaihoz
+        szomszedsagok.putIfAbsent(t2, new ArrayList<>());
+        if (!szomszedsagok.get(t2).contains(t1)) {
+            szomszedsagok.get(t2).add(t1);
+        }
+
+        // 3. OK üzenet pontosan a dokumentumban megadott formátumban
+        System.out.printf("tekton szomszed %d %d -> OK: (%d es %d) mostmar szomszedosak\n", t1, t2, t1, t2);
     }
 
     /**
