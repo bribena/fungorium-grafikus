@@ -4,9 +4,11 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Prototipus {
-
-    Set<Integer> gombaszok = new HashSet<>();
-    Set<Integer> rovaraszok = new HashSet<>();
+    private int sporaSzam = 0;
+    private Set<Integer> gombaszok = new HashSet<>();
+    private Set<Integer> rovaraszok = new HashSet<>();
+    private Set<Integer> tektonok = new HashSet<>();
+    private Set<Integer> gombafonalak = Set.of(1,2,3,4,5);
 
     private void futtat(String file)
     {
@@ -51,6 +53,7 @@ public class Prototipus {
     private void tekton_uj(int id, String tipus)
     {
         if(TektonreszTipus.exsists(tipus)){
+            tektonok.add(id);
             System.out.printf("tekton uj %d %s -> OK: %d tekton letrehozva (%s)\n", id, tipus, id, tipus);
         }else{
             System.out.printf("tekton uj %d %s -> FAIL: %d letrehozasa sikertelen, ismeretlen fajta\n", id, tipus, id);
@@ -84,7 +87,12 @@ public class Prototipus {
 
     private void gombaf_noveszt(int fonalId, int forrasId, int celId)
     {
+        if(gombafonalak.contains(fonalId) && tektonok.contains(forrasId) && tektonok.contains(celId)){
+            System.out.printf("gombaf noveszt %d %d %d -> OK: %d novesztve %d es %d kozott",  fonalId, forrasId, celId, fonalId, forrasId, celId);
+        } else if (!tektonok.contains(forrasId) || !tektonok.contains(celId)) {
+            System.out.printf("gombaf noveszt %d %d %d -> FAIL: gombafonal nem novesztheto %d es %d kozott",  fonalId, forrasId, celId, forrasId, celId);
 
+        }
     }
 
     private void gombaf_rovarbol(int fonalId, int jatekosId, int rovarId)
@@ -94,7 +102,12 @@ public class Prototipus {
 
     private void spora_szam(int ertek)
     {
-
+        if(ertek < 0){
+            System.out.printf("spora szam %d -> FAIL: hibas sporaszam\n", ertek);
+        }else {
+            sporaSzam = ertek;
+            System.out.printf("spora szam %d -> OK: sporaszam beallitva: %d\n", ertek, ertek);
+        }
     }
 
     private void rovar_hatas(int rovarId, String hatas, int ertek)
