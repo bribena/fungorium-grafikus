@@ -87,6 +87,18 @@ public class Fungorium {
         return new int[] { -1, -1 };
     }
 
+    public boolean ujTektonElhelyezese(Tektonrész t) {
+        for (int x = 0; x < 20; ++x) {
+            for (int y = 0; y < 20; ++y) {
+                if (tektonrészek[x][y] == null) {
+                    tektonrészek[x][y] = t;
+                    return true;
+                }
+            }
+        }
+        return false; // ha sehol sem lehetett elhelyezni
+    }
+
     /**
      * x, y koordináta összefogása a töréshez.
      */

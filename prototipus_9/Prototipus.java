@@ -197,8 +197,14 @@ public class Prototipus {
             // hozzáadjuk az új Tektonrészt az azonosítóhoz
             tektonok.put(id, ujTekton);
 
-            // OK üzenet
-            System.out.printf("tekton uj %s %s -> OK: %s tekton letrehozva (%s)\n", id, tipus, id, tipus);
+            // új: megpróbáljuk elhelyezni a pályán!
+            boolean sikeres = fungorium.ujTektonElhelyezese(ujTekton);
+
+            if (!sikeres) {
+                System.out.printf("tekton uj %s %s -> FAIL: nem sikerült pályára helyezni\n", id, tipus);
+                return;
+            }
+
         } else {
             // ha a típus nem ismert
             System.out.printf("tekton uj %s %s -> FAIL: %s letrehozasa sikertelen, ismeretlen fajta\n", id, tipus, id);
@@ -244,7 +250,6 @@ public class Prototipus {
                     jatekosId);
             return;
         }
-
         // 2. Ellenőrizzük, hogy a tekton létezik-e a Prototípus mapban
         if (!tektonok.containsKey(tektonId)) {
             System.out.printf("gomba noveszt %s %s %s -> FAIL: hibás tekton név (%s)\n", gombaId, jatekosId, tektonId,
