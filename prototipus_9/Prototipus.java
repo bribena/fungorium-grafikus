@@ -739,11 +739,11 @@ public class Prototipus {
                 switch (parancs.get(1)) {
                     // adott azonositoju entitas torlesehez
                     case "torol":
-                        fungorium_torol(Integer.parseInt(parancs.get(2)));
+                        fungorium_torol(parancs.get(2));
                         break;
                     // palya szettoresehez (ha sikeresen sorsol)
                     case "tor":
-                        fungorium_tor(Integer.parseInt(parancs.get(2)));
+                        fungorium_tor(parancs.get(2));
                         break;
                     default:
                         break;
