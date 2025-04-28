@@ -504,114 +504,112 @@ public class Prototipus {
                 rovarId, fonalId, rovarId);
     }
 
-    private void spora_szam(int ertek, int tektonId) {
-        // spora_szam beallitasa
+    /**
+     * A megadott tektonrész spóraszámát beállítja.
+     * 
+     * @param ertek    Spórák száma
+     * @param tektonId A tektonrész azonosítója (String)
+     */
+    private void spora_szam(int ertek, String tektonId) {
         if (ertek < 0) {
-            System.out.printf("spora szam %d -> FAIL: hibas sporaszam\n", ertek);
-        } else {
-            tektonok.replace(tektonId, ertek);
-            System.out.printf("spora szam %d -> OK: sporaszam beallitva %d tektonon: %d\n", ertek, ertek, ertek);
+            System.out.printf("spora szam %d -> FAIL: hibás spóraszám\n", ertek);
+            return;
         }
-    }
 
-    private void rovar_hatas(int rovarId, String hatas, int ertek) {
-        // hatasok beallitasa
-        if (rovarok.containsKey(rovarId)) {
-            if (hatas == "gyors") {
-                String ujHatas = Integer.toString(ertek) +
-                        rovarok.get(rovarId).substring(1, 2) +
-                        rovarok.get(rovarId).substring(2, 3) +
-                        rovarok.get(rovarId).substring(3, 4) +
-                        rovarok.get(rovarId).substring(4);
-                rovarok.replace(rovarId, ujHatas);
-            } else if (hatas == "lassu") {
-                String ujHatas = rovarok.get(rovarId).substring(0, 1) +
-                        Integer.toString(ertek) +
-                        rovarok.get(rovarId).substring(2, 3) +
-                        rovarok.get(rovarId).substring(3, 4) +
-                        rovarok.get(rovarId).substring(4);
-                rovarok.replace(rovarId, ujHatas);
-            } else if (hatas == "gyenge") {
-                String ujHatas = rovarok.get(rovarId).substring(0, 1) +
-                        rovarok.get(rovarId).substring(1, 2) +
-                        Integer.toString(ertek) +
-                        rovarok.get(rovarId).substring(3, 4) +
-                        rovarok.get(rovarId).substring(4);
-                rovarok.replace(rovarId, ujHatas);
-            } else if (hatas == "bena") {
-                String ujHatas = rovarok.get(rovarId).substring(0, 1) +
-                        rovarok.get(rovarId).substring(1, 2) +
-                        rovarok.get(rovarId).substring(2, 3) +
-                        Integer.toString(ertek) +
-                        rovarok.get(rovarId).substring(4);
-                rovarok.replace(rovarId, ujHatas);
-            } else if (hatas == "osztodik") {
-                String ujHatas = rovarok.get(rovarId).substring(0, 1) +
-                        rovarok.get(rovarId).substring(1, 2) +
-                        rovarok.get(rovarId).substring(2, 3) +
-                        rovarok.get(rovarId).substring(3, 4);
-                Integer.toString(ertek);
-                rovarok.replace(rovarId, ujHatas);
-            }
-            System.out.printf("rovar hatas %d %s %d -> OK: %s beallitva %d-re", rovarId, hatas, ertek, hatas, ertek);
-        } else if (!rovarok.containsKey(rovarId)) {
-            System.out.printf("rovar hatas %d %s %d -> FAIL: hibas rovar nev (%d)", rovarId, hatas, ertek, rovarId);
-        } else if (ertek < 0) {
-            System.out.printf("rovar hatas %d %s %d -> FAIL: invalid ertek (%d)", rovarId, hatas, ertek, ertek);
+        if (!tektonok.containsKey(tektonId)) {
+            System.out.printf("spora szam %d -> FAIL: hibás tekton azonosító (%s)\n", ertek, tektonId);
+            return;
         }
+
+        tektonok.put(tektonId, ertek);
+
+        System.out.printf("spora szam %d -> OK: spóraszám beállítva %s tektonon: %d\n", ertek, tektonId, ertek);
     }
 
     /**
-     * Egy rovar megpróbálja elvágni a két megadott tekton közötti gombafonalat.
-     * Ellenőrzi a rovar állapotát és a fonal létezését a kapcsolat alapján.
+     * Egy rovar hatásának kézi beállítása.
      * 
-     * @param rovarId  A rovar azonosítója
-     * @param forrasId A forrás tekton azonosítója
-     * @param celId    A cél tekton azonosítója
+     * @param rovarId A rovar azonosítója (String)
+     * @param hatas   A hatás neve (gyors, lassu, gyenge, bena, osztodik)
+     * @param ertek   Az új érték
      */
-    private void rovar_vag(int rovarId, int forrasId, int celId) {
-        // 1. Ellenőrizzük, hogy a rovar létezik-e
+    private void rovar_hatas(String rovarId, String hatas, int ertek) {
         if (!rovarok.containsKey(rovarId)) {
-            System.out.printf("rovar vag %d %d %d -> FAIL: hibás rovar azonosító (%d)\n", rovarId, forrasId, celId,
+            System.out.printf("rovar hatas %s %s %d -> FAIL: hibás rovar név (%s)\n", rovarId, hatas, ertek, rovarId);
+            return;
+        }
+        if (ertek < 0) {
+            System.out.printf("rovar hatas %s %s %d -> FAIL: invalid érték (%d)\n", rovarId, hatas, ertek, ertek);
+            return;
+        }
+
+        Rovar rovar = rovarok.get(rovarId);
+
+        int idx = -1;
+        switch (hatas) {
+            case "lassu":
+                idx = 0;
+                break;
+            case "gyors":
+                idx = 1;
+                break;
+            case "bena":
+                idx = 2;
+                break;
+            case "gyenge":
+                idx = 3;
+                break;
+            case "osztodik":
+                idx = 4;
+                break;
+        }
+
+        if (idx == -1) {
+            System.out.printf("rovar hatas %s %s %d -> FAIL: ismeretlen hatás típus (%s)\n", rovarId, hatas, ertek,
+                    hatas);
+            return;
+        }
+
+        rovar.setHatas(idx, ertek); // ehhez a Rovar osztályban kell egy setHatas(int idx, int ertek) metódus
+
+        System.out.printf("rovar hatas %s %s %d -> OK: %s beállítva %d-re\n", rovarId, hatas, ertek, hatas, ertek);
+    }
+
+    /**
+     * Egy rovar megpróbál elvágni egy gombafonalat két tekton között.
+     */
+    private void rovar_vag(String rovarId, String forrasId, String celId) {
+        if (!rovarok.containsKey(rovarId)) {
+            System.out.printf("rovar vag %s %s %s -> FAIL: hibás rovar azonosító (%s)\n", rovarId, forrasId, celId,
                     rovarId);
             return;
         }
 
-        // 2. Ellenőrizzük, hogy a rovar nem "bena" vagy "gyenge"
-        String statusz = rovarok.get(rovarId);
-        int bena = Character.getNumericValue(statusz.charAt(3)); // "béna" státusz: 4. karakter
-        int gyenge = Character.getNumericValue(statusz.charAt(2)); // "gyenge" státusz: 3. karakter
-
-        if (bena > 0 || gyenge > 0) {
-            System.out.printf("rovar vag %d %d %d -> FAIL: rovar bena/gyenge, nem vaghat (%d)\n", rovarId, forrasId,
+        Rovar rovar = rovarok.get(rovarId);
+        if (rovar.isBena() || rovar.gyenge()) {
+            System.out.printf("rovar vag %s %s %s -> FAIL: rovar béna/gyenge, nem vághat (%s)\n", rovarId, forrasId,
                     celId, rovarId);
             return;
         }
 
-        // 3. Keresünk olyan fonalat, ami a forrasId és celId között húzódik
-        boolean sikeresVagas = false;
-        int torlendoFonalId = -1;
-
-        for (Map.Entry<Integer, List<Integer>> entry : fonalKapcsolatok.entrySet()) {
-            List<Integer> par = entry.getValue();
-            if ((par.get(0) == forrasId && par.get(1) == celId) || (par.get(0) == celId && par.get(1) == forrasId)) {
-                // Megtaláltuk a fonalat
-                torlendoFonalId = entry.getKey();
-                sikeresVagas = true;
+        // fonal keresése
+        String fonalId = null;
+        for (Map.Entry<String, List<String>> entry : fonalKapcsolatok.entrySet()) {
+            List<String> par = entry.getValue();
+            if ((par.get(0).equals(forrasId) && par.get(1).equals(celId))
+                    || (par.get(0).equals(celId) && par.get(1).equals(forrasId))) {
+                fonalId = entry.getKey();
                 break;
             }
         }
 
-        if (sikeresVagas) {
-            // 4. Töröljük a fonalat mindkét helyről
-            gombafonalak.remove(torlendoFonalId);
-            fonalKapcsolatok.remove(torlendoFonalId);
-
-            System.out.printf("rovar vag %d %d %d -> OK: fonal elvágva %d és %d között\n", rovarId, forrasId, celId,
+        if (fonalId != null) {
+            gombafonalak.remove(fonalId);
+            fonalKapcsolatok.remove(fonalId);
+            System.out.printf("rovar vag %s %s %s -> OK: fonal elvágva %s és %s között\n", rovarId, forrasId, celId,
                     forrasId, celId);
         } else {
-            // 5. Ha nincs ilyen fonal
-            System.out.printf("rovar vag %d %d %d -> FAIL: nincs fonal %d es %d kozott\n", rovarId, forrasId, celId,
+            System.out.printf("rovar vag %s %s %s -> FAIL: nincs fonal %s és %s között\n", rovarId, forrasId, celId,
                     forrasId, celId);
         }
     }
@@ -624,42 +622,35 @@ public class Prototipus {
      * @param forrasId A forrás tekton azonosítója
      * @param celId    A cél tekton azonosítója
      */
-    private void rovar_mozog(int rovarId, int forrasId, int celId) {
-        // 1. Ellenőrizzük, hogy a rovar létezik-e
+    private void rovar_mozog(String rovarId, String forrasId, String celId) {
         if (!rovarok.containsKey(rovarId)) {
-            System.out.printf("rovar mozog %d %d %d -> FAIL: hibás rovar azonosító (%d)\n", rovarId, forrasId, celId,
+            System.out.printf("rovar mozog %s %s %s -> FAIL: hibás rovar azonosító (%s)\n", rovarId, forrasId, celId,
                     rovarId);
             return;
         }
 
-        // 2. Ellenőrizzük, hogy a rovar nem "bena"
-        String statusz = rovarok.get(rovarId);
-        int bena = Character.getNumericValue(statusz.charAt(3)); // 4. karakter: "bena"
-
-        if (bena > 0) {
-            System.out.printf("rovar mozog %d %d %d -> FAIL: rovar bena, nem mozoghat (%d)\n", rovarId, forrasId, celId,
+        Rovar rovar = rovarok.get(rovarId);
+        if (rovar.isBena()) {
+            System.out.printf("rovar mozog %s %s %s -> FAIL: rovar béna, nem mozoghat (%s)\n", rovarId, forrasId, celId,
                     rovarId);
             return;
         }
 
-        // 3. Ellenőrizzük, hogy van-e fonal közöttük
         boolean vanFonal = false;
-
-        for (Map.Entry<Integer, List<Integer>> entry : fonalKapcsolatok.entrySet()) {
-            List<Integer> par = entry.getValue();
-            if ((par.get(0) == forrasId && par.get(1) == celId) || (par.get(0) == celId && par.get(1) == forrasId)) {
+        for (Map.Entry<String, List<String>> entry : fonalKapcsolatok.entrySet()) {
+            List<String> par = entry.getValue();
+            if ((par.get(0).equals(forrasId) && par.get(1).equals(celId))
+                    || (par.get(0).equals(celId) && par.get(1).equals(forrasId))) {
                 vanFonal = true;
                 break;
             }
         }
 
         if (vanFonal) {
-            // 4. Sikeres mozgás
-            System.out.printf("rovar mozog %d %d %d -> OK: rovar mozog %d -rol %d -ra\n", rovarId, forrasId, celId,
+            System.out.printf("rovar mozog %s %s %s -> OK: rovar mozog %s -ról %s -ra\n", rovarId, forrasId, celId,
                     forrasId, celId);
         } else {
-            // 5. Ha nincs fonal
-            System.out.printf("rovar mozog %d %d %d -> FAIL: nincs fonal %d es %d kozott\n", rovarId, forrasId, celId,
+            System.out.printf("rovar mozog %s %s %s -> FAIL: nincs fonal %s és %s között\n", rovarId, forrasId, celId,
                     forrasId, celId);
         }
     }
@@ -671,33 +662,26 @@ public class Prototipus {
      * @param rovarId  A rovar azonosítója
      * @param tektonId A tektonrész azonosítója
      */
-    private void rovar_eszik(int rovarId, int tektonId) {
-        // 1. Ellenőrizzük, hogy a rovar létezik-e
+    private void rovar_eszik(String rovarId, String tektonId) {
         if (!rovarok.containsKey(rovarId)) {
-            System.out.printf("rovar eszik %d %d -> FAIL: hibás rovar azonosító (%d)\n", rovarId, tektonId, rovarId);
+            System.out.printf("rovar eszik %s %s -> FAIL: hibás rovar azonosító (%s)\n", rovarId, tektonId, rovarId);
             return;
         }
 
-        // 2. Ellenőrizzük, hogy a rovar nem "bena"
-        String statusz = rovarok.get(rovarId);
-        int bena = Character.getNumericValue(statusz.charAt(3)); // 4. karakter: "bena"
-
-        if (bena > 0) {
-            System.out.printf("rovar eszik %d %d -> FAIL: rovar bena, nem ehet (%d)\n", rovarId, tektonId, rovarId);
+        Rovar rovar = rovarok.get(rovarId);
+        if (rovar.isBena()) {
+            System.out.printf("rovar eszik %s %s -> FAIL: rovar béna, nem ehet (%s)\n", rovarId, tektonId, rovarId);
             return;
         }
 
-        // 3. Ha létezik a tekton, csökkentjük a spórák számát 1-gyel
         if (tektonok.containsKey(tektonId)) {
             int aktualisSpora = tektonok.get(tektonId);
             if (aktualisSpora > 0) {
                 tektonok.put(tektonId, aktualisSpora - 1);
             }
-            // Ha 0 spóra van, akkor is kiírjuk az OK üzenetet
         }
 
-        // 4. OK üzenet
-        System.out.printf("rovar eszik %d %d -> OK: sporak elfogyasztva %d-rol\n", rovarId, tektonId, tektonId);
+        System.out.printf("rovar eszik %s %s -> OK: spórák elfogyasztva %s-ról\n", rovarId, tektonId, tektonId);
     }
 
     private void parancsFeldolgoz(List<String> parancs) {

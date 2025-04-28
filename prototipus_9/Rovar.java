@@ -54,9 +54,13 @@ public class Rovar implements Entitás {
         return true;
     }
 
-    public boolean isBenas() {
+    public boolean isBena() {
         // a rovar bénult-e, vagyis a hatások tömb 0. indexe nagyobb-e 0-nál
-        return hatásLejárt(0);
+        return hatásLejárt(2);
+    }
+
+    public void setHatas(int idx, int ertek) {
+        hatasok[idx] = ertek;
     }
 
     public boolean fonalatVág(Tektonrész t, Gombafonal f) {
