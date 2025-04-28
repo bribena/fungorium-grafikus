@@ -17,14 +17,12 @@ public enum TektonreszTipus {
         return tipus;
     }
 
-    public static boolean exsists(String tipus) {
-        for(TektonreszTipus t : values()){
-            if(t.tipus.equals(tipus)){
+    public static boolean exists(String tipus) {
+        for (TektonreszTipus t : values()) {
+            if (t.tipus.equals(tipus)) {
                 return true;
             }
         }
         return false;
     }
 }
-
-

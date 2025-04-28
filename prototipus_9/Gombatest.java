@@ -8,45 +8,44 @@ public class Gombatest implements Entitás {
     private int spóraSzórásLehetőség = 3; // nem konkret ertek
     private Gombafaj faj;
 
-    public Gombatest(boolean elsoTest)
-    {
+    public Gombatest(boolean elsoTest) {
         kezdő = elsoTest;
     }
 
     @Override
     public boolean frissítés() {
-        if (!passzív && spóraSzórásVárakozásIdő > 0)
-        {
+        if (!passzív && spóraSzórásVárakozásIdő > 0) {
             spóraSzórásVárakozásIdő -= 1;
             return true;
         }
         return false;
     }
 
-    public Gombafaj getFaj()
-    {
+    public Gombafaj getFaj() {
         return faj;
     }
-    
-    public boolean fejlődik()
-    {
-        if (fejlődött)
-        {
+
+    public boolean fejlődik() {
+        if (fejlődött) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public boolean isKezdő()
-    {
+    public boolean isKezdő() {
         return kezdő;
     }
 
-    public boolean spórátSzór(Tektonrész t, Fungorium f)
-    {
+    public boolean isFejlődött() {
+        return fejlődött;
+    }
+
+    public void setFejlodott(boolean fejlodott) {
+        this.fejlődött = fejlodott;
+    }
+
+    public boolean spórátSzór(Tektonrész t, Fungorium f) {
         throw new UnsupportedOperationException("Unimplemented method 'spórátSzór'");
     }
 }
