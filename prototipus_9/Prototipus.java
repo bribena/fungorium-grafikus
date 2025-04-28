@@ -7,15 +7,15 @@ import java.util.*;
 public class Prototipus {
     private int sporaSzam = 0;
     // tarolok az entitasokhoz, jatekosokhoz
-    private final Set<Integer> gombaszok = new HashSet<>();
-    private final Set<Integer> rovaraszok = new HashSet<>();
-    private final Map<Integer, Integer> tektonok = new HashMap<>();
-    private final Set<Integer> gombafonalak = Set.of(1, 2, 3, 4, 5);
-    private final Map<Integer, Boolean> gombatestek = new HashMap<>();
-    private final Map<Integer, String> rovarok = new HashMap<>();
-    private final Map<Integer, String> tektonTipusok = new HashMap<>();
-    private final Map<Integer, List<Integer>> fonalKapcsolatok = new HashMap<>();
-    private final Map<Integer, List<Integer>> szomszedsagok = new HashMap<>(); // Tektonok szomszédsági listája
+    private final Set<String> gombaszok = new HashSet<>();
+    private final Set<String> rovaraszok = new HashSet<>();
+    private final Map<String, Tektonresz> tektonok = new HashMap<>();
+    private final Set<String> gombafonalak = new HashSet<>();
+    private final Map<String, Gombatest> gombatestek = new HashMap<>();
+    private final Map<String, Rovar> rovarok = new HashMap<>();
+    private final Map<String, List<String>> fonalKapcsolatok = new HashMap<>();
+    private final Map<String, List<String>> szomszedsagok = new HashMap<>();
+    private final Fungorium fungorium = new Fungorium();
 
     {
         gombatestek.put(6, true);
@@ -54,85 +54,88 @@ public class Prototipus {
         }
     }
 
-    private void fungorium_torol(int id) {
+    /**
+     * Egy azonosítóval rendelkező entitást töröl a játéktérről.
+     * Most már nem csak a Prototipus térképből, hanem a Fungorium pályáról is!
+     * 
+     * @param id Az entitás azonosítója (String)
+     */
+    private void fungorium_torol(String id) {
         boolean found = false;
 
-        // Keresés és törlés a gombászok között
+        // Gombászok közül törlés
         if (gombaszok.contains(id)) {
             gombaszok.remove(id);
             found = true;
         }
 
-        // Keresés és törlés a rovarászok között
+        // Rovarászok közül törlés
         if (rovaraszok.contains(id)) {
             rovaraszok.remove(id);
             found = true;
         }
 
-        // Keresés és törlés a tektonok között
+        // Tektonok közül törlés
         if (tektonok.containsKey(id)) {
-            tektonok.remove(id);
+            Tektonrész torlendo = tektonok.get(id);
+            tektonok.remove(id); // Prototipus belső térképről törlés
             found = true;
+
+            // Fungorium belső rácsából is eltávolítás
+            int[] coords = fungorium.getTektonrészKoordináta(torlendo);
+            int x = coords[0];
+            int y = coords[1];
+
+            if (x >= 0 && y >= 0 && x < 20 && y < 20) {
+                // Beállítunk egy új TöbbfonalasTektonrészt alapállapotban
+                fungorium.getTektonrész(x, y).setTektonID(-1); // "-1" jelezheti, hogy üres/törölt
+            }
         }
 
-        // Keresés és törlés a gombafonalak között
+        // Gombafonalak közül törlés
         if (gombafonalak.contains(id)) {
+            gombafonalak.remove(id);
             found = true;
         }
 
-        // Keresés és törlés a gombatestek között
+        // Gombatestek közül törlés
         if (gombatestek.containsKey(id)) {
             gombatestek.remove(id);
             found = true;
         }
 
-        // Keresés és törlés a rovarok között
+        // Rovarok közül törlés
         if (rovarok.containsKey(id)) {
             rovarok.remove(id);
             found = true;
         }
 
-        // Ha bárhol töröltünk, kiírjuk az azonosítót
+        // Kiírás
         if (found) {
-            System.out.printf("fungorium torol %d -> OK: %d torolve a palyarol\n", id, id);
+            System.out.printf("fungorium torol %s -> OK: %s torolve a palyarol\n", id, id);
         } else {
-            System.out.printf("fungorium torol %d -> FAIL: nincs ilyen azonositoju entitas (%d)\n", id, id);
+            System.out.printf("fungorium torol %s -> FAIL: nincs ilyen azonositoju entitas (%s)\n", id, id);
         }
     }
 
     /**
-     * Egy adott tekton azonosító mentén logikailag törést hajt végre:
-     * új tekton azonosítót generál, amit spóraszámmal 0-ként tárol.
-     * A pálya fizikai modellje (Fungorium) nincs kezelve itt.
+     * Egy tektonrészt megpróbál eltörni (valójában globális törés).
+     * Csak akkor hívja meg a Fungorium törését, ha a megadott tekton létezik.
      * 
-     * @param tektonId A törni kívánt tekton azonosítója
+     * @param tektonId A törni kívánt tekton azonosítója (String)
      */
-    private void fungorium_tor(int tektonId) {
+    private void fungorium_tor(String tektonId) {
         // 1. Ellenőrizzük, hogy létezik-e ilyen tekton az adatainkban
         if (!tektonok.containsKey(tektonId)) {
-            System.out.printf("fungorium tor %d -> FAIL: hibás tekton azonosító %d\n", tektonId, tektonId);
+            System.out.printf("fungorium tor %s -> FAIL: hibás tekton azonosító %s\n", tektonId, tektonId);
             return;
         }
 
-        // 2. Sorsolás: véletlenszerűen eldöntjük, hogy megtörténik-e a törés
-        Random rand = new Random();
-        double esely = rand.nextDouble(); // 0.0 és 1.0 közötti random szám
+        // 2. Globális törést hajtunk végre a Fungorium pályán
+        fungorium.törés();
 
-        if (esely >= 0.75) { // Ha sikertelen a törés
-            System.out.printf("fungorium tor %d -> FAIL: sikertelen törés (sikertelen sorsolás)\n", tektonId, tektonId);
-            return;
-        }
-
-        // 3. Sikeres törés:
-        // - Új Tekton ID létrehozása
-        int ujTektonId = tektonok.keySet().stream().max(Integer::compareTo).orElse(0) + 1;
-
-        // - Új tekton spóraszám 0 lesz
-        tektonok.put(ujTektonId, 0);
-
-        // - Kimeneti üzenet
-        System.out.printf("fungorium tor %d -> OK: %d mentén törve (új tekton id: %d)\n", tektonId, tektonId,
-                ujTektonId);
+        // 3. Kimenet: mindig OK, ha a törés lefutott
+        System.out.printf("fungorium tor %s -> OK: törés végrehajtva a pályán\n", tektonId);
     }
 
     private void gombasz_uj(int id) {
