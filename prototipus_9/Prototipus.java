@@ -138,48 +138,88 @@ public class Prototipus {
         System.out.printf("fungorium tor %s -> OK: törés végrehajtva a pályán\n", tektonId);
     }
 
-    private void gombasz_uj(int id) {
+    /**
+     * Új gombászt hoz létre a megadott azonosítóval.
+     * Az azonosítók String típusúak.
+     * 
+     * @param id A gombász azonosítója (String)
+     */
+    private void gombasz_uj(String id) {
         // ha a gombaszok kozott van mar ilyen nevu jatekos, nem lehet megegy
         if (gombaszok.contains(id)) {
-            System.out.printf("gombasz uj %d -> FAIL: mar van ilyen nevu jatekos (%d)\n", id, id);
-            // amugy letrehozhatjuk
+            System.out.printf("gombasz uj %s -> FAIL: mar van ilyen nevu jatekos (%s)\n", id, id);
         } else {
             gombaszok.add(id);
-            System.out.printf("gombasz uj %d -> OK: uj gombasz %d letrehozva\n", id, id);
+            System.out.printf("gombasz uj %s -> OK: uj gombasz %s letrehozva\n", id, id);
         }
     }
 
-    private void rovarasz_uj(int id) {
-        // ha a rovaraszok kozott van mar ilyen nevu jatekos, nem lehet megegy
+    /**
+     * Új rovarászt hoz létre a megadott azonosítóval.
+     * 
+     * @param id A rovarász azonosítója (String)
+     */
+    private void rovarasz_uj(String id) {
         if (rovaraszok.contains(id)) {
-            System.out.printf("rovarasz uj %d -> FAIL: mar van ilyen nevu jatekos (%d)\n", id, id);
-            // amugy letrehozhatjuk
+            System.out.printf("rovarasz uj %s -> FAIL: mar van ilyen nevu jatekos (%s)\n", id, id);
         } else {
             rovaraszok.add(id);
-            System.out.printf("rovarasz uj %d -> OK: uj rovarasz %d letrehozva\n", id, id);
+            System.out.printf("rovarasz uj %s -> OK: uj rovarasz %s letrehozva\n", id, id);
         }
     }
 
-    private void tekton_uj(int id, String tipus) {
-        // ha a megadott tipus letezik, letrehozzuk az uj tektont
-        if (TektonreszTipus.exsists(tipus)) {
-            tektonok.put(id, 0);
-            // feljegyzésre kerül a típus is
-            tektonTipusok.put(id, tipus);
-            System.out.printf("tekton uj %d %s -> OK: %d tekton letrehozva (%s)\n", id, tipus, id, tipus);
-            // egyebkent hiba, mert rossz a fajta
+    /**
+     * Új tektonrészt hoz létre a megadott azonosítóval és típussal.
+     * 
+     * @param id    A tektonrész azonosítója (String)
+     * @param tipus A tektonrész típusa (String)
+     */
+    private void tekton_uj(String id, String tipus) {
+        if (TektonreszTipus.exists(tipus)) {
+            Tektonrész ujTekton;
+
+            // típus alapján példányosítjuk a megfelelő Tektonrész alosztályt
+            switch (tipus.toLowerCase()) {
+                case "tobbfonalas":
+                    ujTekton = new TöbbfonalasTektonrész();
+                    break;
+                case "egyfonalas":
+                    ujTekton = new EgyfonalasTektonrész();
+                    break;
+                case "gombatesttilto":
+                    ujTekton = new GombatestTiltóTektonrész();
+                    break;
+                case "eletbentarto":
+                    ujTekton = new ÉletbentartóTektonrész();
+                    break;
+                case "fonalfelszivo":
+                    ujTekton = new FonalfelszívóTektonrész();
+                    break;
+                default:
+                    // Ha valami hiba lenne, default többfonalas
+                    ujTekton = new TöbbfonalasTektonrész();
+                    break;
+            }
+
+            // hozzáadjuk az új Tektonrészt az azonosítóhoz
+            tektonok.put(id, ujTekton);
+
+            // OK üzenet
+            System.out.printf("tekton uj %s %s -> OK: %s tekton letrehozva (%s)\n", id, tipus, id, tipus);
         } else {
-            System.out.printf("tekton uj %d %s -> FAIL: %d letrehozasa sikertelen, ismeretlen fajta\n", id, tipus, id);
+            // ha a típus nem ismert
+            System.out.printf("tekton uj %s %s -> FAIL: %s letrehozasa sikertelen, ismeretlen fajta\n", id, tipus, id);
         }
     }
 
     /**
      * Két tektonrész között szomszédsági kapcsolatot hoz létre.
+     * Az azonosítók String típusúak.
      * 
      * @param t1 Az első tekton azonosítója
      * @param t2 A második tekton azonosítója
      */
-    private void tekton_szomszed(int t1, int t2) {
+    private void tekton_szomszed(String t1, String t2) {
         // 1. Hozzáadjuk t2-t t1 szomszédjaihoz
         szomszedsagok.putIfAbsent(t1, new ArrayList<>());
         if (!szomszedsagok.get(t1).contains(t2)) {
@@ -193,64 +233,95 @@ public class Prototipus {
         }
 
         // 3. OK üzenet pontosan a dokumentumban megadott formátumban
-        System.out.printf("tekton szomszed %d %d -> OK: (%d es %d) mostmar szomszedosak\n", t1, t2, t1, t2);
+        System.out.printf("tekton szomszed %s %s -> OK: (%s es %s) mostmar szomszedosak\n", t1, t2, t1, t2);
     }
 
     /**
      * Egy új gombatestet növeszt a megadott játékos egy megadott tektonrészre.
-     * Ellenőrzi a létezést, a tekton típusát és a feltételeket, majd létrehozza az
-     * új gombatestet.
+     * Az azonosítók String típusúak. Használja a Fungorium objektumot.
      * 
-     * @param gombaId   Az új gombatest azonosítója
-     * @param jatekosId A játékos azonosítója, aki növeszt
-     * @param tektonId  A tektonrész azonosítója, ahova növeszteni szeretnénk
+     * @param gombaId   Az új gombatest azonosítója (String)
+     * @param jatekosId A játékos azonosítója (String)
+     * @param tektonId  A tektonrész azonosítója (String)
      */
-    private void gomba_noveszt(int gombaId, int jatekosId, int tektonId) {
+    private void gomba_noveszt(String gombaId, String jatekosId, String tektonId) {
         // 1. Ellenőrizzük, hogy a játékos létezik-e
         if (!gombaszok.contains(jatekosId)) {
-            System.out.printf("gomba noveszt %d %d %d -> FAIL: hibás játékos név (%d)\n", gombaId, jatekosId, tektonId,
+            System.out.printf("gomba noveszt %s %s %s -> FAIL: hibás játékos név (%s)\n", gombaId, jatekosId, tektonId,
                     jatekosId);
             return;
         }
 
-        // 2. Ellenőrizzük, hogy a tekton létezik-e
+        // 2. Ellenőrizzük, hogy a tekton létezik-e a Prototípus mapban
         if (!tektonok.containsKey(tektonId)) {
-            System.out.printf("gomba noveszt %d %d %d -> FAIL: hibás tekton név (%d)\n", gombaId, jatekosId, tektonId,
+            System.out.printf("gomba noveszt %s %s %s -> FAIL: hibás tekton név (%s)\n", gombaId, jatekosId, tektonId,
                     tektonId);
             return;
         }
 
-        // 3. Ellenőrizzük, hogy a tektonon van-e már gombatest
-        if (gombatestek.containsKey(tektonId)) {
-            System.out.printf("gomba noveszt %d %d %d -> FAIL: már van gombatest %d-n\n", gombaId, jatekosId, tektonId,
+        // 3. Megpróbáljuk lekérni a valódi Tektonrészt a Fungoriumból
+        Tektonrész tekton = tektonok.get(tektonId);
+        int[] coords = fungorium.getTektonrészKoordináta(tekton);
+        int x = coords[0];
+        int y = coords[1];
+
+        // Ha nem található meg a pályán, hibát írunk
+        if (x < 0 || y < 0 || x >= 20 || y >= 20) {
+            System.out.printf("gomba noveszt %s %s %s -> FAIL: hibás tekton név (%s)\n", gombaId, jatekosId, tektonId,
                     tektonId);
             return;
         }
 
-        // 4. Ellenőrizzük, hogy a tekton típusa tiltott-e (GombatestTilto)
-        if (tektonTipusok.containsKey(tektonId) && tektonTipusok.get(tektonId).equals("GombatestTilto")) {
+        // 4. Ellenőrizzük, hogy a tekton típusa tiltott-e (pl.
+        // GombatestTiltóTektonrész)
+        Tektonrész valodiTekton = fungorium.getTektonrész(x, y);
+        if (valodiTekton instanceof GombatestTiltóTektonrész) {
             System.out.printf(
-                    "gomba noveszt %d %d %d -> FAIL: nem lehet gombatestet növeszteni %d-n (GombatestTilto)\n", gombaId,
+                    "gomba noveszt %s %s %s -> FAIL: nem lehet gombatestet növeszteni %s-n (GombatestTilto)\n", gombaId,
                     jatekosId, tektonId, tektonId);
             return;
         }
 
-        // 5. Minden ellenőrzés sikeres, létrehozzuk a gombatestet
-        gombatestek.put(tektonId, false); // false: még nem fejlesztett gomba
+        // 5. Ellenőrizzük, hogy a tektonon van-e már gombatest
+        if (gombatestek.containsKey(tektonId)) {
+            System.out.printf("gomba noveszt %s %s %s -> FAIL: már van gombatest %s-n\n", gombaId, jatekosId, tektonId,
+                    tektonId);
+            return;
+        }
 
-        // 6. OK visszajelzés
-        System.out.printf("gomba noveszt %d %d %d -> OK: új gomba %d létrehozva %d-n\n", gombaId, jatekosId, tektonId,
+        // 6. Minden ellenőrzés sikeres: új Gombatest létrehozása
+        Gombatest ujGombatest = new Gombatest();
+        gombatestek.put(tektonId, ujGombatest);
+
+        // 7. OK üzenet
+        System.out.printf("gomba noveszt %s %s %s -> OK: új gomba %s létrehozva %s-n\n", gombaId, jatekosId, tektonId,
                 gombaId, tektonId);
     }
 
-    private void gomba_fejleszt(int gombaId) {
-        if (gombatestek.containsKey(gombaId) && !gombatestek.get(gombaId)) {
-            gombatestek.replace(gombaId, true);
-            System.out.printf("gomba fejleszt %d -> OK: %d fejlesztve", gombaId, gombaId);
-        } else if (gombatestek.containsKey(gombaId) && gombatestek.get(gombaId)) {
-            System.out.printf("gomba fejleszt %d -> FAIL: %d mar fejlesztve van", gombaId, gombaId);
-        } else if (!gombatestek.containsKey(gombaId)) {
-            System.out.printf("gomba fejleszt %d -> FAIL: hibas gombanev (%d)", gombaId, gombaId);
+    /**
+     * Egy meglévő gombatestet fejleszt tovább.
+     * Az azonosítók String típusúak.
+     * 
+     * @param gombaId A gombatest azonosítója (String)
+     */
+    private void gomba_fejleszt(String gombaId) {
+        // Ha nem létezik ilyen gombatest
+        if (!gombatestek.containsKey(gombaId)) {
+            System.out.printf("gomba fejleszt %s -> FAIL: hibás gomba név (%s)\n", gombaId, gombaId);
+            return;
+        }
+
+        // Lekérjük a Gombatest objektumot
+        Gombatest gomba = gombatestek.get(gombaId);
+
+        // Ha még nincs fejlesztve
+        if (!gomba.isFejlesztve()) {
+            gomba.setFejlodott(true);
+            System.out.printf("gomba fejleszt %s -> OK: %s fejlesztve\n", gombaId, gombaId);
+        }
+        // Ha már fejlesztve volt
+        else {
+            System.out.printf("gomba fejleszt %s -> FAIL: %s már fejlesztve van\n", gombaId, gombaId);
         }
     }
 
