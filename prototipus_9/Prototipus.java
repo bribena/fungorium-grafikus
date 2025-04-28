@@ -329,24 +329,25 @@ public class Prototipus {
      * Egy gombatest megpróbál spórát szórni.
      * Ellenőrzi a gombatest létezését és fejlettségét.
      * 
-     * @param gombaId A gombatest azonosítója
+     * @param gombaId A gombatest azonosítója (String)
      */
-    private void gomba_szoras(int gombaId) {
+    private void gomba_szoras(String gombaId) {
         // 1. Ellenőrizzük, hogy létezik-e a gombatest
         if (!gombatestek.containsKey(gombaId)) {
-            System.out.printf("gomba szoras %d -> FAIL: hibás gomba név (%d)\n", gombaId, gombaId);
+            System.out.printf("gomba szoras %s -> FAIL: hibás gomba név (%s)\n", gombaId, gombaId);
             return;
         }
 
-        // 2. Megnézzük, hogy fejlődött-e a gomba
-        boolean fejlett = gombatestek.get(gombaId);
+        // 2. Lekérjük a Gombatest objektumot
+        Gombatest gomba = gombatestek.get(gombaId);
 
-        if (fejlett) {
-            // 3. Ha fejlődött, sikeres szórás
-            System.out.printf("gomba szoras %d -> OK: %d sporat szort\n", gombaId, gombaId);
+        // 3. Megnézzük, hogy fejlődött-e a gomba
+        if (gomba.fejlődik()) {
+            // 4. Ha fejlődött, sikeres szórás
+            System.out.printf("gomba szoras %s -> OK: %s sporat szort\n", gombaId, gombaId);
         } else {
-            // 4. Ha még nem fejlődött ki, nem tud szórni
-            System.out.printf("gomba szoras %d -> FAIL: %d nem tud sporat szorni\n", gombaId, gombaId);
+            // 5. Ha még nem fejlődött ki, nem tud szórni
+            System.out.printf("gomba szoras %s -> FAIL: %s nem tud sporat szorni\n", gombaId, gombaId);
         }
     }
 
@@ -354,53 +355,97 @@ public class Prototipus {
      * Két tektonrész közötti gombafonalat szakítja el.
      * Ellenőrzi a tektonok létezését és a fonal meglétét.
      * 
-     * @param forrasId A forrás tekton azonosítója
-     * @param celId    A cél tekton azonosítója
+     * @param forrasId A forrás tekton azonosítója (String)
+     * @param celId    A cél tekton azonosítója (String)
      */
-    private void gombaf_szakit(int forrasId, int celId) {
+    private void gombaf_szakit(String forrasId, String celId) {
         // 1. Ellenőrizzük, hogy mindkét tekton létezik-e
         if (!tektonok.containsKey(forrasId) || !tektonok.containsKey(celId)) {
-            System.out.printf("gombaf szakit %d %d -> FAIL: hibas tekton azonostio(k)\n", forrasId, celId);
+            System.out.printf("gombaf szakit %s %s -> FAIL: hibás tekton azonostio(k)\n", forrasId, celId);
             return;
         }
 
-        // 2. Keresünk fonalat, ami a forrasId és celId között van
+        // 2. Keresünk fonalat, ami a forrás és cél között van
         boolean sikeresVagas = false;
-        int torlendoFonalId = -1;
+        String torlendoFonalId = null;
 
-        for (Map.Entry<Integer, List<Integer>> entry : fonalKapcsolatok.entrySet()) {
-            List<Integer> par = entry.getValue();
-            if ((par.get(0) == forrasId && par.get(1) == celId) || (par.get(0) == celId && par.get(1) == forrasId)) {
+        for (Map.Entry<String, List<String>> entry : fonalKapcsolatok.entrySet()) {
+            List<String> par = entry.getValue();
+            if ((par.get(0).equals(forrasId) && par.get(1).equals(celId)) ||
+                    (par.get(0).equals(celId) && par.get(1).equals(forrasId))) {
                 torlendoFonalId = entry.getKey();
                 sikeresVagas = true;
                 break;
             }
         }
 
-        if (sikeresVagas) {
-            // 3. Ha van fonal, eltávolítjuk
+        if (sikeresVagas && torlendoFonalId != null) {
+            // 3. Lekérjük a törlendő Gombafonalt
+            Gombafonal fonal = gombafonalak.get(torlendoFonalId);
+
+            if (fonal != null) {
+                // 4. A kapcsolódó fonalakat is eltávolítjuk
+                Gombafonal[] kapcsolatok = fonal.getKapcsolodoFonalak();
+                for (int i = 0; i < 4; ++i) {
+                    if (kapcsolatok[i] != null) {
+                        // A másik fonalból is töröljük a visszamutatást
+                        Gombafonal szomszed = kapcsolatok[i];
+                        Gombafonal[] szomszedKapcs = szomszed.getKapcsolodoFonalak();
+                        for (int j = 0; j < 4; ++j) {
+                            if (szomszedKapcs[j] == fonal) {
+                                szomszedKapcs[j] = null;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 5. Eltávolítjuk a fonalat a mapokból
             gombafonalak.remove(torlendoFonalId);
             fonalKapcsolatok.remove(torlendoFonalId);
 
-            // 4. OK üzenet
-            System.out.printf("gombaf szakit %d %d -> OK: gombafonal elszakitva a ket megadott tekton kozott\n",
+            // 6. OK üzenet
+            System.out.printf("gombaf szakit %s %s -> OK: gombafonal elszakitva a ket megadott tekton kozott\n",
                     forrasId, celId);
         } else {
-            // 5. Ha nincs fonal, FAIL üzenet
-            System.out.printf("gombaf szakit %d %d -> FAIL: hibas tekton azonostio(k)\n", forrasId, celId);
+            // 7. Ha nincs ilyen fonal
+            System.out.printf("gombaf szakit %s %s -> FAIL: hibás tekton azonostio(k)\n", forrasId, celId);
         }
     }
 
-    private void gombaf_noveszt(int fonalId, int forrasId, int celId) {
-        if (gombafonalak.contains(fonalId) && tektonok.containsKey(forrasId) && tektonok.containsKey(celId)) {
-            gombafonalak.add(fonalId);
-            fonalKapcsolatok.put(fonalId, List.of(forrasId, celId));
-            System.out.printf("gombaf noveszt %d %d %d -> OK: %d novesztve %d es %d kozott", fonalId, forrasId, celId,
-                    fonalId, forrasId, celId);
-        } else if (!tektonok.containsKey(forrasId) || !tektonok.containsKey(celId)) {
-            System.out.printf("gombaf noveszt %d %d %d -> FAIL: gombafonal nem novesztheto %d es %d kozott", fonalId,
-                    forrasId, celId, forrasId, celId);
+    /**
+     * Új gombafonal növesztése két tektonrész között.
+     * 
+     * @param fonalId  Az új gombafonal azonosítója (String)
+     * @param forrasId A forrás tekton azonosítója (String)
+     * @param celId    A cél tekton azonosítója (String)
+     */
+    private void gombaf_noveszt(String fonalId, String forrasId, String celId) {
+        // 1. Ellenőrizzük, hogy mindkét tekton létezik-e
+        if (!tektonok.containsKey(forrasId) || !tektonok.containsKey(celId)) {
+            System.out.printf("gombaf noveszt %s %s %s -> FAIL: gombafonal nem novesztheto %s es %s kozott\n",
+                    fonalId, forrasId, celId, forrasId, celId);
+            return;
         }
+
+        // 2. Ellenőrizzük, hogy létezik-e már ilyen fonal ID
+        if (gombafonalak.containsKey(fonalId)) {
+            System.out.printf("gombaf noveszt %s %s %s -> FAIL: ilyen fonal ID (%s) mar letezik\n",
+                    fonalId, forrasId, celId, fonalId);
+            return;
+        }
+
+        // 3. Létrehozzuk az új Gombafonal példányt
+        Gombafonal ujFonal = new Gombafonal(new Gombafonal(null)); // Alapból egy üres példányból példányosítva
+
+        // 4. Hozzáadjuk a fonalat a mapokhoz
+        gombafonalak.put(fonalId, ujFonal);
+        fonalKapcsolatok.put(fonalId, List.of(forrasId, celId));
+
+        // 5. OK üzenet
+        System.out.printf("gombaf noveszt %s %s %s -> OK: %s novesztve %s es %s kozott\n",
+                fonalId, forrasId, celId, fonalId, forrasId, celId);
     }
 
     private void gombaf_rovarbol(int fonalId, int jatekosId, int rovarId) {
