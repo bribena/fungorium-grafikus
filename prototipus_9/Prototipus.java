@@ -448,20 +448,60 @@ public class Prototipus {
                 fonalId, forrasId, celId, fonalId, forrasId, celId);
     }
 
-    private void gombaf_rovarbol(int fonalId, int jatekosId, int rovarId) {
-        if (gombafonalak.contains(fonalId) && rovarok.containsKey(rovarId) &&
-                (gombaszok.contains(jatekosId) || rovaraszok.contains(jatekosId))) {
-            System.out.printf("gombaf rovarbol %d %d %d -> OK: uj gomba %d letrehozva %d helyen\n", fonalId, jatekosId,
-                    rovarId, fonalId, rovarId);
-        } else if (!(gombaszok.contains(jatekosId) || rovaraszok.contains(jatekosId))) {
-            System.out.printf("gombaf rovarbol %d %d %d -> FAIL: hibas jatekos nev (%d)\n", fonalId, jatekosId, rovarId,
+    /**
+     * Új gombafonal növesztése egy bénult rovarból.
+     * Ellenőrzi a gombafonal, a rovar és a játékos létezését és állapotát,
+     * majd ténylegesen létrehozza az új Gombafonal példányt.
+     * 
+     * @param fonalId   Az új gombafonal azonosítója (String)
+     * @param jatekosId A játékos azonosítója (String)
+     * @param rovarId   A rovar azonosítója (String)
+     */
+    private void gombaf_rovarbol(String fonalId, String jatekosId, String rovarId) {
+        // 1. Ellenőrizzük a játékos létezését
+        if (!(gombaszok.contains(jatekosId) || rovaraszok.contains(jatekosId))) {
+            System.out.printf("gombaf rovarbol %s %s %s -> FAIL: hibás játékos név (%s)\n", fonalId, jatekosId, rovarId,
                     jatekosId);
-        } else if (!rovarok.containsKey(rovarId)) {
-            System.out.printf("gombaf rovarbol %d %d %d -> FAIL: hibas rovar nev (%d)\n", fonalId, jatekosId, rovarId,
-                    rovarId);
-        } else if (rovarok.containsKey(rovarId) && rovarok.get(rovarId) == "0") {
-            System.out.printf("gombaf rovarbol %d %d %d -> FAIL: %d nem bena\n", fonalId, jatekosId, rovarId, rovarId);
+            return;
         }
+
+        // 2. Ellenőrizzük a rovar létezését
+        if (!rovarok.containsKey(rovarId)) {
+            System.out.printf("gombaf rovarbol %s %s %s -> FAIL: hibás rovar név (%s)\n", fonalId, jatekosId, rovarId,
+                    rovarId);
+            return;
+        }
+
+        // 3. Ellenőrizzük a rovar bénaságát
+        Rovar rovar = rovarok.get(rovarId);
+        if (!rovar.isBena()) {
+            System.out.printf("gombaf rovarbol %s %s %s -> FAIL: %s nem béna\n", fonalId, jatekosId, rovarId, rovarId);
+            return;
+        }
+
+        // 4. Ellenőrizzük, hogy nincs-e már ilyen fonal ID
+        if (gombafonalak.containsKey(fonalId)) {
+            System.out.printf("gombaf rovarbol %s %s %s -> FAIL: ilyen fonal ID (%s) már létezik\n", fonalId, jatekosId,
+                    rovarId, fonalId);
+            return;
+        }
+
+        // 5. Tényleges gombafonal létrehozás
+        Gombafonal ujFonal = new Gombafonal(new Gombafonal(null)); // példányosítás másolatból (most üresen)
+
+        // 6. Hozzáadjuk az új fonalat a gombafonalakhoz
+        gombafonalak.put(fonalId, ujFonal);
+
+        // 7. Rovar helyének kiderítése
+        Tektonrész rovarTekton = rovar.getTektonresz(); // Feltételezzük, hogy van ilyen getter, amit bevezettünk
+
+        if (rovarTekton != null) {
+            rovarTekton.entitásHozzáadás(ujFonal);
+        }
+
+        // 8. Kimenet - OK üzenet
+        System.out.printf("gombaf rovarbol %s %s %s -> OK: új gomba %s létrehozva %s helyen\n", fonalId, jatekosId,
+                rovarId, fonalId, rovarId);
     }
 
     private void spora_szam(int ertek, int tektonId) {
