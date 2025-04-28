@@ -11,7 +11,10 @@ public class Fungorium {
     /** Random szám generátor */
     private static Random r = new Random();
 
-    /** Ebben vannak a tektonrészek, x, y a koordináták sorrendje. For ciklusnál figyelj oda!!! */
+    /**
+     * Ebben vannak a tektonrészek, x, y a koordináták sorrendje. For ciklusnál
+     * figyelj oda!!!
+     */
     private Tektonrész[][] tektonrészek = new Tektonrész[20][20];
 
     // /** A létező tektonID-ket tartalmazza. */
@@ -21,7 +24,7 @@ public class Fungorium {
     private int maxTektonID = 3;
 
     /** A törés esélyét tartja nyilván. */
-    private double törésEsély = (double)1 / 16;
+    private double törésEsély = (double) 1 / 16;
 
     /** Default konstruktor */
     public Fungorium() {
@@ -61,9 +64,10 @@ public class Fungorium {
             tektonrészek[10][i].getTektonSzéleE()[0] = true;
         }
     }
-    
+
     /**
      * Visszaadja az x, y koordinátákkal megadott Tektonrészt.
+     * 
      * @param x x koordináta
      * @param y y koordináta
      * @return Egy Tektonrész
@@ -76,11 +80,11 @@ public class Fungorium {
         for (int x = 0; x < 20; ++x) {
             for (int y = 0; y < 20; ++y) {
                 if (tektonrészek[x][y] == t) {
-                    return new int[] {x, y};
+                    return new int[] { x, y };
                 }
             }
         }
-        return new int[] {-1, -1};
+        return new int[] { -1, -1 };
     }
 
     /**
@@ -88,6 +92,7 @@ public class Fungorium {
      */
     private class Point {
         public double x = 0, y = 0;
+
         public Point(double x, double y) {
             this.x = x;
             this.y = y;
@@ -95,8 +100,10 @@ public class Fungorium {
     }
 
     /**
-     * A fekete mágia lényege, hogy két random pontot kapunk, amit kitolunk [0; 20]^2-ről, majd slerp-pel végigmegyünk rajta
-     * és szűrűnk a megfelelő pontokra. Azoknak a pontoknak a koordinátái lesznek majd az egyenesen levő tektonrészek indexei.
+     * A fekete mágia lényege, hogy két random pontot kapunk, amit kitolunk [0;
+     * 20]^2-ről, majd slerp-pel végigmegyünk rajta
+     * és szűrűnk a megfelelő pontokra. Azoknak a pontoknak a koordinátái lesznek
+     * majd az egyenesen levő tektonrészek indexei.
      */
     private List<Point> indexekMeghatározása() {
         // x1, x2, y1, y2
@@ -125,7 +132,7 @@ public class Fungorium {
         // points-ban vannak az indexek
         List<Point> points = new ArrayList<>();
         for (int i = 0; i <= 1000; ++i) {
-            double t = (double)i / 1000;
+            double t = (double) i / 1000;
             double x = (1 - t) * a.x + t * b.x;
             double y = (1 - t) * a.y + t * b.y;
             Point p = new Point(x, y);
@@ -198,7 +205,7 @@ public class Fungorium {
     private Tektonrész[] getTektonrészSzomszédok(int x, int y) {
         Tektonrész[] ret = new Tektonrész[4];
         for (int i = 0; i < 4; ++i) {
-            ret[i] =  new TöbbfonalasTektonrész();
+            ret[i] = new TöbbfonalasTektonrész();
         }
 
         if (x > 0) {
@@ -262,11 +269,10 @@ public class Fungorium {
         }
     }
 
-
     /**
      * Végrehajtja a törést.
      */
-    private void törés() {
+    public void törés() {
         List<Point> points = indexekMeghatározása();
 
         /** Tektonrészek szétválogatása... */
@@ -277,18 +283,17 @@ public class Fungorium {
 
         for (Point p : points) {
             if (kezdo.y != veg.y) {
-                for (int x = (int)p.x + 1; x < 20; ++x) {
-                    Tektonrész current = tektonrészek[x][(int)p.y];
+                for (int x = (int) p.x + 1; x < 20; ++x) {
+                    Tektonrész current = tektonrészek[x][(int) p.y];
 
                     if (!idMap.containsKey(current.getTektonID())) {
                         idMap.put(current.getTektonID(), ++maxTektonID);
                     }
                     current.setTektonID(idMap.get(current.getTektonID()));
                 }
-            }
-            else {
-                for (int y = (int)p.y + 1; y < 20; ++y) {
-                    Tektonrész current = tektonrészek[(int)p.x][y];
+            } else {
+                for (int y = (int) p.y + 1; y < 20; ++y) {
+                    Tektonrész current = tektonrészek[(int) p.x][y];
 
                     if (!idMap.containsKey(current.getTektonID())) {
                         idMap.put(current.getTektonID(), ++maxTektonID);
@@ -299,7 +304,7 @@ public class Fungorium {
         }
 
         szélKorrigálás();
-        
+
         /** GOMBAFONAL SZAKÍTÁS */
         fonalSzakítás();
 
@@ -307,9 +312,9 @@ public class Fungorium {
         tektonrészRandomizálás();
     }
 
-
     /**
      * Kör léptetéséhez hívható. Az aktuális kör alapján változik a törés sorsolása.
+     * 
      * @param kör Új kör száma
      */
     public void körtLéptet(int kör) {
@@ -321,18 +326,17 @@ public class Fungorium {
         }
 
         // Törés
-        int random = r.nextInt((int)(1 / törésEsély));
+        int random = r.nextInt((int) (1 / törésEsély));
         if (random == 0) {
             törés();
             if (kör < 16) {
-                törésEsély = (double)1 / 16;
+                törésEsély = (double) 1 / 16;
             }
-        }
-        else if (random != 0 && kör < 16) {
+        } else if (random != 0 && kör < 16) {
             törésEsély *= 2;
         }
         if (kör == 16) {
-            törésEsély = (double)1 / 4;
+            törésEsély = (double) 1 / 4;
         }
     }
 }

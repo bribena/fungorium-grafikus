@@ -9,20 +9,13 @@ public class Prototipus {
     // tarolok az entitasokhoz, jatekosokhoz
     private final Set<String> gombaszok = new HashSet<>();
     private final Set<String> rovaraszok = new HashSet<>();
-    private final Map<String, Tektonresz> tektonok = new HashMap<>();
-    private final Set<String> gombafonalak = new HashSet<>();
+    private final Map<String, Tektonrész> tektonok = new HashMap<>();
+    private final Map<String, Gombafonal> gombafonalak = new HashMap<>();
     private final Map<String, Gombatest> gombatestek = new HashMap<>();
     private final Map<String, Rovar> rovarok = new HashMap<>();
     private final Map<String, List<String>> fonalKapcsolatok = new HashMap<>();
     private final Map<String, List<String>> szomszedsagok = new HashMap<>();
     private final Fungorium fungorium = new Fungorium();
-
-    {
-        gombatestek.put(6, true);
-        gombatestek.put(3, false);
-        gombatestek.put(4, false);
-        gombatestek.put(2, true);
-    }
 
     // fajlbol valo parancsbeolvasas
     private void futtat(String file) {
@@ -93,7 +86,7 @@ public class Prototipus {
         }
 
         // Gombafonalak közül törlés
-        if (gombafonalak.contains(id)) {
+        if (gombafonalak.containsKey(id)) {
             gombafonalak.remove(id);
             found = true;
         }
@@ -290,7 +283,7 @@ public class Prototipus {
         }
 
         // 6. Minden ellenőrzés sikeres: új Gombatest létrehozása
-        Gombatest ujGombatest = new Gombatest();
+        Gombatest ujGombatest = new Gombatest(false);
         gombatestek.put(tektonId, ujGombatest);
 
         // 7. OK üzenet
@@ -315,7 +308,7 @@ public class Prototipus {
         Gombatest gomba = gombatestek.get(gombaId);
 
         // Ha még nincs fejlesztve
-        if (!gomba.isFejlesztve()) {
+        if (!gomba.isFejlődött()) {
             gomba.setFejlodott(true);
             System.out.printf("gomba fejleszt %s -> OK: %s fejlesztve\n", gombaId, gombaId);
         }
@@ -392,7 +385,7 @@ public class Prototipus {
                         Gombafonal szomszed = kapcsolatok[i];
                         Gombafonal[] szomszedKapcs = szomszed.getKapcsolodoFonalak();
                         for (int j = 0; j < 4; ++j) {
-                            if (szomszedKapcs[j] == fonal) {
+                            if (szomszedKapcs[j].equals(fonal)) {
                                 szomszedKapcs[j] = null;
                                 break;
                             }
@@ -493,7 +486,7 @@ public class Prototipus {
         gombafonalak.put(fonalId, ujFonal);
 
         // 7. Rovar helyének kiderítése
-        Tektonrész rovarTekton = rovar.getTektonresz(); // Feltételezzük, hogy van ilyen getter, amit bevezettünk
+        Tektonrész rovarTekton = rovar.getTektonrész(); // Feltételezzük, hogy van ilyen getter, amit bevezettünk
 
         if (rovarTekton != null) {
             rovarTekton.entitásHozzáadás(ujFonal);
@@ -520,8 +513,13 @@ public class Prototipus {
             System.out.printf("spora szam %d -> FAIL: hibás tekton azonosító (%s)\n", ertek, tektonId);
             return;
         }
-
-        tektonok.put(tektonId, ertek);
+        Tektonrész tekton = tektonok.get(tektonId);
+        if (tekton != null) {
+            tekton.setSporaSzam(ertek);
+            System.out.printf("spora szam %d -> OK: sporaszam beallitva %d tektonon: %d\n", ertek, ertek, tektonId);
+        } else {
+            System.out.printf("spora szam %d -> FAIL: hibas tekton azonostio (%d)\n", ertek, tektonId);
+        }
 
         System.out.printf("spora szam %d -> OK: spóraszám beállítva %s tektonon: %d\n", ertek, tektonId, ertek);
     }
@@ -673,11 +671,15 @@ public class Prototipus {
             System.out.printf("rovar eszik %s %s -> FAIL: rovar béna, nem ehet (%s)\n", rovarId, tektonId, rovarId);
             return;
         }
-
+        Tektonrész tekton = tektonok.get(tektonId);
         if (tektonok.containsKey(tektonId)) {
-            int aktualisSpora = tektonok.get(tektonId);
-            if (aktualisSpora > 0) {
-                tektonok.put(tektonId, aktualisSpora - 1);
+            if (tekton != null) {
+                int aktualisSpora = tekton.getSporaSzam();
+                if (aktualisSpora > 0) {
+                    tekton.setSporaSzam(aktualisSpora - 1);
+                }
+                // OK üzenetet ugyanúgy kiírjuk
+                System.out.printf("rovar eszik %s %s -> OK: sporak elfogyasztva %s-rol\n", rovarId, tektonId, tektonId);
             }
         }
 
@@ -752,24 +754,24 @@ public class Prototipus {
             // gombasz jatekos letrehozasahoz
             case "gombasz":
                 if (parancs.get(1).equals("uj")) {
-                    gombasz_uj(Integer.parseInt(parancs.get(2)));
+                    gombasz_uj(parancs.get(2));
                 }
                 break;
             // rovarasz jatekos letrehozasahoz
             case "rovarasz":
                 if (parancs.get(1).equals("uj")) {
-                    rovarasz_uj(Integer.parseInt(parancs.get(2)));
+                    rovarasz_uj(parancs.get(2));
                 }
                 break;
             case "tekton":
                 switch (parancs.get(1)) {
                     // uj tekton hozzaadasahoz
                     case "uj":
-                        tekton_uj(Integer.parseInt(parancs.get(2)), parancs.get(3));
+                        tekton_uj(parancs.get(2), parancs.get(3));
                         break;
                     // ket tekton szomszedossa tetelehez
                     case "szomszed":
-                        tekton_szomszed(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)));
+                        tekton_szomszed(parancs.get(2), parancs.get(3));
                         break;
                     default:
                         break;
@@ -779,16 +781,16 @@ public class Prototipus {
                 switch (parancs.get(1)) {
                     // gomba novesztese, ha lehetseges
                     case "noveszt":
-                        gomba_noveszt(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)),
-                                Integer.parseInt(parancs.get(4)));
+                        gomba_noveszt(parancs.get(2), parancs.get(3),
+                                parancs.get(4));
                         break;
                     // gomba fejlesztese, ha lehetseges
                     case "fejleszt":
-                        gomba_fejleszt(Integer.parseInt(parancs.get(2)));
+                        gomba_fejleszt(parancs.get(2));
                         break;
                     // spora szoras kornyezo tektonokra
                     case "szoras":
-                        gomba_szoras(Integer.parseInt(parancs.get(2)));
+                        gomba_szoras(parancs.get(2));
                         break;
                     default:
                         break;
@@ -798,17 +800,17 @@ public class Prototipus {
                 switch (parancs.get(1)) {
                     // fonal elszakitasa
                     case "szakit":
-                        gombaf_szakit(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)));
+                        gombaf_szakit(parancs.get(2), parancs.get(3));
                         break;
                     // fonal novesztese egy iranyba
                     case "noveszt":
-                        gombaf_noveszt(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)),
-                                Integer.parseInt(parancs.get(4)));
+                        gombaf_noveszt(parancs.get(2), parancs.get(3),
+                                parancs.get(4));
                         break;
                     // gombatest novesztes fonalbol egy bena rovar helyere
                     case "rovarbol":
-                        gombaf_rovarbol(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)),
-                                Integer.parseInt(parancs.get(4)));
+                        gombaf_rovarbol(parancs.get(2), parancs.get(3),
+                                parancs.get(4));
                         break;
                     default:
                         break;
@@ -817,28 +819,28 @@ public class Prototipus {
             // sporaszam beallitasa
             case "spora":
                 if (parancs.get(1).equals("szam")) {
-                    spora_szam(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)));
+                    spora_szam(Integer.parseInt(parancs.get(2)), parancs.get(3));
                 }
                 break;
             case "rovar":
                 switch (parancs.get(1)) {
                     // hatas beallitasa
                     case "hatas":
-                        rovar_hatas(Integer.parseInt(parancs.get(2)), parancs.get(3), Integer.parseInt(parancs.get(4)));
+                        rovar_hatas(parancs.get(2), parancs.get(3), Integer.parseInt(parancs.get(4)));
                         break;
                     // fonalvagas
                     case "vag":
-                        rovar_vag(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)),
-                                Integer.parseInt(parancs.get(4)));
+                        rovar_vag(parancs.get(2), parancs.get(3),
+                                parancs.get(4));
                         break;
                     // mozgas
                     case "mozog":
-                        rovar_mozog(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)),
-                                Integer.parseInt(parancs.get(4)));
+                        rovar_mozog(parancs.get(2), parancs.get(3),
+                                parancs.get(4));
                         break;
                     // eves
                     case "eszik":
-                        rovar_eszik(Integer.parseInt(parancs.get(2)), Integer.parseInt(parancs.get(3)));
+                        rovar_eszik(parancs.get(2), parancs.get(3));
                         break;
                     default:
                         break;

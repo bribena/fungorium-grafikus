@@ -37,6 +37,10 @@ public class Gombatest implements Entitás {
         return kezdő;
     }
 
+    public boolean isFejlődött() {
+        return fejlődött;
+    }
+
     public void setFejlodott(boolean fejlodott) {
         this.fejlődött = fejlodott;
     }

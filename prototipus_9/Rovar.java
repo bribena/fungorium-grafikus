@@ -7,7 +7,7 @@ import java.util.Random;
 public class Rovar implements Entitás {
     private Rovarfaj faj;
     private int[] hatások;
-
+    private Tektonrész tektonresz;
     private Random random = new Random();
 
     public boolean frissítés() {
@@ -56,11 +56,19 @@ public class Rovar implements Entitás {
 
     public boolean isBena() {
         // a rovar bénult-e, vagyis a hatások tömb 0. indexe nagyobb-e 0-nál
-        return hatásLejárt(2);
+        return hatásaAlatt(2);
+    }
+
+    public Tektonrész getTektonrész() {
+        return tektonresz;
+    }
+
+    public void setTektonrész(Tektonrész t) {
+        tektonresz = t;
     }
 
     public void setHatas(int idx, int ertek) {
-        hatasok[idx] = ertek;
+        hatások[idx] = ertek;
     }
 
     public boolean fonalatVág(Tektonrész t, Gombafonal f) {
@@ -71,9 +79,16 @@ public class Rovar implements Entitás {
         return true;
     }
 
+    /**
+     * Visszahelyezi a rovart egy adott Tektonrészre, és frissíti a tektonresz
+     * mutatót is.
+     */
     public boolean visszahelyez(Tektonrész t) {
-        // a paraméterként kapott tektonrészre helyezi vissza a rovart
-        return t.entitásHozzáadás(this);
+        boolean sikeres = t.entitásHozzáadás(this);
+        if (sikeres) {
+            tektonresz = t; // Ha sikeres volt, akkor frissítjük a helyét
+        }
+        return sikeres;
     }
 
     public void eszik(Tektonrész t) {
@@ -85,6 +100,7 @@ public class Rovar implements Entitás {
         // rovart
         t1.entitásTörlés(this);
         t2.entitásHozzáadás(this);
+        tektonresz = t2; // a tektonrész is frissül
     }
 
     public boolean gyenge() {
