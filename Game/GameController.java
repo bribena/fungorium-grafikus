@@ -1,5 +1,39 @@
 package Game;
 
+import java.util.List;
+
+import prototipus_9.Fungorium;
+
+public class GameController {
+    private GamePanel panel;
+    private GameStateManager stateManager;
+    private PlayerManager playerManager;
+    private GameLogic gameLogic;
+    private InputHandler inputHandler;
+
+    public GameController(GamePanel panel, List<EntityView> views) {
+        this.panel = panel;
+        Fungorium fungorium = new Fungorium();
+
+        this.stateManager = new GameStateManager();
+        this.playerManager = new PlayerManager();
+        this.gameLogic = new GameLogic(fungorium, views, stateManager, playerManager);
+        this.inputHandler = new InputHandler(stateManager, gameLogic);
+    }
+
+    public void handleClick(int x, int y) {
+        inputHandler.handleClick(x, y);
+        panel.repaint();
+    }
+
+    public void handleKey(int keyCode) {
+        inputHandler.handleKey(keyCode);
+        panel.repaint();
+    }
+}
+
+/*package Game;
+
 import java.awt.event.KeyEvent;
 import java.util.List;
 
@@ -172,4 +206,4 @@ public class GameController {
         //TODO
     	//Irényitás (billentyűk) lekezelése, megfelelő függvények hívása
     }
-}
+}*/

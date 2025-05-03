@@ -2,6 +2,8 @@ package Menu;
 
 import javax.swing.JFrame;
 
+import Game.PlayerManager;
+
 public class MainApp {
     public static void main(String[] args) {
         // Az alkalmazás indításakor hozzuk létre a főmenüt
@@ -14,7 +16,7 @@ public class MainApp {
         // Menü vezérlő létrehozása
         MenuController menuController = new MenuController(frame, playerManager);
         
-        // Főmenü megjelenítése
+        // Főmenü megjelenítéses
         menuController.showMainMenu();
         
         // Teszt: közvetlenül a győzelmi képernyő megjelenítése

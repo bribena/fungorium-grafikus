@@ -18,6 +18,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import Game.PlayerManager;
+
 public class PlayerEditView extends JPanel {
 
     public PlayerEditView(MenuController controller, PlayerManager manager) {

@@ -9,6 +9,7 @@ import Game.EntityView;
 import Game.GameController;
 import Game.GamePanel;
 import Game.PalyaView;
+import Game.PlayerManager;
 import prototipus_9.Fungorium;
 
 public class MenuController {

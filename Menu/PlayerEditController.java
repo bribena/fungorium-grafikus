@@ -1,5 +1,7 @@
 package Menu;
 
+import Game.PlayerManager;
+
 public class PlayerEditController {
     private PlayerManager playerManager;
 
