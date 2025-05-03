@@ -19,6 +19,12 @@ public class Gombafonal implements Entitás {
     {
         faj = forras.getFaj();
     }
+    
+    //nem lesz jó
+    public Gombafonal(Gombafaj faj)
+    {
+        faj = Gombafaj.Amanita;
+    }
 
     @Override
     public boolean frissítés()
