@@ -1,7 +1,8 @@
 #!/bin/sh
 
-javac -d out fungorium/**/*.java
+javac -d out fungorium/*/*.java
+javac -d out fungorium/*.java
 cd out
-jar cvfe $1.jar $1.Main $1/*.class
-mv $1.jar ../$1.jar
+jar cvfe fungorium.jar fungorium.Main fungorium/*.class fungorium/*/*.class
+mv fungorium.jar ../fungorium.jar
 cd ..

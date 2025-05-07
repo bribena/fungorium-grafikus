@@ -1,4 +1,5 @@
-javac -d out %1/*.java
+javac -d out fungorium/*/*.java
+javac -d out fungorium/*.java
 cd out
-java %1/Main
+java fungorium/Main
 cd ..

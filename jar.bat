@@ -1,5 +1,6 @@
-javac -d out /*.java
+javac -d out fungorium/*/*.java
+javac -d out fungorium/*.java
 cd out
-jar cvfe %1.jar %1.Main %1/*.class
-move %1.jar ../%1.jar
+jar cvfe fungorium.jar fungorium.Main fungorium/*.class fungorium/*/*.class
+move fungorium.jar ../fungorium.jar
 cd ..
