@@ -10,3 +10,7 @@
 shell.nix
 # Ez sem kell
 .vscode
+
+*.iml
+module-info.java
+out
