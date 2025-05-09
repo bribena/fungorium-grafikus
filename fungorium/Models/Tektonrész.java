@@ -7,7 +7,6 @@ public abstract class Tektonrész {
     protected int tektonID = -1;
     protected boolean[] tektonSzéleE = { false, false, false, false }; // tárolja, hogy melyik irányban van rés
     protected List<Entitás> entitások = new ArrayList<>(); // a Tektonrészen levő entitásokat tárolja
-    private int sporaSzam = 0;
 
     protected Tektonrész() {
     }
@@ -22,14 +21,6 @@ public abstract class Tektonrész {
         return tektonID;
     }
 
-    public int getSporaSzam() {
-        return sporaSzam;
-    }
-
-    public void setSporaSzam(int sporaSzam) {
-        this.sporaSzam = sporaSzam;
-    }
-
     public void setTektonID(int tektonID) {
         this.tektonID = tektonID;
     }
@@ -37,6 +28,7 @@ public abstract class Tektonrész {
     // hozzáadja a tektonrész entitásainak listájához a paraméterként kapott
     // entitást, true-t ad vissza, ha sikeres volt, amúgy false-ot
     public boolean entitásHozzáadás(Entitás entitás) {
+        /** TODO: ÚJRAÍRNI */
         for (int i = 0; i < entitások.size(); i++) {
             if (vanGomba() && entitás.getClass() == Gombatest.class) {
                 return false;
