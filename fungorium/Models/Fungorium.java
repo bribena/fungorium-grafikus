@@ -87,18 +87,6 @@ public class Fungorium {
         return new int[] { -1, -1 };
     }
 
-    public boolean ujTektonElhelyezese(Tektonrész t) {
-        for (int x = 0; x < 20; ++x) {
-            for (int y = 0; y < 20; ++y) {
-                if (tektonrészek[x][y] == null) {
-                    tektonrészek[x][y] = t;
-                    return true;
-                }
-            }
-        }
-        return false; // ha sehol sem lehetett elhelyezni
-    }
-
     /**
      * x, y koordináta összefogása a töréshez.
      */
@@ -149,7 +137,7 @@ public class Fungorium {
             double y = (1 - t) * a.y + t * b.y;
             Point p = new Point(x, y);
 
-            if (p.x < -1 || p.y < -1 || p.x > 19 || p.y > 19) {
+            if (p.x <= -1 || p.y <= -1 || p.x > 19 || p.y > 19) {
                 continue;
             }
             Point rounded = new Point(Math.ceil(p.x), Math.ceil(p.y));
@@ -226,10 +214,10 @@ public class Fungorium {
         if (y > 0) {
             ret[0] = tektonrészek[x][y - 1];
         }
-        if (x < 20) {
+        if (x < 19) {
             ret[1] = tektonrészek[x + 1][y];
         }
-        if (y < 20) {
+        if (y < 19) {
             ret[2] = tektonrészek[x][y + 1];
         }
 
@@ -257,25 +245,36 @@ public class Fungorium {
      * Tektonrész randomizáló. Nagyon csúnya lesz, van egy olyan sejtésem...
      */
     private void tektonrészRandomizálás() {
+        // Class<? extends Tektonrész>[] ujHatasok = new Class<? extends Tektonrész>[maxTektonID];
+        List<Class<? extends Tektonrész>> ujHatasok = new ArrayList<>(maxTektonID);
+        for (int i = 0; i <= maxTektonID; ++i) {
+            int n = r.nextInt(5);
+            switch (n) {
+                case 0:
+                    ujHatasok.add(TöbbfonalasTektonrész.class);
+                    break;
+                case 1:
+                    ujHatasok.add(ÉletbentartóTektonrész.class);
+                    break;
+                case 2:
+                    ujHatasok.add(EgyfonalasTektonrész.class);
+                    break;
+                case 3:
+                    ujHatasok.add(FonalfelszívóTektonrész.class);
+                    break;
+                case 4:
+                    ujHatasok.add(GombatestTiltóTektonrész.class);
+                    break;
+            }
+        }
         for (int x = 0; x < 20; ++x) {
             for (int y = 0; y < 20; ++y) {
-                int i = r.nextInt(5);
-                switch (i) {
-                    case 0:
-                        tektonrészek[x][y] = new TöbbfonalasTektonrész(tektonrészek[x][y]);
-                        break;
-                    case 1:
-                        tektonrészek[x][y] = new EgyfonalasTektonrész(tektonrészek[x][y]);
-                        break;
-                    case 2:
-                        tektonrészek[x][y] = new FonalfelszívóTektonrész(tektonrészek[x][y]);
-                        break;
-                    case 3:
-                        tektonrészek[x][y] = new ÉletbentartóTektonrész(tektonrészek[x][y]);
-                        break;
-                    case 4:
-                        tektonrészek[x][y] = new GombatestTiltóTektonrész(tektonrészek[x][y]);
-                        break;
+                try {
+                    Tektonrész tr = ujHatasok.get(tektonrészek[x][y].getTektonID())
+                        .getConstructor(Tektonrész.class)
+                        .newInstance(tektonrészek[x][y]);
+                    tektonrészek[x][y] = tr;
+                } catch (Exception e) {
                 }
             }
         }
@@ -293,28 +292,63 @@ public class Fungorium {
 
         Map<Integer, Integer> idMap = new HashMap<>();
 
-        for (Point p : points) {
-            if (kezdo.y != veg.y) {
-                for (int x = (int) p.x + 1; x < 20; ++x) {
-                    Tektonrész current = tektonrészek[x][(int) p.y];
-
-                    if (!idMap.containsKey(current.getTektonID())) {
-                        idMap.put(current.getTektonID(), ++maxTektonID);
+        // Függőleges
+        if (kezdo.x == veg.x) {
+            for (int y = 0; y < 20; ++y) {
+                for (int x = (int)kezdo.x + 1; x < 20; ++x) {
+                    Tektonrész curr = tektonrészek[x][y];
+                    if (!idMap.containsKey(curr.getTektonID())) {
+                        idMap.put(curr.getTektonID(), ++maxTektonID);
                     }
-                    current.setTektonID(idMap.get(current.getTektonID()));
-                }
-            } else {
-                for (int y = (int) p.y + 1; y < 20; ++y) {
-                    Tektonrész current = tektonrészek[(int) p.x][y];
-
-                    if (!idMap.containsKey(current.getTektonID())) {
-                        idMap.put(current.getTektonID(), ++maxTektonID);
-                    }
-                    current.setTektonID(idMap.get(current.getTektonID()));
+                    curr.setTektonID(idMap.get(curr.getTektonID()));
                 }
             }
         }
+        // Vízszintes
+        else if (kezdo.y == veg.y) {
+            for (int x = 0; x < 20; ++x) {
+                for (int y = (int)kezdo.y + 1; y < 20; ++y) {
+                    Tektonrész curr = tektonrészek[x][y];
+                    if (!idMap.containsKey(curr.getTektonID())) {
+                        idMap.put(curr.getTektonID(), ++maxTektonID);
+                    }
+                    curr.setTektonID(idMap.get(curr.getTektonID()));
+                }
+            }
+        }
+        // Átlósan valahogy
+        else {
+            int maxX = (int)points.get(0).x;
+            int currY = (int)points.get(0).y;
+            for (Point p : points) {
+                if (currY != (int)p.y) {
+                    for (int x = maxX + 1; x < 20; ++x) {
+                        Tektonrész curr = tektonrészek[x][currY];
+                        // System.out.print(x + ", " + currY + " changed from " + curr.getTektonID() + " to ");
+                        if (!idMap.containsKey(curr.getTektonID())) {
+                            idMap.put(curr.getTektonID(), ++maxTektonID);
+                        }
+                        curr.setTektonID(idMap.get(curr.getTektonID()));
+                    }
 
+                    currY = (int)p.y;
+                    maxX = (int)p.x;
+                }
+                else if (maxX < (int)p.x) {
+                    maxX = (int)p.x;
+                }
+            }
+            for (int x = maxX + 1; x < 20; ++x) {
+                Tektonrész curr = tektonrészek[x][currY];
+                // System.out.print(x + ", " + currY + " changed from " + curr.getTektonID() + " to ");
+                if (!idMap.containsKey(curr.getTektonID())) {
+                    idMap.put(curr.getTektonID(), ++maxTektonID);
+                }
+                curr.setTektonID(idMap.get(curr.getTektonID()));
+                // System.out.println(curr.getTektonID() + " via Point " + maxX + ", " + currY);
+            }
+        }
+        
         szélKorrigálás();
 
         /** GOMBAFONAL SZAKÍTÁS */
