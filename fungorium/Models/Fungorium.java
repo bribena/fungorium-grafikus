@@ -54,14 +54,14 @@ public class Fungorium {
             // Perem
             tektonrészek[i][0].getTektonSzéleE()[0] = true;
             tektonrészek[0][i].getTektonSzéleE()[3] = true;
-            tektonrészek[i][19].getTektonSzéleE()[1] = true;
-            tektonrészek[19][i].getTektonSzéleE()[2] = true;
+            tektonrészek[i][19].getTektonSzéleE()[2] = true;
+            tektonrészek[19][i].getTektonSzéleE()[1] = true;
 
             // Belső
-            tektonrészek[i][9].getTektonSzéleE()[1] = true;
-            tektonrészek[i][10].getTektonSzéleE()[3] = true;
-            tektonrészek[9][i].getTektonSzéleE()[2] = true;
-            tektonrészek[10][i].getTektonSzéleE()[0] = true;
+            tektonrészek[i][9].getTektonSzéleE()[2] = true;
+            tektonrészek[i][10].getTektonSzéleE()[0] = true;
+            tektonrészek[9][i].getTektonSzéleE()[1] = true;
+            tektonrészek[10][i].getTektonSzéleE()[3] = true;
         }
     }
 
