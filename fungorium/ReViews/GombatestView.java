@@ -9,7 +9,8 @@ import fungorium.ReModels.Tektonrész;
 public class GombatestView extends EntitásView {
     public GombatestView(Tektonrész tr) {
         super(tr);
-        setOpaque(false);
+
+        setBounds(0, 0, 38, 38);
     }
 
     @Override

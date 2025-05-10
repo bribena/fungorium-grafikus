@@ -20,11 +20,10 @@ public class TektonrészView extends JLayeredPane {
         fungorium = f;
         this.x = x;
         this.y = y;
-        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
         // if (x == 0 && y == 0) {
-            add(new GombatestView(f.getTektonrész(x, y)), 0, 0);
-            add(new GombafonalView(f.getTektonrész(x, y)), 0, 1);
+            add(new GombatestView(f.getTektonrész(x, y)));
+            add(new GombafonalView(f.getTektonrész(x, y)));
         // }
         setOpaque(true);
         setVisible(true);

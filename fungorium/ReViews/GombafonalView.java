@@ -14,7 +14,8 @@ public class GombafonalView extends EntitásView {
         super(tr);
         fonal = new Gombafonal();
         tr.getEntitások().add(fonal);
-        setOpaque(false);
+
+        setBounds(0, 0, 38, 38);
     }
 
     @Override
