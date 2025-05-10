@@ -1,12 +1,13 @@
 package fungorium.ReViews;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.FlowLayout;
 
 import javax.swing.JLayeredPane;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 
 import fungorium.ReModels.*;
 
@@ -15,18 +16,30 @@ public class TektonrészView extends JLayeredPane {
     
     public Fungorium fungorium;
     public int x, y;
+    // private JLabel debug = new JLabel("E", JLabel.CENTER);
 
     public TektonrészView(Fungorium f, int x, int y) {
         fungorium = f;
         this.x = x;
         this.y = y;
 
-        // if (x == 0 && y == 0) {
-            add(new GombatestView(f.getTektonrész(x, y)));
-            add(new GombafonalView(f.getTektonrész(x, y)));
-        // }
+        // add(debug, 1);
+        
         setOpaque(true);
         setVisible(true);
+    }
+
+    @Override
+    public Component add(Component comp) {
+        comp = super.add(comp);
+        comp.setBounds(0, 0, TILE_SIZE, TILE_SIZE);
+        return comp;
+    }
+    @Override
+    public Component add(Component comp, int index) {
+        comp = super.add(comp, index);
+        comp.setBounds(0, 0, TILE_SIZE, TILE_SIZE);
+        return comp;
     }
 
     @Override
@@ -67,5 +80,7 @@ public class TektonrészView extends JLayeredPane {
             BorderFactory.createMatteBorder(bToI(!szel[0]), bToI(!szel[3]), bToI(!szel[2]), bToI(!szel[1]), Color.BLACK),
             BorderFactory.createMatteBorder(bToI(szel[0]), bToI(szel[3]), bToI(szel[2]), bToI(szel[1]), Color.WHITE)
         ));
+
+        // debug.setText(fungorium.getTektonrész(x, y).getTektonID() + "");
     }
 }

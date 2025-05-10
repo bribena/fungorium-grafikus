@@ -7,10 +7,19 @@ import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 
 import fungorium.ReControllers.GameController;
-import fungorium.ReModels.Fungorium;
+import fungorium.ReModels.*;
 
 public class GamePanel extends JPanel {
     public GameController controller;
+
+    private Gombafonal getGombafonal(Tektonrész t) {
+        for (Entitás e : t.getEntitások()) {
+            if (e instanceof Gombafonal) {
+                return (Gombafonal)e;
+            }
+        }
+        return null;
+    }
 
     public GamePanel() {
         Fungorium f = new Fungorium();
