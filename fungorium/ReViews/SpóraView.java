@@ -28,7 +28,7 @@ public class SpóraView extends EntitásView {
             alpha = 0xFF;
         }
         else {
-            alpha = 13 * spóra.getSpóraSzám() + 128;
+            alpha = 6 * spóra.getSpóraSzám() + 192;
         }
 
         switch (spóra.getFaj()) {
@@ -45,7 +45,6 @@ public class SpóraView extends EntitásView {
                 g.setColor(new Color(0xFF, 0xE4, 0XE3, alpha));
                 break;
         }
-        // D: #ffe4e3
 
         // RANDOM SZÁMOK GOOOOO
         g.fillOval((getWidth() - 16) / 4, (getHeight() - 16) / 4, 14, 14);
