@@ -7,7 +7,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-import javax.swing.JLabel;
+// import javax.swing.JLabel;
 
 import javax.swing.JLayeredPane;
 import javax.swing.BorderFactory;
@@ -20,7 +20,9 @@ public class TektonrészView extends JLayeredPane {
     private List<EntitásView> e = new ArrayList<>();
 
     private Fungorium fungorium;
-    private int x, y;
+    public int x, y;
+
+    private boolean selected = false;
 
     // private JLabel label;
 
@@ -33,6 +35,10 @@ public class TektonrészView extends JLayeredPane {
         // add(label);
 
         setOpaque(true);
+    }
+
+    public void toggleSelected() {
+        selected = !selected;
     }
 
     @Override
@@ -102,11 +108,16 @@ public class TektonrészView extends JLayeredPane {
         }
 
         // Szél rajzolása
-        boolean[] szel = tr.getTektonSzéleE();
-        setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(bToI(!szel[0]), bToI(!szel[3]), bToI(!szel[2]), bToI(!szel[1]), Color.BLACK),
-            BorderFactory.createMatteBorder(bToI(szel[0]), bToI(szel[3]), bToI(szel[2]), bToI(szel[1]), Color.WHITE)
-        ));
+        if (!selected) {
+            boolean[] szel = tr.getTektonSzéleE();
+            setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(bToI(!szel[0]), bToI(!szel[3]), bToI(!szel[2]), bToI(!szel[1]), Color.BLACK),
+                BorderFactory.createMatteBorder(bToI(szel[0]), bToI(szel[3]), bToI(szel[2]), bToI(szel[1]), Color.WHITE)
+            ));
+        }
+        else {
+            setBorder(BorderFactory.createLineBorder(Color.CYAN, 4));
+        }
 
         // label.setText(fungorium.getTektonrész(x, y).getTektonID() + "");
     }

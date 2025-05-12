@@ -1,7 +1,9 @@
 package fungorium.ReViews;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+// import java.awt.event.KeyAdapter;
+// import java.awt.event.KeyEvent;
+// import java.awt.event.MouseAdapter;
+// import java.awt.event.MouseEvent;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 
@@ -14,6 +16,7 @@ public class FungoriumView extends JPanel {
     
     public FungoriumView(Fungorium f) {
         fungorium = f;
+
         setLayout(new GridLayout(f.getWidth(), f.getHeight()));
         
         for (int y = 0; y < fungorium.getHeight(); ++y) {
@@ -22,13 +25,21 @@ public class FungoriumView extends JPanel {
             }
         }
 
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                f.törés();
-                System.out.println("Törés");
-            }
-        });
+        // addMouseListener(new MouseAdapter() {
+        //     @Override
+        //     public void mouseClicked(MouseEvent e) {
+        //         TektonrészView tw = (TektonrészView)getComponentAt(e.getPoint());
+        //         System.out.println(tw.x + ", " + tw.y);
+        //     }
+        // });
+
+        // addKeyListener(new KeyAdapter() {
+        //     @Override
+        //     public void keyReleased(KeyEvent e) {
+        //         f.törés();
+        //         System.out.println("Törés");
+        //     }
+        // });
 
         setFocusable(true);
     }

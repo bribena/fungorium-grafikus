@@ -11,10 +11,14 @@ public class GamePanel extends JPanel {
     public GameController controller;
 
     public GamePanel() {
-        JátékKezelő k = new JátékKezelő();
+        Játék k = new Játék();
+        FungoriumView f = new FungoriumView(k.getFungorium());
 
-        controller = new GameController(k);
-        add(new FungoriumView(k.getFungorium()));
+        controller = new GameController(k, f);
+        add(f);
+
+        f.addMouseListener(controller.getFungoriumMouseAdapter());
+        f.addKeyListener(controller.getFungoriumKeyAdapter());
     }
 
     @Override
