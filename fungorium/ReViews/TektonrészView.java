@@ -26,17 +26,24 @@ public class TektonrészView extends JLayeredPane {
         this.x = x;
         this.y = y;
 
-        Gombafaj faj = Gombafaj.values()[new Random().nextInt(4)];
-        add(new GombafonalView(f.getTektonrész(x, y), faj));
+        // int i = new Random().nextInt(4);
+        // Gombafaj gfaj = Gombafaj.values()[i];
+        // Rovarfaj rfaj = Rovarfaj.values()[i];
+
+        // add(new GombafonalView(f.getTektonrész(x, y), gfaj));
 
         // if (x > 0) {
         //     ((Gombafonal)f.getTektonrész(x, y).getEntitások().get(0)).getSzomszédosFonalak()[3] = ((Gombafonal)f.getTektonrész(x - 1, y).getEntitások().get(0));
         //     ((Gombafonal)f.getTektonrész(x - 1, y).getEntitások().get(0)).getSzomszédosFonalak()[1] = ((Gombafonal)f.getTektonrész(x, y).getEntitások().get(0));
         // }
 
-        add(new GombatestView(f.getTektonrész(x, y), faj));
+        // add(new GombatestView(f.getTektonrész(x, y), gfaj));
 
-        add(new SpóraView(f.getTektonrész(x, y), faj));
+        // add(new SpóraView(f.getTektonrész(x, y), gfaj));
+
+        // add(new RovarView(f.getTektonrész(x, y), rfaj));
+
+
         // add(debug, 1);
 
         setOpaque(true);

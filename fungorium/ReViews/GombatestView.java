@@ -41,5 +41,8 @@ public class GombatestView extends EntitásView {
         }
 
         g.fillOval((getWidth() - 20) / 2, (getHeight() - 20) / 2, 20, 20);
+        
+        g.setColor(Color.BLACK);
+        g.drawOval((getWidth() - 20) / 2, (getHeight() - 20) / 2, 20, 20);
     }
 }

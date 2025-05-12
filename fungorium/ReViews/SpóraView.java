@@ -16,7 +16,7 @@ public class SpóraView extends EntitásView {
 
     @Override
     public boolean isValid() {
-        return true;
+        return spóra == null ? true : spóra.érvényesE();
     }
 
     @Override
@@ -51,5 +51,11 @@ public class SpóraView extends EntitásView {
         g.fillOval((getWidth() - 12) / 4 + (getWidth()) / 2, (getHeight() - 12) / 4, 10, 10);
         g.fillOval((getWidth() - 12) / 4, (getHeight() - 12) / 4 + (getHeight()) / 2, 10, 10);
         g.fillOval((getWidth() - 8) / 4 + (getWidth()) / 2, (getHeight() - 8) / 4 + (getHeight()) / 2, 8, 8);
+
+        g.setColor(Color.BLACK);
+        g.drawOval((getWidth() - 16) / 4, (getHeight() - 16) / 4, 14, 14);
+        g.drawOval((getWidth() - 12) / 4 + (getWidth()) / 2, (getHeight() - 12) / 4, 10, 10);
+        g.drawOval((getWidth() - 12) / 4, (getHeight() - 12) / 4 + (getHeight()) / 2, 10, 10);
+        g.drawOval((getWidth() - 8) / 4 + (getWidth()) / 2, (getHeight() - 8) / 4 + (getHeight()) / 2, 8, 8);
     }
 }
