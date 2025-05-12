@@ -7,44 +7,30 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import javax.swing.JLabel;
+
 import javax.swing.JLayeredPane;
 import javax.swing.BorderFactory;
 
 import fungorium.ReModels.*;
 
 public class TektonrészView extends JLayeredPane {
-    public static final int TILE_SIZE = 38;
+    private static final int TILE_SIZE = 38;
     
     private List<EntitásView> e = new ArrayList<>();
 
-    public Fungorium fungorium;
-    public int x, y;
-    // private JLabel debug = new JLabel("E", JLabel.CENTER);
+    private Fungorium fungorium;
+    private int x, y;
+
+    // private JLabel label;
 
     public TektonrészView(Fungorium f, int x, int y) {
         fungorium = f;
         this.x = x;
         this.y = y;
 
-        // int i = new Random().nextInt(4);
-        // Gombafaj gfaj = Gombafaj.values()[i];
-        // Rovarfaj rfaj = Rovarfaj.values()[i];
-
-        // add(new GombafonalView(f.getTektonrész(x, y), gfaj));
-
-        // if (x > 0) {
-        //     ((Gombafonal)f.getTektonrész(x, y).getEntitások().get(0)).getSzomszédosFonalak()[3] = ((Gombafonal)f.getTektonrész(x - 1, y).getEntitások().get(0));
-        //     ((Gombafonal)f.getTektonrész(x - 1, y).getEntitások().get(0)).getSzomszédosFonalak()[1] = ((Gombafonal)f.getTektonrész(x, y).getEntitások().get(0));
-        // }
-
-        // add(new GombatestView(f.getTektonrész(x, y), gfaj));
-
-        // add(new SpóraView(f.getTektonrész(x, y), gfaj));
-
-        // add(new RovarView(f.getTektonrész(x, y), rfaj));
-
-
-        // add(debug, 1);
+        // label = new JLabel(fungorium.getTektonrész(x, y).getTektonID() + "");
+        // add(label);
 
         setOpaque(true);
     }
@@ -80,6 +66,7 @@ public class TektonrészView extends JLayeredPane {
         return new Dimension(TILE_SIZE, TILE_SIZE);
     }
 
+    /** boolean-t int-té alakít */
     private int bToI(boolean b) {
         return b ? 1 : 0;
     }
@@ -121,6 +108,6 @@ public class TektonrészView extends JLayeredPane {
             BorderFactory.createMatteBorder(bToI(szel[0]), bToI(szel[3]), bToI(szel[2]), bToI(szel[1]), Color.WHITE)
         ));
 
-        // debug.setText(fungorium.getTektonrész(x, y).getTektonID() + "");
+        // label.setText(fungorium.getTektonrész(x, y).getTektonID() + "");
     }
 }

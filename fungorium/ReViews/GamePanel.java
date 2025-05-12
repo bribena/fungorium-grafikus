@@ -1,8 +1,6 @@
 package fungorium.ReViews;
 
 import java.awt.Graphics;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 
@@ -13,23 +11,10 @@ public class GamePanel extends JPanel {
     public GameController controller;
 
     public GamePanel() {
-        Fungorium f = new Fungorium();
+        JátékKezelő k = new JátékKezelő();
 
-        controller = new GameController(f);
-        add(new FungoriumView(f));
-
-        setFocusable(true);
-
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyChar() == ' ') {
-                    f.törés();
-                    repaint();
-                    System.out.println("Törés");
-                }
-            }
-        });
+        controller = new GameController(k);
+        add(new FungoriumView(k.getFungorium()));
     }
 
     @Override

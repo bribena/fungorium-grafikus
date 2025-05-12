@@ -1,11 +1,15 @@
 package fungorium.ReControllers;
 
-import fungorium.ReModels.Fungorium;
+import fungorium.ReModels.JátékKezelő;
 
 public class GameController {
-    public Fungorium fungorium;
+    private JátékKezelő kezelő;
 
-    public GameController(Fungorium f) {
-        fungorium = f;
+    public GameController(JátékKezelő kezelő) {
+        this.kezelő = kezelő;
+    }
+
+    public JátékKezelő getJátékKezelő() {
+        return kezelő;
     }
 }

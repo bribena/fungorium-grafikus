@@ -165,6 +165,24 @@ public class Fungorium {
                 }
             }
         }
+
+        // Mégegy korrigálás
+        for (int x = 0; x < 20; ++x) {
+            for (int y = 0; y < 20; ++y) {
+                Tektonrész curr = tektonrészek[x][y];
+                Tektonrész[] szomsz = getTektonrészSzomszédok(x, y);
+                
+                boolean found = false;
+
+                for (int i = 0; i < 4 && !found; ++i) {
+                    found = szomsz[i].getTektonID() == curr.getTektonID();
+                }
+
+                if (!found) {
+                    curr.setTektonID(++maxTektonID);
+                }
+            }
+        }
     }
     // Még mindig elég :skull: ez a sok kapcsos zárójel, de már nem érdekel...
 
@@ -238,9 +256,6 @@ public class Fungorium {
         }
         
         szélKorrigálásÉsSzakítás();
-
-        /** GOMBAFONAL SZAKÍTÁS */
-        // fonalSzakítás();
 
         /** TEKTONRÉSZ EFFEKT RANDOMIZÁLÁS */
         tektonrészRandomizálás();
