@@ -1,5 +1,7 @@
 package fungorium.ReViews;
 
+import java.util.*;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -7,13 +9,14 @@ import java.awt.Graphics;
 
 import javax.swing.JLayeredPane;
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 
 import fungorium.ReModels.*;
 
 public class TektonrészView extends JLayeredPane {
     public static final int TILE_SIZE = 38;
     
+    private List<EntitásView> e = new ArrayList<>();
+
     public Fungorium fungorium;
     public int x, y;
     // private JLabel debug = new JLabel("E", JLabel.CENTER);
@@ -23,10 +26,20 @@ public class TektonrészView extends JLayeredPane {
         this.x = x;
         this.y = y;
 
+        Gombafaj faj = Gombafaj.values()[new Random().nextInt(4)];
+        add(new GombafonalView(f.getTektonrész(x, y), faj));
+
+        // if (x > 0) {
+        //     ((Gombafonal)f.getTektonrész(x, y).getEntitások().get(0)).getSzomszédosFonalak()[3] = ((Gombafonal)f.getTektonrész(x - 1, y).getEntitások().get(0));
+        //     ((Gombafonal)f.getTektonrész(x - 1, y).getEntitások().get(0)).getSzomszédosFonalak()[1] = ((Gombafonal)f.getTektonrész(x, y).getEntitások().get(0));
+        // }
+
+        add(new GombatestView(f.getTektonrész(x, y), faj));
+
+        add(new SpóraView(f.getTektonrész(x, y), faj));
         // add(debug, 1);
-        
+
         setOpaque(true);
-        setVisible(true);
     }
 
     @Override
@@ -35,11 +48,24 @@ public class TektonrészView extends JLayeredPane {
         comp.setBounds(0, 0, TILE_SIZE, TILE_SIZE);
         return comp;
     }
-    @Override
-    public Component add(Component comp, int index) {
-        comp = super.add(comp, index);
-        comp.setBounds(0, 0, TILE_SIZE, TILE_SIZE);
-        return comp;
+
+    public Component add(EntitásView comp) {
+        e.add(comp);
+
+        if (comp instanceof GombafonalView) {
+            setLayer(comp, 0);
+        }
+        else if (comp instanceof GombatestView) {
+            setLayer(comp, 2);
+        }
+        else if (comp instanceof SpóraView) {
+            setLayer(comp, 1);
+        }
+        else if (comp instanceof RovarView) {
+            setLayer(comp, 3);
+        }
+
+        return add((Component)comp);
     }
 
     @Override
@@ -54,6 +80,13 @@ public class TektonrészView extends JLayeredPane {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
+        for (int i = 0; i < e.size(); ++i) {
+            if (e.get(i) != null && !e.get(i).isValid()) {
+                e.remove(i);
+                --i;
+            }
+        }
 
         Tektonrész tr = fungorium.getTektonrész(x, y);
         

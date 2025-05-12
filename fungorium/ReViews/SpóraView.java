@@ -1,0 +1,56 @@
+package fungorium.ReViews;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import fungorium.ReModels.*;
+
+public class SpóraView extends EntitásView {
+    private Spóra spóra;
+
+    public SpóraView(Tektonrész tr, Gombafaj faj) {
+        super(tr);
+        spóra = new Spóra(faj);
+        tr.getEntitások().add(spóra);
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        int alpha;
+        if (spóra.getSpóraSzám() >= 10) {
+            alpha = 0xFF;
+        }
+        else {
+            alpha = 13 * spóra.getSpóraSzám() + 128;
+        }
+
+        switch (spóra.getFaj()) {
+            case Amanita:
+                g.setColor(new Color(0xf7,0xf2,0xcb,alpha));
+                break;
+            case Boletus:
+                g.setColor(new Color(0xd6, 0xe8, 0xef, alpha));
+                break;
+            case Coprinus:
+                g.setColor(new Color(0xf2, 0xec, 0xff, alpha));
+                break;
+            case Deconica:
+                g.setColor(new Color(0xFF, 0xE4, 0XE3, alpha));
+                break;
+        }
+        // D: #ffe4e3
+
+        // RANDOM SZÁMOK GOOOOO
+        g.fillOval((getWidth() - 16) / 4, (getHeight() - 16) / 4, 14, 14);
+        g.fillOval((getWidth() - 12) / 4 + (getWidth()) / 2, (getHeight() - 12) / 4, 10, 10);
+        g.fillOval((getWidth() - 12) / 4, (getHeight() - 12) / 4 + (getHeight()) / 2, 10, 10);
+        g.fillOval((getWidth() - 8) / 4 + (getWidth()) / 2, (getHeight() - 8) / 4 + (getHeight()) / 2, 8, 8);
+    }
+}

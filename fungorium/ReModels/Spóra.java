@@ -1,15 +1,19 @@
 package fungorium.ReModels;
 
-public class Gombafonal implements Entitás {
-    private Gombafonal[] kapcsolódóFonalak = new Gombafonal[4];
+public class Spóra implements Entitás {
     private Gombafaj faj;
-
-    public Gombafonal(Gombafaj faj) {
+    private int spóraSzám;
+    
+    public Spóra(Gombafaj faj) {
         this.faj = faj;
     }
 
     public Gombafaj getFaj() {
         return faj;
+    }
+
+    public int getSpóraSzám() {
+        return spóraSzám;
     }
 
     @Override
@@ -21,9 +25,4 @@ public class Gombafonal implements Entitás {
     public boolean frissítés() {
         return false;
     }
-
-    public Gombafonal[] getSzomszédosFonalak() {
-        return kapcsolódóFonalak;
-    }
-    
 }

@@ -1,16 +1,16 @@
 package fungorium.ReModels;
 
-public class Gombafonal implements Entitás {
-    private Gombafonal[] kapcsolódóFonalak = new Gombafonal[4];
+public class Gombatest implements Entitás {
     private Gombafaj faj;
-
-    public Gombafonal(Gombafaj faj) {
+    
+    public Gombatest(Gombafaj faj) {
         this.faj = faj;
     }
 
     public Gombafaj getFaj() {
         return faj;
     }
+
 
     @Override
     public boolean érvényesE() {
@@ -20,10 +20,6 @@ public class Gombafonal implements Entitás {
     @Override
     public boolean frissítés() {
         return false;
-    }
-
-    public Gombafonal[] getSzomszédosFonalak() {
-        return kapcsolódóFonalak;
     }
     
 }
