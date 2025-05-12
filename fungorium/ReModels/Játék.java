@@ -10,7 +10,7 @@ public class Játék {
             játékosok[i] = new Gombász(Gombafaj.values()[i]);
             játékosok[i+4] = new Rovarász(Rovarfaj.values()[i]);
         }
-        aktuálisJátékos = játékosok[4];
+        aktuálisJátékos = játékosok[0];
     }
 
     public Játékos getAktuálisJátékos() {

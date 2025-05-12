@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 import fungorium.ReViews.GamePanel;
 
-
 public class Main {
     public static void main(String[] args) {
         // Az alkalmazás indításakor hozzuk létre a főmenüt

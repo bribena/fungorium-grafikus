@@ -18,7 +18,8 @@ public class GamePanel extends JPanel {
         add(f);
 
         f.addMouseListener(controller.getFungoriumMouseAdapter());
-        f.addKeyListener(controller.getFungoriumKeyAdapter());
+        f.addKeyListener(controller.getGombászKeyAdapter());
+        f.addKeyListener(controller.getRovarászKeyAdapter());
     }
 
     @Override
