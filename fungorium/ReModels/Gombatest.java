@@ -2,7 +2,7 @@ package fungorium.ReModels;
 
 public class Gombatest implements Entitás {
     private Gombafaj faj;
-    
+    public Gombatest(){};
     public Gombatest(Gombafaj faj) {
         this.faj = faj;
     }
