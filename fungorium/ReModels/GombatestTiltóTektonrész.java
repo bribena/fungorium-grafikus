@@ -10,7 +10,7 @@ public class GombatestTiltóTektonrész extends Tektonrész {
 
     public boolean entitásHozzáadás(Entitás entitás)
     {
-        if (entitás.getClass() == Gombatest.class)
+        if (entitás instanceof Gombatest)
         {
             return false;
         }

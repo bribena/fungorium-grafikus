@@ -158,7 +158,7 @@ public class Fungorium {
                         for (Entitás e : tektonrészek[x][y].getEntitások()) {
                             if (e instanceof Gombafonal) {
                                 Gombafonal gf = (Gombafonal)e;
-                                gf.getSzomszédosFonalak()[i] = null;
+                                gf.getKapcsolódóFonalak()[i] = null;
                             }
                         }
                     }

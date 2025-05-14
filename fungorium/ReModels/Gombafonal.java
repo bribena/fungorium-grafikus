@@ -140,7 +140,7 @@ public class Gombafonal implements Entitás {
         List<Entitás> entitások = aholVan.getEntitások();
 
         for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i).getClass() == fungorium.Models.Spóra.class) {
+            if (entitások.get(i) instanceof Spóra) {
                 Spóra spóra = (Spóra) entitások.get(i);
                 if (spóra.getFaj() == faj && spóra.getSpóraSzám() > 5) {
                     Gombatest test = new Gombatest();

@@ -36,7 +36,7 @@ public abstract class Tektonrész {
 
     public boolean vanGomba() {
         for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i).getClass() == Gombatest.class)
+            if (entitások.get(i) instanceof Gombatest)
             {
                 return true;
             }
@@ -46,7 +46,7 @@ public abstract class Tektonrész {
 
     public boolean vanSpóra() {
         for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i).getClass() == Spóra.class)
+            if (entitások.get(i) instanceof Spóra)
             {
                 return true;
             }
@@ -56,7 +56,7 @@ public abstract class Tektonrész {
 
     public boolean entitásHozzáadás(Entitás entitás) {
         for (int i = 0; i < entitások.size(); i++) {
-            if (vanGomba() && entitás.getClass() == Gombatest.class) {
+            if (vanGomba() && (entitás instanceof Gombatest)) {
                 return false;
             }
         }
@@ -64,11 +64,21 @@ public abstract class Tektonrész {
         return true;
     }
 
+    public boolean entitásTörlés(Entitás entitás){
+        for (int i = 0; i < entitások.size(); i++) {
+            if (entitás == entitások.get(i)) {
+                entitások.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<fungorium.ReModels.Gombafonal> getGombafonalak() {
-        List<Gombafonal> fonalak = new ArrayList<>();
+        List<fungorium.ReModels.Gombafonal> fonalak = new ArrayList<>();
         for (int i = 0; i < entitások.size(); i++) {
             if (entitások.get(i) instanceof Gombafonal) {
-                fonalak.add((Gombafonal)entitások.get(i));
+                fonalak.add((fungorium.ReModels.Gombafonal)entitások.get(i));
             }
         }
         return fonalak;
