@@ -1,7 +1,5 @@
 package fungorium.ReModels;
 
-import fungorium.Models.Gombatest;
-
 public class GombatestTiltóTektonrész extends Tektonrész {
     public GombatestTiltóTektonrész() {}
     public GombatestTiltóTektonrész(Tektonrész t) {

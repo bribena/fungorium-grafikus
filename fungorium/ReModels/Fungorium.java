@@ -115,7 +115,7 @@ public class Fungorium {
      * [2]: Lefelé,
      * [3]: Balra.
      */
-    private Tektonrész[] getTektonrészSzomszédok(int x, int y) {
+    public Tektonrész[] getTektonrészSzomszédok(int x, int y) {
         Tektonrész[] ret = new Tektonrész[4];
         for (int i = 0; i < 4; ++i) {
             ret[i] = new TöbbfonalasTektonrész();
@@ -158,7 +158,7 @@ public class Fungorium {
                         for (Entitás e : tektonrészek[x][y].getEntitások()) {
                             if (e instanceof Gombafonal) {
                                 Gombafonal gf = (Gombafonal)e;
-                                gf.getKapcsolódóFonalak()[i] = null;
+                                gf.szakad(i);
                             }
                         }
                     }

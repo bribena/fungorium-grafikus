@@ -26,10 +26,17 @@ public class GameStateManager {
 
     public void leptetFazist() {
         switch (aktualisFazis) {
-            case GOMBA_HELYEZES -> aktualisFazis = JatekFazis.ROVAR_HELYEZES;
-            case ROVAR_HELYEZES -> aktualisFazis = JatekFazis.KOROK;
-            case KOROK -> aktualisFazis = JatekFazis.VEGE;
-            default -> {}
+            case GOMBA_HELYEZES:
+                aktualisFazis = JatekFazis.ROVAR_HELYEZES;
+                break;
+            case ROVAR_HELYEZES:
+                aktualisFazis = JatekFazis.KOROK;
+                break;
+            case KOROK:
+                aktualisFazis = JatekFazis.VEGE;
+                break;
+            default:
+                break;
         }
     }
 

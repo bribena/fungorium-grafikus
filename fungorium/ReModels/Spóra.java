@@ -4,8 +4,9 @@ public class Spóra implements Entitás {
     private Gombafaj faj;
     private int spóraSzám;
     
-    public Spóra(Gombafaj faj) {
+    public Spóra(Gombafaj faj, int spóraSzám) {
         this.faj = faj;
+        this.spóraSzám = spóraSzám;
     }
 
     public Gombafaj getFaj() {

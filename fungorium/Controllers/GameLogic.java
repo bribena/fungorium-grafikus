@@ -43,16 +43,31 @@ public class GameLogic {
             fonal.gombatestHozzáadása(g);
             resz.entitásHozzáadás(fonal);
 
-            int dx = switch (i) {
-                case 1 -> 1;
-                case 3 -> -1;
-                default -> 0;
-            };
-            int dy = switch (i) {
-                case 0 -> -1;
-                case 2 -> 1;
-                default -> 0;
-            };
+            int dx, dy;
+
+            switch (i) {
+                case 1:
+                    dx = 1;
+                    break;
+                case 3:
+                    dx = -1;
+                    break;
+                default:
+                    dx = 0;
+                    break;
+            }
+
+            switch (i) {
+                case 0:
+                    dy = -1;
+                    break;
+                case 2:
+                    dy = 1;
+                    break;
+                default:
+                    dy = 0;
+                    break;
+            }
 
             views.add(new GombafonalView(fonal, x, y, dx, dy));
         }

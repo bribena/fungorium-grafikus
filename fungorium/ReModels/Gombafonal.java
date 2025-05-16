@@ -46,6 +46,24 @@ public class Gombafonal implements Entitás {
         return false;
     }
 
+    public void szakad(int irany)
+    {
+        Gombafonal szakitando = kapcsolódóFonalak[irany];
+
+        if (szakitando != null)
+        {
+            kapcsolódóFonalak[irany] = null;
+
+            irany -= 2;
+            if (irany < 0)
+            {
+                irany += 4;
+            }
+
+            szakitando.szakad(irany);
+        }
+    }
+
     public boolean gombafonalatNöveszt(Tektonrész honnan, Tektonrész hova, Fungorium fungorium)
     {
         if (!kapcsolódikGombatesthez())

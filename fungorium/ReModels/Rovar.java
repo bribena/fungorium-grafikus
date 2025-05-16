@@ -78,10 +78,15 @@ public class Rovar implements Entitás {
         hatások[idx] = ertek;
     }
 
-    public boolean fonalatVág(fungorium.Models.Tektonrész t, Gombafonal f) {
+    public boolean fonalatVág(Tektonrész t, Gombafonal f) {
         // a paraméterként kapott tektonrészen lévő,
         // szintén paraméterként kapott fonalat végja el,
         // vagyis a fonalnak nem lesznek szomszédai
+
+        for (int i = 0; i < 4; i++)
+        {
+            f.szakad(i);
+        }
 
         return true;
     }

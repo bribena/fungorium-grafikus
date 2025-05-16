@@ -1,9 +1,5 @@
 package fungorium.ReModels;
 
-import fungorium.Models.Gombafonal;
-import fungorium.Models.Gombatest;
-import fungorium.Models.Spóra;
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -74,11 +70,11 @@ public abstract class Tektonrész {
         return false;
     }
 
-    public List<fungorium.ReModels.Gombafonal> getGombafonalak() {
-        List<fungorium.ReModels.Gombafonal> fonalak = new ArrayList<>();
+    public List<Gombafonal> getGombafonalak() {
+        List<Gombafonal> fonalak = new ArrayList<>();
         for (int i = 0; i < entitások.size(); i++) {
             if (entitások.get(i) instanceof Gombafonal) {
-                fonalak.add((fungorium.ReModels.Gombafonal)entitások.get(i));
+                fonalak.add((Gombafonal)entitások.get(i));
             }
         }
         return fonalak;
