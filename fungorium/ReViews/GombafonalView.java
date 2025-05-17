@@ -10,10 +10,9 @@ import fungorium.ReModels.Tektonrész;
 public class GombafonalView extends EntitásView {
     private Gombafonal fonal;
 
-    public GombafonalView(Tektonrész tr, Gombafaj faj) {
+    public GombafonalView(Tektonrész tr, Gombafonal fonal) {
         super(tr);
-        fonal = new Gombafonal(faj);
-        tr.getEntitások().add(fonal);
+        this.fonal = fonal;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class GombafonalView extends EntitásView {
 
         int c = 0;
         for (int i = 0; i < 4; ++i) {
-            if (fonal.getSzomszédosFonalak()[i] != null) {
+            if (fonal.getKapcsolódóFonalak()[i] != null) {
                 c++;
             }
         }
@@ -51,16 +50,16 @@ public class GombafonalView extends EntitásView {
             g.fillRect(getWidth() / 2 - 2, getHeight() / 2 - 2, 5, 5);
         }
 
-        if (fonal.getSzomszédosFonalak()[0] != null) {
+        if (fonal.getKapcsolódóFonalak()[0] != null) {
             g.fillRect(getWidth() / 2, 0, 1, getHeight() / 2);
         }
-        if (fonal.getSzomszédosFonalak()[2] != null) {
+        if (fonal.getKapcsolódóFonalak()[2] != null) {
             g.fillRect(getWidth() / 2, getHeight() / 2 + 1, 1, getHeight());
         }
-        if (fonal.getSzomszédosFonalak()[3] != null) {
+        if (fonal.getKapcsolódóFonalak()[3] != null) {
             g.fillRect(0, getHeight() / 2, getWidth() / 2, 1);
         }
-        if (fonal.getSzomszédosFonalak()[1] != null) {
+        if (fonal.getKapcsolódóFonalak()[1] != null) {
             g.fillRect(getWidth() / 2 + 1, getHeight() / 2, getWidth() / 2, 1);
         }
     }

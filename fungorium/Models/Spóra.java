@@ -1,6 +1,6 @@
 package fungorium.Models;
 
-public class Spóra implements Entitás {
+public class  Spóra implements Entitás {
     private int spóraSzám;
     private Gombafaj faj;
 

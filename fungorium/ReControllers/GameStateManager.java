@@ -1,27 +1,18 @@
-package fungorium.Controllers;
+package fungorium.ReControllers;
 
 public class GameStateManager {
-    public enum JatekFazis {
-        GOMBA_HELYEZES,
-        ROVAR_HELYEZES,
-        KOROK,
-        VEGE
+    private PlayerManager playerManager;
+
+    public GameStateManager(PlayerManager manager)
+    {
+        playerManager = manager;
     }
 
     private JatekFazis aktualisFazis = JatekFazis.GOMBA_HELYEZES;
-    private int jatekosIndex = 0;
     private int korokSzama = 0;
 
     public JatekFazis getFazis() {
         return aktualisFazis;
-    }
-
-    public int getAktualisJatekosIndex() {
-        return jatekosIndex;
-    }
-
-    public void kovetkezoJatekos() {
-        jatekosIndex = (jatekosIndex + 1) % 4;
     }
 
     public void leptetFazist() {
@@ -45,7 +36,7 @@ public class GameStateManager {
         if (korokSzama >= 24) {
             aktualisFazis = JatekFazis.VEGE;
         } else {
-            kovetkezoJatekos();
+            playerManager.következőJátékos();
         }
     }
 

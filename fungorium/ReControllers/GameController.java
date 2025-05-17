@@ -7,20 +7,28 @@ import java.awt.Point;
 
 import fungorium.ReViews.FungoriumView;
 import fungorium.ReViews.TektonrészView;
-import fungorium.ReModels.Játék;
+
+import fungorium.ReModels.Entitás;
+import fungorium.ReModels.Gombász;
+import fungorium.ReModels.Rovar;
+import fungorium.ReModels.Rovarász;
+import fungorium.ReModels.Tektonrész;
+
 
 public class GameController {
-    private Játék kezelő;
+    private PlayerManager playerManager;
     private FungoriumView view;
     private TektonrészView selectedTektonrész;
+    private GameLogic gameLogic;
 
-    public GameController(Játék kezelő, FungoriumView view) {
-        this.kezelő = kezelő;
+    public GameController(PlayerManager manager, FungoriumView view) {
+        this.playerManager = manager;
         this.view = view;
+        gameLogic = new GameLogic(playerManager);
     }
 
-    public Játék getJáték() {
-        return kezelő;
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
     public void selectByWindowPoint(Point p) {
@@ -36,7 +44,7 @@ public class GameController {
     }
 
     public void selectByTectonCoordinates(int x, int y) {
-        if (x < 0 || x >= kezelő.getFungorium().getWidth() || y < 0 || y >= kezelő.getFungorium().getHeight()) {
+        if (x < 0 || x >= playerManager.getFungorium().getWidth() || y < 0 || y >= playerManager.getFungorium().getHeight()) {
             return;
         }
 
