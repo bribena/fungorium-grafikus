@@ -10,10 +10,9 @@ import fungorium.ReModels.Tektonrész;
 public class GombafonalView extends EntitásView {
     private Gombafonal fonal;
 
-    public GombafonalView(Tektonrész tr, Gombafaj faj) {
+    public GombafonalView(Tektonrész tr, Gombafonal fonal) {
         super(tr);
-        fonal = new Gombafonal(faj);
-        tr.getEntitások().add(fonal);
+        this.fonal = fonal;
     }
 
     @Override

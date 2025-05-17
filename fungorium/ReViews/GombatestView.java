@@ -10,10 +10,9 @@ import fungorium.ReModels.Tektonrész;
 public class GombatestView extends EntitásView {
     private Gombatest t;
 
-    public GombatestView(Tektonrész tr, Gombafaj faj) {
+    public GombatestView(Tektonrész tr, Gombatest test) {
         super(tr);
-        t = new Gombatest(faj);
-        tr.getEntitások().add(t);
+        t = test;
     }
 
     @Override

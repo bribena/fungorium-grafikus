@@ -9,7 +9,6 @@ public class Gombafonal implements Entitás {
     private Gombafaj faj;
     private int szakadt = 0;
 
-    public Gombafonal(){}
     public Gombafonal(Gombafaj faj) {
         this.faj = faj;
     }
@@ -26,6 +25,32 @@ public class Gombafonal implements Entitás {
     public boolean kapcsolódikGombatesthez()
     {
         return gombaTestek.size() > 0;
+    }
+
+    public boolean addTest(Gombatest test)
+    {
+        if (!gombaTestek.contains(test))
+        {
+             gombaTestek.add(test);
+             return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean removeTest(Gombatest test)
+    {
+        if (gombaTestek.contains(test))
+        {
+             gombaTestek.remove(test);
+             return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     @Override
@@ -108,7 +133,7 @@ public class Gombafonal implements Entitás {
             }
         }
 
-        Gombafonal fonal = new Gombafonal();
+        Gombafonal fonal = new Gombafonal(faj);
 
         for (int i = 0; i < gombaTestek.size(); i++)
         {
