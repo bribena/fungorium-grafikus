@@ -26,6 +26,10 @@ public class TektonrészView extends JLayeredPane {
 
     // private JLabel label;
 
+    public Tektonrész getTektonrész() {
+        return fungorium.getTektonrész(x, y);
+    }
+
     public TektonrészView(Fungorium f, int x, int y) {
         fungorium = f;
         this.x = x;
