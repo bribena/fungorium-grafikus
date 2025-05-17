@@ -1,16 +1,15 @@
 package fungorium.Menu;
 
+import fungorium.Controllers.PlayerManager;
+import fungorium.ReControllers.GameController;
+import fungorium.ReModels.Fungorium;
+import fungorium.ReModels.Játék;
+import fungorium.ReViews.EntitásView;
+import fungorium.ReViews.FungoriumView;
+import fungorium.ReViews.GamePanel;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JFrame;
-
-import fungorium.Controllers.GameController;
-import fungorium.Controllers.PlayerManager;
-import fungorium.Models.Fungorium;
-import fungorium.Views.EntityView;
-import fungorium.Views.GamePanel;
-import fungorium.Views.PalyaView;
 
 public class MenuController {
     private JFrame frame;
@@ -40,12 +39,12 @@ public class MenuController {
     }
 
     public void startGame() {
-        List<EntityView> entityViews = new ArrayList<>();
+        List<EntitásView> entityViews = new ArrayList<>();
+        Játék játék = new Játék();
         Fungorium fungorium = new Fungorium();
-        PalyaView palyaView = new PalyaView(fungorium);
-        GamePanel panel = new GamePanel(entityViews, palyaView);
-        GameController gameController = new GameController(panel, entityViews); // újra beállítva
-        panel.setController(gameController);
+        FungoriumView fungoriumView = new FungoriumView(fungorium);
+        GamePanel panel = new GamePanel();
+        GameController gameController = new GameController(játék, fungoriumView); // újra beállítva
         frame.setContentPane(panel);
         frame.revalidate();
     }

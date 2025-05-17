@@ -1,21 +1,25 @@
 package fungorium;
 
+import fungorium.Controllers.PlayerManager;
+import fungorium.Menu.MenuController;
 import javax.swing.JFrame;
-
-import fungorium.ReViews.GamePanel;
 
 
 public class Main {
     public static void main(String[] args) {
         // Az alkalmazás indításakor hozzuk létre a főmenüt
-        JFrame frame = new JFrame("Game Menu");
+        JFrame frame = new JFrame("Fungorium");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        frame.add(new GamePanel());
-        // frame.add(new GombafonalView(new TöbbfonalasTektonrész()));
-        frame.pack();
+        PlayerManager playerManager = new PlayerManager();
+        MenuController menuController = new MenuController(frame, playerManager);
+        menuController.showMainMenu();
 
-        // frame.setSize(825, 825);
+        //frame.add(new GamePanel());
+        //frame.add(new GombafonalView(new TöbbfonalasTektonrész()));
+        //frame.pack();
+
+        frame.setSize(825, 825);
         frame.setVisible(true);
     }
 }
