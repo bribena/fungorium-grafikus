@@ -9,23 +9,24 @@ import fungorium.ReViews.FungoriumView;
 import fungorium.ReViews.TektonrészView;
 import fungorium.ReModels.Entitás;
 import fungorium.ReModels.Gombász;
-import fungorium.ReModels.Játék;
 import fungorium.ReModels.Rovar;
 import fungorium.ReModels.Rovarász;
 import fungorium.ReModels.Tektonrész;
 
 public class GameController {
-    private Játék kezelő;
+    private PlayerManager playerManager;
     private FungoriumView view;
     private TektonrészView selectedTektonrész;
+    private GameLogic gameLogic;
 
-    public GameController(Játék kezelő, FungoriumView view) {
-        this.kezelő = kezelő;
+    public GameController(PlayerManager manager, FungoriumView view) {
+        this.playerManager = manager;
         this.view = view;
+        gameLogic = new GameLogic(playerManager);
     }
 
-    public Játék getJátékKezelő() {
-        return kezelő;
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
     private FungoriumMouseAdapter mouseAdapter = new FungoriumMouseAdapter();
@@ -59,7 +60,7 @@ public class GameController {
         }
         
         private void reselect(int x, int y) {
-            if (x < 0 || x >= kezelő.getFungorium().getWidth() || y < 0 || y >= kezelő.getFungorium().getHeight()) {
+            if (x < 0 || x >= playerManager.getFungorium().getWidth() || y < 0 || y >= playerManager.getFungorium().getHeight()) {
                 return;
             }
             for (int i = 0; i < view.getComponentCount(); ++i) {
@@ -73,8 +74,11 @@ public class GameController {
         }
 
         private void gombászAction(KeyEvent e) {
+            Tektonrész tr = playerManager.getFungorium().getTektonrész(selectedTektonrész.x, selectedTektonrész.y);
+
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_N:
+                    gameLogic.helyezGombatest(tr);
                     System.out.println("N");
                     break;
                 case KeyEvent.VK_F:
@@ -100,10 +104,10 @@ public class GameController {
         }
 
         private void rovarászAction(KeyEvent e) {
-            Tektonrész tr = kezelő.getFungorium().getTektonrész(selectedTektonrész.x, selectedTektonrész.y);
+            Tektonrész tr = playerManager.getFungorium().getTektonrész(selectedTektonrész.x, selectedTektonrész.y);
             Rovar selectedRovar = null;
             for (Entitás ent : tr.getEntitások()) {
-                if (ent instanceof Rovar && ((Rovar)ent).getFaj() == ((Rovarász)kezelő.getAktuálisJátékos()).getKezeltFaj()) {
+                if (ent instanceof Rovar && ((Rovar)ent).getFaj() == ((Rovarász)playerManager.getAktuálisJátékos()).getKezeltFaj()) {
                     selectedRovar = (Rovar)ent;
                     break;
                 }
@@ -138,10 +142,10 @@ public class GameController {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            if (selectedTektonrész != null && kezelő.getAktuálisJátékos() instanceof Rovarász) {
+            if (selectedTektonrész != null && playerManager.getAktuálisJátékos() instanceof Rovarász) {
                 rovarászAction(e);
             }
-            else if (selectedTektonrész != null && kezelő.getAktuálisJátékos() instanceof Gombász) {
+            else if (selectedTektonrész != null && playerManager.getAktuálisJátékos() instanceof Gombász) {
                 gombászAction(e);
             }
         }

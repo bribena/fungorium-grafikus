@@ -50,6 +50,29 @@ public abstract class Tektonrész {
         return false;
     }
 
+    public boolean vanFonal() {
+        for (int i = 0; i < entitások.size(); i++) {
+            if (entitások.get(i) instanceof Gombafonal)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Gombafonal getKapcsolodoFonal(Gombafaj faj)
+    {
+        for (int i = 0; i < getGombafonalak().size(); i++)
+        {
+            if (getGombafonalak().get(i).getFaj() == faj)
+            {
+                return getGombafonalak().get(i);
+            }
+        }
+
+        return null;
+    }
+
     public boolean entitásHozzáadás(Entitás entitás) {
         for (int i = 0; i < entitások.size(); i++) {
             if (vanGomba() && (entitás instanceof Gombatest)) {
