@@ -14,7 +14,7 @@ class FungoriumRovarászKeyAdapter extends KeyAdapter {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (controller.getSelectedTektonrészView() == null || !(controller.getJáték().getAktuálisJátékos() instanceof Rovarász)) {
+        if (controller.getSelectedTektonrészView() == null || !(controller.getPlayerManager().getAktuálisJátékos() instanceof Rovarász)) {
             return;
         }
         

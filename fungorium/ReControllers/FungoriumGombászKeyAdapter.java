@@ -28,7 +28,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (controller.getSelectedTektonrészView() == null || !(controller.getJáték().getAktuálisJátékos() instanceof Gombász)) {
+        if (controller.getSelectedTektonrészView() == null || !(controller.getPlayerManager().getAktuálisJátékos() instanceof Gombász)) {
             return;
         }
         
