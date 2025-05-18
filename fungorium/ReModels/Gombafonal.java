@@ -96,43 +96,6 @@ public class Gombafonal implements Entitás {
             return false;
         }
 
-        int[] honnanKoor = fungorium.getTektonrészKoordináta(honnan);
-        int[] hovaKoor = fungorium.getTektonrészKoordináta(hova);
-
-        List<Gombafonal> fonalak = hova.getGombafonalak();
-        if (!fonalak.isEmpty()) {
-            for (Gombafonal fonal : fonalak) {
-                if (fonal.faj == faj) {
-                    if (honnanKoor[0] - 1 == hovaKoor[0]) {
-                        // Balra új
-                        kapcsolódóFonalak[3] = fonal;
-                        fonal.kapcsolódóFonalak[1] = this;
-                    }
-                    else if (honnanKoor[0] + 1 == hovaKoor[0]) {
-                        // Jobbra új
-                        kapcsolódóFonalak[1] = fonal;
-                        fonal.kapcsolódóFonalak[3] = this;
-                    }
-                    else if (honnanKoor[1] - 1 == hovaKoor[1]) {
-                        // Fel új
-                        kapcsolódóFonalak[0] = fonal;
-                        fonal.kapcsolódóFonalak[2] = this;
-                    }
-                    else if (honnanKoor[1] + 1 == hovaKoor[1]) {
-                        // Le új
-                        kapcsolódóFonalak[2] = fonal;
-                        fonal.kapcsolódóFonalak[0] = this;
-                    }
-                    else {
-                        // Nem szomszéd
-                        return false;
-                    }
-
-                    return true;
-                }
-            }
-        }
-
         Gombafonal fonal = new Gombafonal(faj);
 
         for (int i = 0; i < gombaTestek.size(); i++)
@@ -142,29 +105,50 @@ public class Gombafonal implements Entitás {
 
         if (hova.entitásHozzáadás(fonal)) // a tektonresz eldonti, hogy lehetseges-e a novesztes
         {
-            if (honnanKoor[0] - 1 == hovaKoor[0]) {
-                // Balra új
-                kapcsolódóFonalak[3] = fonal;
-                fonal.kapcsolódóFonalak[1] = this;
-            }
-            else if (honnanKoor[0] + 1 == hovaKoor[0]) {
-                // Jobbra új
-                kapcsolódóFonalak[1] = fonal;
-                fonal.kapcsolódóFonalak[3] = this;
-            }
-            else if (honnanKoor[1] - 1 == hovaKoor[1]) {
-                // Fel új
-                kapcsolódóFonalak[0] = fonal;
-                fonal.kapcsolódóFonalak[2] = this;
-            }
-            else if (honnanKoor[1] + 1 == hovaKoor[1]) {
-                // Le új
-                kapcsolódóFonalak[2] = fonal;
-                fonal.kapcsolódóFonalak[0] = this;
-            }
-            else {
-                // Nem szomszéd
-                return false;
+            int[] coords = fungorium.getTektonrészKoordináta(hova);
+            int x = coords[0];
+            int y = coords[1];
+
+            int[][] szomszedokCoords = {{x + 1, y}, {x - 1, y}, {x, y + 1}, {x, y - 1}};
+
+            for (int i = 0; i < szomszedokCoords.length; i++)
+            {
+                int szomszedX = szomszedokCoords[i][0];
+                int szomszedY = szomszedokCoords[i][1];
+                Tektonrész tekton = fungorium.getTektonrész(szomszedX, szomszedY);
+                if (tekton != null)
+                {
+                    Gombafonal kapcsolodoFonal = tekton.getKapcsolodoFonal(faj);
+                    if (kapcsolodoFonal != null)
+                    {
+                        if (szomszedX - x == 0)
+                        {
+                            if(szomszedY - y == 1)
+                            {
+                                fonal.setKapcsolodoFonal(0, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(2, kapcsolodoFonal);
+                            }
+                            else if(szomszedY - y == -1)
+                            {
+                                fonal.setKapcsolodoFonal(2, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(0, kapcsolodoFonal);
+                            }
+                        }
+                        else if(szomszedY - y == 0)
+                        {
+                            if (szomszedX - x == 1)
+                            {
+                                fonal.setKapcsolodoFonal(3, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(1, kapcsolodoFonal);
+                            }
+                            else if (szomszedX - x == -1)
+                            {
+                                fonal.setKapcsolodoFonal(1, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(3, kapcsolodoFonal);
+                            }
+                        }
+                    }
+                }
             }
 
             return true;
@@ -197,6 +181,16 @@ public class Gombafonal implements Entitás {
             }
         }
         return false;
+    }
+
+    public void setKapcsolodoFonal(int irany, Gombafonal fonal)
+    {
+        if (irany < 0 || irany > 3)
+        {
+            return;
+        }
+
+        kapcsolódóFonalak[irany] = fonal;
     }
 
     public Gombafonal[] getKapcsolódóFonalak() {
