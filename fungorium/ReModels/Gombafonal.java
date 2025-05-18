@@ -125,26 +125,26 @@ public class Gombafonal implements Entitás {
                         {
                             if(szomszedY - y == 1)
                             {
-                                fonal.setKapcsolodoFonal(0, kapcsolodoFonal);
-                                kapcsolodoFonal.setKapcsolodoFonal(2, fonal);
+                                fonal.setKapcsolodoFonal(2, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(0, fonal);
                             }
                             else if(szomszedY - y == -1)
                             {
-                                fonal.setKapcsolodoFonal(2, kapcsolodoFonal);
-                                kapcsolodoFonal.setKapcsolodoFonal(0, fonal);
+                                fonal.setKapcsolodoFonal(0, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(2, fonal);
                             }
                         }
                         else if(szomszedY - y == 0)
                         {
                             if (szomszedX - x == 1)
                             {
-                                fonal.setKapcsolodoFonal(3, kapcsolodoFonal);
-                                kapcsolodoFonal.setKapcsolodoFonal(1, fonal);
+                                fonal.setKapcsolodoFonal(1, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(3, fonal);
                             }
                             else if (szomszedX - x == -1)
                             {
-                                fonal.setKapcsolodoFonal(1, kapcsolodoFonal);
-                                kapcsolodoFonal.setKapcsolodoFonal(3, fonal);
+                                fonal.setKapcsolodoFonal(3, kapcsolodoFonal);
+                                kapcsolodoFonal.setKapcsolodoFonal(1, fonal);
                             }
                         }
                     }
