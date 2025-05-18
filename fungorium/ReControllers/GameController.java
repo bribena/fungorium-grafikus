@@ -1,18 +1,10 @@
 package fungorium.ReControllers;
 
+import fungorium.ReViews.*;
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.KeyAdapter;
 import java.awt.Point;
-
-import fungorium.ReViews.FungoriumView;
-import fungorium.ReViews.TektonrészView;
-
-import fungorium.ReModels.Entitás;
-import fungorium.ReModels.Gombász;
-import fungorium.ReModels.Rovar;
-import fungorium.ReModels.Rovarász;
-import fungorium.ReModels.Tektonrész;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
 
 
 public class GameController {
@@ -20,11 +12,29 @@ public class GameController {
     private FungoriumView view;
     private TektonrészView selectedTektonrész;
     private GameLogic gameLogic;
+    private GameStateManager gameState;
+    private GamePanel gamePanel;
 
-    public GameController(PlayerManager manager, FungoriumView view) {
+    public GameController(GameStateManager gameState, PlayerManager manager, FungoriumView view, GamePanel gp) {
+        this.gameState =gameState;
         this.playerManager = manager;
         this.view = view;
         gameLogic = new GameLogic(playerManager);
+        gombászKeyAdapter = new FungoriumGombászKeyAdapter(this, this.gameState);
+        rovarászKeyAdapter = new FungoriumRovarászKeyAdapter(this, this.gameState);
+        this.gamePanel = gp;
+    }
+
+    public FungoriumView getFungoriumView() {
+        return view;
+    }
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
+    public void setGamePanel(GamePanel gp) {
+        this.gamePanel = gp;
     }
 
     public PlayerManager getPlayerManager() {
@@ -76,13 +86,13 @@ public class GameController {
         return mouseAdapter;
     }
 
-    private FungoriumGombászKeyAdapter gombászKeyAdapter = new FungoriumGombászKeyAdapter(this);
+    private FungoriumGombászKeyAdapter gombászKeyAdapter = new FungoriumGombászKeyAdapter(this, this.gameState);
 
     public KeyAdapter getGombászKeyAdapter() {
         return gombászKeyAdapter;
     }
 
-    private FungoriumRovarászKeyAdapter rovarászKeyAdapter = new FungoriumRovarászKeyAdapter(this);
+    private FungoriumRovarászKeyAdapter rovarászKeyAdapter = new FungoriumRovarászKeyAdapter(this, this.gameState);
 
     public KeyAdapter getRovarászKeyAdapter() {
         return rovarászKeyAdapter;

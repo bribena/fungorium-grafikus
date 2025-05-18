@@ -1,7 +1,7 @@
 package fungorium.ReModels;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Tektonrész {
     private int tektonID = -1;
@@ -53,6 +53,16 @@ public abstract class Tektonrész {
     public boolean vanFonal() {
         for (int i = 0; i < entitások.size(); i++) {
             if (entitások.get(i) instanceof Gombafonal)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean vanRovar() {
+        for (int i = 0; i < entitások.size(); i++) {
+            if (entitások.get(i) instanceof Rovar)
             {
                 return true;
             }

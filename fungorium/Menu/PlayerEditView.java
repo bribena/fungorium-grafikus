@@ -1,6 +1,6 @@
 package fungorium.Menu;
 
-import fungorium.Controllers.PlayerManager;
+import fungorium.ReControllers.PlayerManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

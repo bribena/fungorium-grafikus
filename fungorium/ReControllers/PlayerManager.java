@@ -1,10 +1,5 @@
 package fungorium.ReControllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import fungorium.ReModels.Entitás;
 import fungorium.ReModels.Fungorium;
 import fungorium.ReModels.Gombafaj;
@@ -12,6 +7,8 @@ import fungorium.ReModels.Gombász;
 import fungorium.ReModels.Játékos;
 import fungorium.ReModels.Rovarfaj;
 import fungorium.ReModels.Rovarász;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerManager {
     private List<Játékos> jatekosok = new ArrayList<>();
@@ -24,7 +21,7 @@ public class PlayerManager {
             jatekosok.add(new Gombász(Gombafaj.values()[i], "Gombász"+(i+1)));
         }
 
-        for (int i = 1; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             jatekosok.add(new Rovarász(Rovarfaj.values()[i], "Rovarász"+(i+1)));
         }
 
@@ -33,6 +30,10 @@ public class PlayerManager {
 
     public Játékos getAktuálisJátékos() {
         return jatekosok.get(aktuálisJátékos);
+    }
+
+    public int getAktuálisJátékosIndex() {
+        return aktuálisJátékos;
     }
 
     public void következőJátékos()
@@ -57,12 +58,6 @@ public class PlayerManager {
     public boolean isRovarhozTartozo(int jatekosIndex, Entitás e) {
 		return false;
         //return e instanceof Rovar r && r.getFaj() == rovarfajok.get(jatekosIndex);
-    }
-
-    // Kijelölés logika
-    public void kijelolEntitast(Entitás e) {
-        // Jelöljük ki az adott entitást, pl. állítsunk be belső státuszt (ha szükséges)
-        //e.setKijelolt(true);
     }
 
     // Név beállítása index alapján (0-3: gombász, 4-7: rovarász)

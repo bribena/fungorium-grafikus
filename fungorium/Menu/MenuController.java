@@ -1,23 +1,27 @@
 package fungorium.Menu;
 
-import fungorium.Controllers.PlayerManager;
 import fungorium.ReControllers.GameController;
-import fungorium.ReModels.Fungorium;
-import fungorium.ReModels.Játék;
-import fungorium.ReViews.EntitásView;
+import fungorium.ReControllers.GameStateManager;
+import fungorium.ReControllers.PlayerManager;
 import fungorium.ReViews.FungoriumView;
 import fungorium.ReViews.GamePanel;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JFrame;
 
 public class MenuController {
     private JFrame frame;
     private PlayerManager playerManager;
+    private GameController controller;
+
+    public MenuController(JFrame frame, PlayerManager playerManager, GameController controller) {
+        this.frame = frame;
+        this.playerManager = playerManager;
+        this.controller = controller;
+    }
 
     public MenuController(JFrame frame, PlayerManager playerManager) {
         this.frame = frame;
         this.playerManager = playerManager;
+        this.controller = null;
     }
 
     public void showMainMenu() {
@@ -39,13 +43,22 @@ public class MenuController {
     }
 
     public void startGame() {
-        List<EntitásView> entityViews = new ArrayList<>();
-        Játék játék = new Játék();
-        Fungorium fungorium = new Fungorium();
-        FungoriumView fungoriumView = new FungoriumView(fungorium);
-        GamePanel panel = new GamePanel();
-        GameController gameController = new GameController(játék, fungoriumView); // újra beállítva
+        FungoriumView fungView = new FungoriumView(playerManager.getFungorium());
+        GameStateManager gameState = new GameStateManager(playerManager);
+        GameController controller = new GameController(gameState, playerManager, fungView, null);
+
+        GamePanel panel = new GamePanel(fungView, controller);  // ÁTADÁS
+
+        // Mostantól a controller is tudja, melyik panelje van
+        controller.setGamePanel(panel);
+
         frame.setContentPane(panel);
         frame.revalidate();
+        frame.repaint();
+
+        panel.addKeyListener(controller.getGombászKeyAdapter());
+        panel.addKeyListener(controller.getRovarászKeyAdapter());
+        panel.setFocusable(true);
+        panel.requestFocusInWindow();
     }
 }

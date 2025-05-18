@@ -1,7 +1,7 @@
 package fungorium;
 
-import fungorium.Controllers.PlayerManager;
 import fungorium.Menu.MenuController;
+import fungorium.ReControllers.PlayerManager;
 import javax.swing.JFrame;
 
 
