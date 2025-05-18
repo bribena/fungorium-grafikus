@@ -10,7 +10,8 @@ public class Gombatest implements Entitás {
     private boolean kezdő = false;
     private Gombafaj faj;
 
-    public Gombatest(){}
+    public Gombatest() {
+    }
 
     public Gombatest(Gombafaj faj) {
         this.faj = faj;
@@ -52,47 +53,42 @@ public class Gombatest implements Entitás {
     }
 
     public List<Spóra> spórátSzór(Tektonrész t, Fungorium f) {
-        List<Tektonrész> marSzort = new ArrayList<>(); // itt taroljuk a tektonokat ahova mar lett szorva, mivel a szomszed returnnel kesobb olyant is visszaad amin mar jartunk
+        List<Tektonrész> marSzort = new ArrayList<>(); // itt taroljuk a tektonokat ahova mar lett szorva, mivel a
+                                                       // szomszed returnnel kesobb olyant is visszaad amin mar jartunk
         List<Spóra> sporak = new ArrayList<>();
 
         int[] tektonCoords = f.getTektonrészKoordináta(t);
         Tektonrész[] kozeliSzomszedok = f.getTektonrészSzomszédok(tektonCoords[0], tektonCoords[1]);
 
         Spóra spora = new Spóra(faj, 5, tektonCoords);
-        if (!t.entitásHozzáadás(spora)) // sok ilyen csunya check van mert fogalmam sincs hogyan mashogy tudna ez false-t returnolni
+        if (t.entitásHozzáadás(spora)) // sok ilyen csunya check van mert fogalmam sincs hogyan mashogy tudna ez
+                                       // false-t returnolni
         {
             sporak.add(spora);
-            return null;
         }
         marSzort.add(t);
 
-        for (int i = 0; i < kozeliSzomszedok.length; i++)
-        {
+        for (int i = 0; i < kozeliSzomszedok.length; i++) {
             spora = new Spóra(faj, 2, tektonCoords);
-            if (!kozeliSzomszedok[i].entitásHozzáadás(spora))
-            {
+            if (kozeliSzomszedok[i].entitásHozzáadás(spora)) {
                 sporak.add(spora);
-                return null;
             }
             marSzort.add(kozeliSzomszedok[i]);
         }
 
-        if (fejlődött)
-        {
-            for (int i = 0; i < marSzort.size(); i++) // vegig megyunk azokon a tektonokon ahol mar szortunk (a kozepson is, de nyilvan nem fog ujra szorni arra)
+        if (fejlődött) {
+            for (int i = 0; i < marSzort.size(); i++) // vegig megyunk azokon a tektonokon ahol mar szortunk (a kozepson
+                                                      // is, de nyilvan nem fog ujra szorni arra)
             {
                 tektonCoords = f.getTektonrészKoordináta(kozeliSzomszedok[i]);
                 Tektonrész[] tavoliSzomszedok = f.getTektonrészSzomszédok(tektonCoords[0], tektonCoords[1]);
 
-                for (int j = 0; j < tavoliSzomszedok.length; j++)
-                {
+                for (int j = 0; j < tavoliSzomszedok.length; j++) {
                     if (!marSzort.contains(tavoliSzomszedok[j])) // csak akkor szorunk ha itt meg nem szortunk
                     {
                         spora = new Spóra(faj, 1, tektonCoords);
-                        if (!tavoliSzomszedok[j].entitásHozzáadás(spora))
-                        {
+                        if (tavoliSzomszedok[j].entitásHozzáadás(spora)) {
                             sporak.add(spora);
-                            return null;
                         }
                         marSzort.add(tavoliSzomszedok[j]);
                     }

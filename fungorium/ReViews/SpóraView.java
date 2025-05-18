@@ -11,6 +11,7 @@ public class SpóraView extends EntitásView {
     public SpóraView(Tektonrész tr, Spóra sp) {
         super(tr);
         spóra = sp;
+        setOpaque(false);
     }
 
     @Override
@@ -25,14 +26,13 @@ public class SpóraView extends EntitásView {
         int alpha;
         if (spóra.getSpóraSzám() >= 10) {
             alpha = 0xFF;
-        }
-        else {
+        } else {
             alpha = 6 * spóra.getSpóraSzám() + 192;
         }
 
         switch (spóra.getFaj()) {
             case Amanita:
-                g.setColor(new Color(0xf7,0xf2,0xcb,alpha));
+                g.setColor(new Color(0xf7, 0xf2, 0xcb, alpha));
                 break;
             case Boletus:
                 g.setColor(new Color(0xd6, 0xe8, 0xef, alpha));
