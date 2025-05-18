@@ -50,7 +50,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
             int x = selectedView.x;
             int y = selectedView.y;
 
-            for (int i = 0; i < 4; ++i) {
+            /*for (int i = 0; i < 4; ++i) {
                 int dx = (i == 1) ? 1 : (i == 3) ? -1 : 0;
                 int dy = (i == 0) ? -1 : (i == 2) ? 1 : 0;
 
@@ -71,7 +71,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
                         break;
                     }
                 }
-            }
+            }*/
         }
 
         // Kör vége
