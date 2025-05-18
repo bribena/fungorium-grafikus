@@ -232,11 +232,11 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
                 break;
             case KeyEvent.VK_DOWN:
                 System.out.println("down");
-                gombafonalNövesztés(1);
+                gombafonalNövesztés(2);
                 break;
             case KeyEvent.VK_RIGHT:
                 System.out.println("right");
-                gombafonalNövesztés(2);
+                gombafonalNövesztés(1);
                 break;
             case KeyEvent.VK_LEFT:
                 System.out.println("left");
