@@ -5,7 +5,8 @@ import java.util.*;
 public class Fungorium {
     /** Random szám generátor */
     private static Random r = new Random();
-
+    private Point törésA = null;
+    private Point törésB = null;
     /** Ne változtasd meg!!! */
     private final int width = 20;
 
@@ -95,7 +96,7 @@ public class Fungorium {
     /**
      * x, y koordináta összefogása a töréshez.
      */
-    private class Point {
+    public class Point {
         public double x = 0, y = 0;
 
         public Point(double x, double y) {
@@ -141,7 +142,8 @@ public class Fungorium {
                     boolean régi = tektonrészek[x][y].getTektonSzéleE()[i];
 
                     // Korrigálás
-                    if (szomszédok[i].getTektonID() != tektonrészek[x][y].getTektonID()) {
+                    if (szomszédok[i] != null && tektonrészek[x][y] != null &&
+                            szomszédok[i].getTektonID() != tektonrészek[x][y].getTektonID()) {
                         tektonrészek[x][y].getTektonSzéleE()[i] = true;
                     }
 
@@ -167,7 +169,9 @@ public class Fungorium {
                 boolean found = false;
 
                 for (int i = 0; i < 4 && !found; ++i) {
-                    found = szomsz[i].getTektonID() == curr.getTektonID();
+                    if (curr != null && szomsz[i] != null && szomsz[i].getTektonID() == curr.getTektonID()) {
+                        found = true;
+                    }
                 }
 
                 if (!found) {
@@ -233,6 +237,8 @@ public class Fungorium {
 
         Point a = new Point(v[0], v[1]);
         Point b = new Point(v[2], v[3]);
+        törésA = a;
+        törésB = b;
         Map<Integer, Integer> idMap = new HashMap<>();
 
         for (int x = 0; x < width; ++x) {
@@ -280,5 +286,13 @@ public class Fungorium {
         if (kör == 16) {
             törésEsély = (double) 1 / 4;
         }
+    }
+
+    public Point getTörésA() {
+        return törésA;
+    }
+
+    public Point getTörésB() {
+        return törésB;
     }
 }

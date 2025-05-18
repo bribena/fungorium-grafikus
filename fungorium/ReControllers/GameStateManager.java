@@ -6,8 +6,7 @@ public class GameStateManager {
     /**
      * Konstruktor.
      */
-    public GameStateManager(PlayerManager manager)
-    {
+    public GameStateManager(PlayerManager manager) {
         playerManager = manager;
     }
 
@@ -50,6 +49,9 @@ public class GameStateManager {
         } else {
             playerManager.következőJátékos();
         }
+        // --- Törés és nézet frissítés ---
+        // Feltételezve, hogy elérhető a Fungorium példánya
+        playerManager.getFungorium().körtLéptet(korokSzama);
     }
 
     /**
