@@ -3,6 +3,9 @@ package fungorium.ReControllers;
 public class GameStateManager {
     private PlayerManager playerManager;
 
+    /**
+     * Konstruktor.
+     */
     public GameStateManager(PlayerManager manager)
     {
         playerManager = manager;
@@ -11,10 +14,16 @@ public class GameStateManager {
     private JatekFazis aktualisFazis = JatekFazis.GOMBA_HELYEZES;
     private int korokSzama = 0;
 
+    /**
+     * Visszaadja az aktuális fázist.
+     */
     public JatekFazis getFazis() {
         return aktualisFazis;
     }
 
+    /**
+     * Fázisok közötti léptetést végzi el.
+     */
     public void leptetFazist() {
         switch (aktualisFazis) {
             case GOMBA_HELYEZES:
@@ -31,6 +40,9 @@ public class GameStateManager {
         }
     }
 
+    /**
+     * Körök számának és játékos léptetése .
+     */
     public void kovetkezoKor() {
         korokSzama++;
         if (korokSzama >= 24) {
@@ -40,10 +52,16 @@ public class GameStateManager {
         }
     }
 
+    /**
+     * Visszaadja az eddigi körök számát.
+     */
     public int getKorokSzama() {
         return korokSzama;
     }
 
+    /**
+     * Ellenőrzi, hogy vége van-e a játéknak.
+     */
     public boolean isVege() {
         return aktualisFazis == JatekFazis.VEGE;
     }

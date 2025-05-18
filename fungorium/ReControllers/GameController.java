@@ -15,6 +15,9 @@ public class GameController {
     private GameStateManager gameState;
     private GamePanel gamePanel;
 
+    /** 
+     * Konstrukor.
+     */
     public GameController(GameStateManager gameState, PlayerManager manager, FungoriumView view, GamePanel gp) {
         this.gameState =gameState;
         this.playerManager = manager;
@@ -25,10 +28,18 @@ public class GameController {
         this.gamePanel = gp;
     }
 
+    /**
+     * Visszaadja a FungoriumViewot.
+     * @return FungoriumView
+     */
     public FungoriumView getFungoriumView() {
         return view;
     }
 
+    /**
+     * Visszaadja a GamePanelt.
+     * @return GamePanel
+     */
     public GamePanel getGamePanel() {
         return gamePanel;
     }
@@ -37,10 +48,17 @@ public class GameController {
         this.gamePanel = gp;
     }
 
+    /**
+     * Visszaadja a Playermanagert.
+     * @return PalyerManager
+     */
     public PlayerManager getPlayerManager() {
         return playerManager;
     }
 
+    /**
+     * A tektonrész kiválasztásának logikája kattintást nézve.
+     */
     public void selectByWindowPoint(Point p) {
         if (selectedTektonrész != null) {
             selectedTektonrész.toggleSelected();
@@ -53,6 +71,9 @@ public class GameController {
         } 
     }
 
+    /**
+     * A tektonrész kiválasztásának logikája a kattintás helyén lévő tektonrészre.
+     */
     public void selectByTectonCoordinates(int x, int y) {
         if (x < 0 || x >= playerManager.getFungorium().getWidth() || y < 0 || y >= playerManager.getFungorium().getHeight()) {
             return;
@@ -71,11 +92,18 @@ public class GameController {
         }
     }
 
+    /**
+     * A tektonrész már nem "aktív", ne legyen kiválasztva.
+     */
     public void deselect() {
         selectedTektonrész.toggleSelected();
         selectedTektonrész = null;
     }
 
+    /**
+     * A kiválasztott tektonrész View-át adja vissza.
+     * @return TektonrészView
+     */
     public TektonrészView getSelectedTektonrészView() {
         return selectedTektonrész;
     }

@@ -17,9 +17,11 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
     }
 
     private void gombatestNövesztés() {
+        // kijelölt tektonrész lekérdezése + ha nincs kijelölve semmi, return
         TektonrészView selectedView = controller.getSelectedTektonrészView();
         if (selectedView == null) return;
 
+        // ha a tekton hatása GombatestTiltó, nem kerülhet rá gommbatest
         Tektonrész hova = selectedView.getTektonrész();
         if (hova.vanGomba() || hova instanceof GombatestTiltóTektonrész) return;
 
@@ -78,12 +80,14 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
     }
 
     private void gombatestFejlesztés() {
+        // kiejölt tektonrész lekérése + ha nincs kijelölve semmi, return
         TektonrészView selectedView = controller.getSelectedTektonrészView();
         if (selectedView == null) return;
 
+        // tektonrész, ahol fejleszteni akarunk testet
         Tektonrész hova = selectedView.getTektonrész();
 
-        // Megkeressük a gombatestet
+        // Megkeressük a gombatestet a tektonrészen
         Gombatest targetTest = null;
         for (Entitás e : hova.getEntitások()) {
             if (e instanceof Gombatest gt) {
@@ -92,6 +96,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
             }
         }
 
+        // ha nem találunk gombatestet, akkor nincs mit fejleszteni
         if (targetTest == null) {
             System.out.println("Nincs gombatest az adott helyen.");
             return;
@@ -123,7 +128,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         controller.getGamePanel().updateStatusLabel();
     }
 
-    // NEM JÓ, mert szarul rajzol ki, tezstelésnél nézd meg
+    // TODO NEM JÓ, mert szarul rajzol ki, tezstelésnél nézd meg
     private void gombafonalNövesztés(int irány) {
         // 0: fel, 1: jobb, 2: le, 3: bal
         TektonrészView selectedView = controller.getSelectedTektonrészView();
@@ -200,22 +205,27 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        // ha nincs kijelölt tektonrész vagy nem gombász a játékos, return
         if (controller.getSelectedTektonrészView() == null || !(controller.getPlayerManager().getAktuálisJátékos() instanceof Gombász)) {
             return;
         }
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_N:
+                // N billentyűre gombatestet növeszt
                 System.out.println("N lenyomva");
                 gombatestNövesztés();
                 break;
             case KeyEvent.VK_F:
+                // F billentyűre gombatestet fejleszt
                 System.out.println("F lenyomva");
                 gombatestFejlesztés();
                 break;
             case KeyEvent.VK_S:
+                // S billentyűre spórát szór
                 spóraSzórás();
                 break;
+            // nyíl billentyűknek megfelelően gombafonal növesztés
             case KeyEvent.VK_UP:
                 System.out.println("up");
                 gombafonalNövesztés(0);
