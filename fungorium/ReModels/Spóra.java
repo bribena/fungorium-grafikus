@@ -4,7 +4,8 @@ public class Spóra implements Entitás {
     private Gombafaj faj;
     private int spóraSzám;
     private int[] coords;
-    
+    private boolean megevett;
+
     public Spóra(Gombafaj faj, int spóraSzám, int[] coords) {
         this.faj = faj;
         this.spóraSzám = spóraSzám;
@@ -19,8 +20,7 @@ public class Spóra implements Entitás {
         return spóraSzám;
     }
 
-    public int[] getCoords()
-    {
+    public int[] getCoords() {
         return coords;
     }
 
@@ -32,5 +32,13 @@ public class Spóra implements Entitás {
     @Override
     public boolean frissítés() {
         return false;
+    }
+
+    public boolean isMegevett() {
+        return megevett;
+    }
+
+    public void megette() {
+        this.megevett = true;
     }
 }

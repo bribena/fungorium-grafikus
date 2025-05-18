@@ -10,15 +10,16 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 import fungorium.ReModels.Fungorium;
+import fungorium.ReModels.Tektonrész;
 
 public class FungoriumView extends JPanel {
     private Fungorium fungorium;
-    
+
     public FungoriumView(Fungorium f) {
         fungorium = f;
 
-        setLayout(new GridLayout(f.getWidth(), f.getHeight()));
-        
+        setLayout(new GridLayout(f.getHeight(), f.getWidth()));
+
         for (int y = 0; y < fungorium.getHeight(); ++y) {
             for (int x = 0; x < fungorium.getWidth(); ++x) {
                 add(new TektonrészView(f, x, y));
@@ -26,19 +27,19 @@ public class FungoriumView extends JPanel {
         }
 
         // addMouseListener(new MouseAdapter() {
-        //     @Override
-        //     public void mouseClicked(MouseEvent e) {
-        //         TektonrészView tw = (TektonrészView)getComponentAt(e.getPoint());
-        //         System.out.println(tw.x + ", " + tw.y);
-        //     }
+        // @Override
+        // public void mouseClicked(MouseEvent e) {
+        // TektonrészView tw = (TektonrészView)getComponentAt(e.getPoint());
+        // System.out.println(tw.x + ", " + tw.y);
+        // }
         // });
 
         // addKeyListener(new KeyAdapter() {
-        //     @Override
-        //     public void keyReleased(KeyEvent e) {
-        //         f.törés();
-        //         System.out.println("Törés");
-        //     }
+        // @Override
+        // public void keyReleased(KeyEvent e) {
+        // f.törés();
+        // System.out.println("Törés");
+        // }
         // });
 
         setFocusable(true);
@@ -47,5 +48,15 @@ public class FungoriumView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+    }
+
+    public TektonrészView getTektonrészView(Tektonrész keresett) {
+        for (int i = 0; i < getComponentCount(); ++i) {
+            TektonrészView tv = (TektonrészView) getComponent(i);
+            if (tv.getTektonrész() == keresett) {
+                return tv;
+            }
+        }
+        return null;
     }
 }

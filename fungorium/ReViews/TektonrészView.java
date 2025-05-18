@@ -16,7 +16,7 @@ import fungorium.ReModels.*;
 
 public class TektonrészView extends JLayeredPane {
     private static final int TILE_SIZE = 38;
-    
+
     private List<EntitásView> e = new ArrayList<>();
 
     private Fungorium fungorium;
@@ -57,18 +57,15 @@ public class TektonrészView extends JLayeredPane {
 
         if (comp instanceof GombafonalView) {
             setLayer(comp, 0);
-        }
-        else if (comp instanceof GombatestView) {
+        } else if (comp instanceof GombatestView) {
             setLayer(comp, 2);
-        }
-        else if (comp instanceof SpóraView) {
+        } else if (comp instanceof SpóraView) {
             setLayer(comp, 1);
-        }
-        else if (comp instanceof RovarView) {
+        } else if (comp instanceof RovarView) {
             setLayer(comp, 3);
         }
 
-        return add((Component)comp);
+        return add((Component) comp);
     }
 
     @Override
@@ -84,7 +81,7 @@ public class TektonrészView extends JLayeredPane {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         for (int i = 0; i < e.size(); ++i) {
             if (e.get(i) != null && !e.get(i).isValid()) {
                 e.remove(i);
@@ -93,21 +90,17 @@ public class TektonrészView extends JLayeredPane {
         }
 
         Tektonrész tr = fungorium.getTektonrész(x, y);
-        
+
         // Alap rajzolása
         if (tr instanceof TöbbfonalasTektonrész) {
             setBackground(Color.GREEN);
-        }
-        else if (tr instanceof EgyfonalasTektonrész) {
+        } else if (tr instanceof EgyfonalasTektonrész) {
             setBackground(Color.CYAN);
-        }
-        else if (tr instanceof ÉletbentartóTektonrész) {
+        } else if (tr instanceof ÉletbentartóTektonrész) {
             setBackground(Color.PINK);
-        }
-        else if (tr instanceof FonalfelszívóTektonrész) {
+        } else if (tr instanceof FonalfelszívóTektonrész) {
             setBackground(Color.ORANGE);
-        }
-        else if (tr instanceof GombatestTiltóTektonrész) {
+        } else if (tr instanceof GombatestTiltóTektonrész) {
             setBackground(Color.RED);
         }
 
@@ -115,11 +108,11 @@ public class TektonrészView extends JLayeredPane {
         if (!selected) {
             boolean[] szel = tr.getTektonSzéleE();
             setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(bToI(!szel[0]), bToI(!szel[3]), bToI(!szel[2]), bToI(!szel[1]), Color.BLACK),
-                BorderFactory.createMatteBorder(bToI(szel[0]), bToI(szel[3]), bToI(szel[2]), bToI(szel[1]), Color.WHITE)
-            ));
-        }
-        else {
+                    BorderFactory.createMatteBorder(bToI(!szel[0]), bToI(!szel[3]), bToI(!szel[2]), bToI(!szel[1]),
+                            Color.BLACK),
+                    BorderFactory.createMatteBorder(bToI(szel[0]), bToI(szel[3]), bToI(szel[2]), bToI(szel[1]),
+                            Color.WHITE)));
+        } else {
             setBorder(BorderFactory.createLineBorder(Color.CYAN, 4));
         }
 

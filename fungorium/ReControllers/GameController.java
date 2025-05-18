@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 
-
 public class GameController {
     private PlayerManager playerManager;
     private FungoriumView view;
@@ -15,11 +14,11 @@ public class GameController {
     private GameStateManager gameState;
     private GamePanel gamePanel;
 
-    /** 
+    /**
      * Konstrukor.
      */
     public GameController(GameStateManager gameState, PlayerManager manager, FungoriumView view, GamePanel gp) {
-        this.gameState =gameState;
+        this.gameState = gameState;
         this.playerManager = manager;
         this.view = view;
         gameLogic = new GameLogic(playerManager);
@@ -30,6 +29,7 @@ public class GameController {
 
     /**
      * Visszaadja a FungoriumViewot.
+     * 
      * @return FungoriumView
      */
     public FungoriumView getFungoriumView() {
@@ -38,6 +38,7 @@ public class GameController {
 
     /**
      * Visszaadja a GamePanelt.
+     * 
      * @return GamePanel
      */
     public GamePanel getGamePanel() {
@@ -50,6 +51,7 @@ public class GameController {
 
     /**
      * Visszaadja a Playermanagert.
+     * 
      * @return PalyerManager
      */
     public PlayerManager getPlayerManager() {
@@ -64,24 +66,25 @@ public class GameController {
             selectedTektonrész.toggleSelected();
         }
 
-        selectedTektonrész = (TektonrészView)view.getComponentAt(p);
+        selectedTektonrész = (TektonrészView) view.getComponentAt(p);
 
         if (selectedTektonrész != null) {
             selectedTektonrész.toggleSelected();
-        } 
+        }
     }
 
     /**
      * A tektonrész kiválasztásának logikája a kattintás helyén lévő tektonrészre.
      */
     public void selectByTectonCoordinates(int x, int y) {
-        if (x < 0 || x >= playerManager.getFungorium().getWidth() || y < 0 || y >= playerManager.getFungorium().getHeight()) {
+        if (x < 0 || x >= playerManager.getFungorium().getWidth() || y < 0
+                || y >= playerManager.getFungorium().getHeight()) {
             return;
         }
 
         for (Component c : view.getComponents()) {
             if (c instanceof TektonrészView) {
-                TektonrészView v = (TektonrészView)c;
+                TektonrészView v = (TektonrészView) c;
                 if (v.x == x && v.y == y) {
                     selectedTektonrész.toggleSelected();
                     selectedTektonrész = v;
@@ -102,6 +105,7 @@ public class GameController {
 
     /**
      * A kiválasztott tektonrész View-át adja vissza.
+     * 
      * @return TektonrészView
      */
     public TektonrészView getSelectedTektonrészView() {

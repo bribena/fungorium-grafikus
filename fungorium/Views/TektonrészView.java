@@ -28,17 +28,13 @@ public class TektonrészView {
         // Alap rajzolása
         if (tr instanceof TöbbfonalasTektonrész) {
             g.setColor(Color.GREEN);
-        }
-        else if (tr instanceof EgyfonalasTektonrész) {
+        } else if (tr instanceof EgyfonalasTektonrész) {
             g.setColor(Color.CYAN);
-        }
-        else if (tr instanceof ÉletbentartóTektonrész) {
+        } else if (tr instanceof ÉletbentartóTektonrész) {
             g.setColor(Color.PINK);
-        }
-        else if (tr instanceof FonalfelszívóTektonrész) {
+        } else if (tr instanceof FonalfelszívóTektonrész) {
             g.setColor(Color.ORANGE);
-        }
-        else if (tr instanceof GombatestTiltóTektonrész) {
+        } else if (tr instanceof GombatestTiltóTektonrész) {
             g.setColor(Color.RED);
         }
         g.fillRect(px, py, TILE_SIZE, TILE_SIZE);

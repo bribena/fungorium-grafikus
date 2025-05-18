@@ -8,10 +8,13 @@ public class Fungorium {
 
     /** Ne változtasd meg!!! */
     private final int width = 20;
+
     public int getWidth() {
         return width;
     }
+
     private final int height = 20;
+
     public int getHeight() {
         return height;
     }
@@ -102,10 +105,9 @@ public class Fungorium {
     }
 
     private double d(Point p, Point q, Point a) {
-        return 
-            ((q.y - p.y) * a.x - (q.x - p.x) * a.y + q.x * p.y - q.y * p.x) 
-            / 
-            Math.sqrt((q.y - p.y) * (q.y - p.y) + (q.x - p.x) * (q.x - p.x));
+        return ((q.y - p.y) * a.x - (q.x - p.x) * a.y + q.x * p.y - q.y * p.x)
+                /
+                Math.sqrt((q.y - p.y) * (q.y - p.y) + (q.x - p.x) * (q.x - p.x));
     }
 
     /**
@@ -117,22 +119,12 @@ public class Fungorium {
      */
     public Tektonrész[] getTektonrészSzomszédok(int x, int y) {
         Tektonrész[] ret = new Tektonrész[4];
-        for (int i = 0; i < 4; ++i) {
-            ret[i] = new TöbbfonalasTektonrész();
-        }
+        // [0]: Felfelé, [1]: Jobbra, [2]: Lefelé, [3]: Balra
 
-        if (x > 0) {
-            ret[3] = tektonrészek[x - 1][y];
-        }
-        if (y > 0) {
-            ret[0] = tektonrészek[x][y - 1];
-        }
-        if (x < 19) {
-            ret[1] = tektonrészek[x + 1][y];
-        }
-        if (y < 19) {
-            ret[2] = tektonrészek[x][y + 1];
-        }
+        ret[0] = (y > 0) ? tektonrészek[x][y - 1] : null; // Felfelé
+        ret[1] = (x < 19) ? tektonrészek[x + 1][y] : null; // Jobbra
+        ret[2] = (y < 19) ? tektonrészek[x][y + 1] : null; // Lefelé
+        ret[3] = (x > 0) ? tektonrészek[x - 1][y] : null; // Balra
 
         return ret;
     }
@@ -157,7 +149,7 @@ public class Fungorium {
                     if (régi != tektonrészek[x][y].getTektonSzéleE()[i]) {
                         for (Entitás e : tektonrészek[x][y].getEntitások()) {
                             if (e instanceof Gombafonal) {
-                                Gombafonal gf = (Gombafonal)e;
+                                Gombafonal gf = (Gombafonal) e;
                                 gf.szakad(i);
                             }
                         }
@@ -171,7 +163,7 @@ public class Fungorium {
             for (int y = 0; y < 20; ++y) {
                 Tektonrész curr = tektonrészek[x][y];
                 Tektonrész[] szomsz = getTektonrészSzomszédok(x, y);
-                
+
                 boolean found = false;
 
                 for (int i = 0; i < 4 && !found; ++i) {
@@ -190,7 +182,8 @@ public class Fungorium {
      * Tektonrész randomizáló. Nagyon csúnya lesz, van egy olyan sejtésem...
      */
     private void tektonrészRandomizálás() {
-        // Class<? extends Tektonrész>[] ujHatasok = new Class<? extends Tektonrész>[maxTektonID];
+        // Class<? extends Tektonrész>[] ujHatasok = new Class<? extends
+        // Tektonrész>[maxTektonID];
         List<Class<? extends Tektonrész>> ujHatasok = new ArrayList<>(maxTektonID);
         for (int i = 0; i <= maxTektonID; ++i) {
             int n = r.nextInt(5);
@@ -216,8 +209,8 @@ public class Fungorium {
             for (int y = 0; y < 20; ++y) {
                 try {
                     Tektonrész tr = ujHatasok.get(tektonrészek[x][y].getTektonID())
-                        .getConstructor(Tektonrész.class)
-                        .newInstance(tektonrészek[x][y]);
+                            .getConstructor(Tektonrész.class)
+                            .newInstance(tektonrészek[x][y]);
                     tektonrészek[x][y] = tr;
                 } catch (Exception e) {
                 }
@@ -254,7 +247,7 @@ public class Fungorium {
                 }
             }
         }
-        
+
         szélKorrigálásÉsSzakítás();
 
         /** TEKTONRÉSZ EFFEKT RANDOMIZÁLÁS */
@@ -269,9 +262,9 @@ public class Fungorium {
     public void körtLéptet(int kör) {
         // Entitások frissítésének átadása
         // for (int i = 0; i < 20; ++i) {
-        //     for (int j = 0; j < 20; ++j) {
-        //         tektonrészek[j][i].frissítés();
-        //     }
+        // for (int j = 0; j < 20; ++j) {
+        // tektonrészek[j][i].frissítés();
+        // }
         // }
 
         // Törés

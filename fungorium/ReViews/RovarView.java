@@ -36,12 +36,16 @@ public class RovarView extends EntitásView {
                 g.setColor(Color.WHITE);
                 break;
         }
-        
-        int[] xPoints = { getWidth() / 2,  (getWidth() - 20) / 2, (getWidth() + 20) / 2};
+
+        int[] xPoints = { getWidth() / 2, (getWidth() - 20) / 2, (getWidth() + 20) / 2 };
         int[] yPoints = { (getHeight() - 20) / 2, (getHeight() + 20) / 2, (getHeight() + 20) / 2 };
         g.fillPolygon(xPoints, yPoints, 3);
 
         g.setColor(Color.BLACK);
         g.drawPolygon(xPoints, yPoints, 3);
+    }
+
+    public Rovar getRovar() {
+        return rovar;
     }
 }
