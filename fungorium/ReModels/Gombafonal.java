@@ -89,11 +89,11 @@ public class Gombafonal implements Entitás {
         }
     }
 
-    public boolean gombafonalatNöveszt(Tektonrész honnan, Tektonrész hova, Fungorium fungorium)
+    public Gombafonal gombafonalatNöveszt(Tektonrész honnan, Tektonrész hova, Fungorium fungorium)
     {
         if (!kapcsolódikGombatesthez())
         {
-            return false;
+            return null;
         }
 
         Gombafonal fonal = new Gombafonal(faj);
@@ -151,11 +151,11 @@ public class Gombafonal implements Entitás {
                 }
             }
 
-            return true;
+            return fonal;
         }
         else
         {
-            return false;
+            return null;
         }
     }
 

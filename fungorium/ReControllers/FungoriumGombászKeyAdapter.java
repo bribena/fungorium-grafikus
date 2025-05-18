@@ -150,16 +150,16 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
             case 3: nx = x - 1; break;  // bal
         }
 
-        Tektonrész hova = selectedView.getTektonrész();
-        Tektonrész szomszed = fungorium.getTektonrész(nx, ny);
-        if (szomszed == null) {
+        Tektonrész honnan = selectedView.getTektonrész();
+        Tektonrész hova = fungorium.getTektonrész(nx, ny);
+        if (hova == null) {
             System.out.println("Nincs szomszédos tektonrész az adott irányban.");
             return;
         }
 
         // Megkeressük a gombafonalat a jelenlegi tektonrészen
         Gombafonal fonal = null;
-        for (Entitás e : hova.getEntitások()) {
+        for (Entitás e : honnan.getEntitások()) {
             if (e instanceof Gombafonal gf) {
                 fonal = gf;
                 break;
@@ -172,9 +172,9 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         }
 
         // Megpróbáljuk növeszteni a gombafonalat a szomszédos tektonrészre
-        boolean siker = fonal.gombafonalatNöveszt(hova, szomszed, fungorium);
+        Gombafonal ujFonal = fonal.gombafonalatNöveszt(honnan, hova, fungorium);
 
-        if (!siker) {
+        if (ujFonal == null) {
             System.out.println("Nem sikerült növeszteni a gombafonalat.");
             return;
         }
@@ -182,7 +182,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         // View frissítése a szomszéd tektonrészen
         for (Component c : controller.getFungoriumView().getComponents()) {
             if (c instanceof TektonrészView tv && tv.x == nx && tv.y == ny) {
-                tv.add(new GombafonalView(szomszed, fonal));
+                tv.add(new GombafonalView(hova, ujFonal));
                 tv.revalidate();
                 tv.repaint();
                 break;
