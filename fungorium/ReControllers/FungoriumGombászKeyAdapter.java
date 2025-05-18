@@ -2,7 +2,10 @@ package fungorium.ReControllers;
 
 import fungorium.ReModels.*;
 import fungorium.ReViews.*;
+import fungorium.Views.SporaView;
+
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -210,6 +213,8 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         Tektonrész tekton = fungorium.getTektonrész(x, y);
         List<Entitás> entitások = tekton.getEntitások();
 
+        List<Spóra> sporak = new ArrayList<>();
+
         for (int i = 0; i < entitások.size(); i++)
         {
             if (entitások.get(i).getClass() == Gombatest.class)
@@ -217,10 +222,36 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
                 Gombatest test = (Gombatest)entitások.get(i);
                 if (test.getFaj() == player.getKezeltFaj())
                 {
-                    test.spórátSzór(tekton, fungorium);
+                    sporak = test.spórátSzór(tekton, fungorium);
+                    break;
+                }
+                else
+                {
+                    System.out.println("Nincs a jatekos fajatol test a tektonon.");
                 }
             }
         }
+
+        // View frissítése a szomszéd tektonrészen
+        for (int i = 0; i < sporak.size(); i++)
+        {
+            int[] coords = sporak.get(i).getCoords();
+
+            for (Component c : controller.getFungoriumView().getComponents()) {
+                if (c instanceof TektonrészView tv && tv.x == coords[0] && tv.y == coords[1]) {
+                    tv.add(new SpóraView(tekton, sporak.get(i)));
+                    tv.revalidate();
+                    tv.repaint();
+                    break;
+                }
+            }
+        }
+
+        selectedView.repaint();
+
+        // Kör vége
+        controller.getPlayerManager().következőJátékos();
+        controller.getGamePanel().updateStatusLabel();
     }
 
 
@@ -245,6 +276,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
                 break;
             case KeyEvent.VK_S:
                 // S billentyűre spórát szór
+                System.out.println("S lenyomva");
                 spóraSzórás();
                 break;
             // nyíl billentyűknek megfelelően gombafonal növesztés

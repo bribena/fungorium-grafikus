@@ -8,10 +8,9 @@ import fungorium.ReModels.*;
 public class SpóraView extends EntitásView {
     private Spóra spóra;
 
-    public SpóraView(Tektonrész tr, Gombafaj faj, int sporaSzam) {
+    public SpóraView(Tektonrész tr, Spóra sp) {
         super(tr);
-        spóra = new Spóra(faj, sporaSzam);
-        tr.getEntitások().add(spóra);
+        spóra = sp;
     }
 
     @Override

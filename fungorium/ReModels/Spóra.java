@@ -3,10 +3,12 @@ package fungorium.ReModels;
 public class Spóra implements Entitás {
     private Gombafaj faj;
     private int spóraSzám;
+    private int[] coords;
     
-    public Spóra(Gombafaj faj, int spóraSzám) {
+    public Spóra(Gombafaj faj, int spóraSzám, int[] coords) {
         this.faj = faj;
         this.spóraSzám = spóraSzám;
+        this.coords = coords;
     }
 
     public Gombafaj getFaj() {
@@ -15,6 +17,11 @@ public class Spóra implements Entitás {
 
     public int getSpóraSzám() {
         return spóraSzám;
+    }
+
+    public int[] getCoords()
+    {
+        return coords;
     }
 
     @Override

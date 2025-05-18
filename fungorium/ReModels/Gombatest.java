@@ -51,23 +51,28 @@ public class Gombatest implements Entitás {
         this.fejlődött = fejlodott;
     }
 
-    public boolean spórátSzór(Tektonrész t, Fungorium f) {
+    public List<Spóra> spórátSzór(Tektonrész t, Fungorium f) {
         List<Tektonrész> marSzort = new ArrayList<>(); // itt taroljuk a tektonokat ahova mar lett szorva, mivel a szomszed returnnel kesobb olyant is visszaad amin mar jartunk
+        List<Spóra> sporak = new ArrayList<>();
 
         int[] tektonCoords = f.getTektonrészKoordináta(t);
         Tektonrész[] kozeliSzomszedok = f.getTektonrészSzomszédok(tektonCoords[0], tektonCoords[1]);
 
-        if (!t.entitásHozzáadás(new Spóra(faj, 5))) // sok ilyen csunya check van mert fogalmam sincs hogyan mashogy tudna ez false-t returnolni
+        Spóra spora = new Spóra(faj, 5, tektonCoords);
+        if (!t.entitásHozzáadás(spora)) // sok ilyen csunya check van mert fogalmam sincs hogyan mashogy tudna ez false-t returnolni
         {
-            return false;
+            sporak.add(spora);
+            return null;
         }
         marSzort.add(t);
 
         for (int i = 0; i < kozeliSzomszedok.length; i++)
         {
-            if (!kozeliSzomszedok[i].entitásHozzáadás(new Spóra(faj, 2)))
+            spora = new Spóra(faj, 2, tektonCoords);
+            if (!kozeliSzomszedok[i].entitásHozzáadás(spora))
             {
-                return false;
+                sporak.add(spora);
+                return null;
             }
             marSzort.add(kozeliSzomszedok[i]);
         }
@@ -83,9 +88,11 @@ public class Gombatest implements Entitás {
                 {
                     if (!marSzort.contains(tavoliSzomszedok[j])) // csak akkor szorunk ha itt meg nem szortunk
                     {
-                        if (!tavoliSzomszedok[j].entitásHozzáadás(new Spóra(faj, 1)))
+                        spora = new Spóra(faj, 1, tektonCoords);
+                        if (!tavoliSzomszedok[j].entitásHozzáadás(spora))
                         {
-                            return false;
+                            sporak.add(spora);
+                            return null;
                         }
                         marSzort.add(tavoliSzomszedok[j]);
                     }
@@ -93,6 +100,6 @@ public class Gombatest implements Entitás {
             }
         }
 
-        return true;
+        return sporak;
     }
 }
