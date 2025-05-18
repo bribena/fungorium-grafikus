@@ -3,6 +3,7 @@ package fungorium.ReControllers;
 import fungorium.ReModels.*;
 import fungorium.ReViews.*;
 import java.awt.Component;
+import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -198,7 +199,28 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
     }
 
     private void spóraSzórás() {
+        Fungorium fungorium = controller.getPlayerManager().getFungorium();
+        Gombász player = (Gombász)controller.getPlayerManager().getAktuálisJátékos();
 
+        TektonrészView selectedView = controller.getSelectedTektonrészView();
+
+        int x = selectedView.x;
+        int y = selectedView.y;
+
+        Tektonrész tekton = fungorium.getTektonrész(x, y);
+        List<Entitás> entitások = tekton.getEntitások();
+
+        for (int i = 0; i < entitások.size(); i++)
+        {
+            if (entitások.get(i).getClass() == Gombatest.class)
+            {
+                Gombatest test = (Gombatest)entitások.get(i);
+                if (test.getFaj() == player.getKezeltFaj())
+                {
+                    test.spórátSzór(tekton, fungorium);
+                }
+            }
+        }
     }
 
 
