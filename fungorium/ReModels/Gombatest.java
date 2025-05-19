@@ -55,7 +55,7 @@ public class Gombatest implements Entitás {
     public void spórátSzór(Tektonrész forrás, Tektonrész cél, Fungorium fungorium) {
         if ((fejlődött && !fungorium.getMásodfokúTektonSzomszédosságok(forrás.getTektonID()).contains(cél.getTektonID())
             || (!fejlődött && !fungorium.getElsőfokúTektonSzomszédosságok(forrás.getTektonID()).contains(cél.getTektonID())))
-            || spóraszórásLehetőség > 0
+            || spóraszórásVárakozásIdő > 0
             || (kezdő && spóraszórásLehetőség < 2)) {
             return;
         }
