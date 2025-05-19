@@ -20,19 +20,13 @@ public abstract class Tektonrész {
     private boolean[] tektonSzéleE = {false, false, false, false};
     /** Entitásokat tárol (lol) */
     protected List<Entitás> entitások = new ArrayList<>();
-    /** Kell a referencia :( */
-    protected Fungorium fungorium;
-
-    /** Kell a referencia :( */
-    protected Tektonrész(Fungorium fungorium) {
-        this.fungorium = fungorium;
-    }
+    
+    protected Tektonrész() {}
     /** Copy */
     protected Tektonrész(Tektonrész tr) {
         tektonID = tr.tektonID;
         tektonSzéleE = tr.tektonSzéleE;
         entitások = tr.entitások;
-        fungorium = tr.fungorium;
 
         for (Entitás e : entitások) {
             if (e instanceof Gombatest) {
@@ -113,6 +107,10 @@ public abstract class Tektonrész {
             }
         }
         return false;
+    }
+
+    public boolean tartalmaz(Entitás entitás) {
+        return entitások.contains(entitás);
     }
 
     public void frissítés() {

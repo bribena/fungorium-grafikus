@@ -1,11 +1,20 @@
 package fungorium.ReModels;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Gombafonal implements Entitás {
+    /**
+     * A szoki.
+     * [0]: fel
+     * [1]: jobbra
+     * [2]: le
+     * [3]: balra
+     */
     private Gombafonal[] kapcsolódóFonalak = new Gombafonal[4];
-    private List<Gombatest> gombaTestek = new ArrayList<>();
+    private Gombatest test = null;
     private Gombafaj faj;
     private int szakadt = 0;
     private boolean specFrissítés = false;
@@ -14,10 +23,23 @@ public class Gombafonal implements Entitás {
         this.faj = faj;
     }
 
-    public void gombafonalÖsszekapcsolás(Gombafonal szomszéd, int irány) {
+    public void összekapcsolás(Gombafonal szomszéd, int irány) {
         kapcsolódóFonalak[irány] = szomszéd;
         szomszéd.kapcsolódóFonalak[(irány + 2) % 4] = this;
     }
+
+    public void szakít(int irany) {
+        Gombafonal szakitando = kapcsolódóFonalak[irany];
+
+        if (szakitando != null) {
+            kapcsolódóFonalak[irany] = null;
+            szakitando.kapcsolódóFonalak[(irany + 2) % 4] = null;
+        }
+    }
+
+    public void addTest(Gombatest test) {
+        this.test = test;
+    } 
 
     public Gombafaj getFaj() {
         return faj;
@@ -25,98 +47,102 @@ public class Gombafonal implements Entitás {
 
     @Override
     public boolean érvényesE() {
-        return true;
+        return szakadt >= 2;
     }
 
     public void specBeállítás(boolean spec) {
         specFrissítés = spec;
     }
 
-    public boolean kapcsolódikGombatesthez()
-    {
-        return gombaTestek.size() > 0;
+    private Set<Gombafonal> getÖsszesKapcsolódó(Set<Gombafonal> eddigiek) {
+        if (eddigiek == null) {
+            eddigiek = new HashSet<>();
+        }
+        eddigiek.add(this);
+        for (int i = 0; i < 4; ++i) {
+            if (kapcsolódóFonalak[i] != null && !eddigiek.contains(kapcsolódóFonalak[i])) {
+                kapcsolódóFonalak[i].getÖsszesKapcsolódó(eddigiek);
+            }
+        }
+        return eddigiek;
     }
 
-    public boolean addTest(Gombatest test)
-    {
-        if (!gombaTestek.contains(test))
-        {
-             gombaTestek.add(test);
-             return true;
+    private boolean kapcsolódikGombatesthez() {
+        if (test != null && !test.érvényesE()) {
+            test = null;
         }
-        else
-        {
-            return false;
+        if (test != null) {
+            return true;
         }
+
+        Set<Gombafonal> kapcsolódók = getÖsszesKapcsolódó(null);
+        for (Gombafonal f : kapcsolódók) {
+            if (f.test != null && !f.test.érvényesE()) {
+                f.test = null;
+            }
+            if (f.test != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean removeTest(Gombatest test)
-    {
-        if (gombaTestek.contains(test))
-        {
-             gombaTestek.remove(test);
-             return true;
+    private Gombatest getÉrvényesNövesztőGombatest() {
+        if (test != null && !test.érvényesE()) {
+            test = null;
         }
-        else
-        {
-            return false;
+        if (test != null && test.növeszthetFonalat()) {
+            return test;
         }
+
+        Set<Gombafonal> kapcsolódók = getÖsszesKapcsolódó(null);
+        for (Gombafonal f : kapcsolódók) {
+            if (f.test != null && !f.test.érvényesE()) {
+                f.test = null;
+            }
+            if (f.test != null && f.test.növeszthetFonalat()) {
+                return f.test;
+            }
+        }
+        return null;
     }
 
     @Override
     public boolean frissítés() {
-        if (!kapcsolódikGombatesthez())
-        {
-            szakadt += 1;
-            if (szakadt > 2)
-            {
-                return true;
-            }
+        if (!kapcsolódikGombatesthez() || specFrissítés) {
+            szakadt++;
         }
-        else
-        {
+        else {
             szakadt = 0;
         }
 
-        return false;
+        return érvényesE();
     }
 
-    @Override
-    public boolean speciálisFrissítés() {
-        /** TODO */
-        return false;
-    }
-
-    public void szakad(int irany)
+    public boolean gombafonalatNöveszt(Tektonrész honnan, Tektonrész hova, Fungorium fungorium)
     {
-        Gombafonal szakitando = kapcsolódóFonalak[irany];
-
-        if (szakitando != null)
-        {
-            kapcsolódóFonalak[irany] = null;
-
-            irany -= 2;
-            if (irany < 0)
-            {
-                irany += 4;
-            }
-
-            szakitando.szakad(irany);
+        Gombatest t = getÉrvényesNövesztőGombatest();
+        if (t == null || !honnan.tartalmaz(this)) {
+            return false;
         }
-    }
 
-    public Gombafonal gombafonalatNöveszt(Tektonrész honnan, Tektonrész hova, Fungorium fungorium)
-    {
-        if (!kapcsolódikGombatesthez())
-        {
-            return null;
+        int[] honnanKoor = fungorium.getTektonrészKoordináta(honnan);
+        int[] hovaKoor = fungorium.getTektonrészKoordináta(hova);
+        int[] d = new int[] {hovaKoor[0] - honnanKoor[0], hovaKoor[1] - honnanKoor[1]};
+        // Nem szomszédos
+        if ((d[1] == 0 && (d[0] < -1 || d[0] > 1)) || (d[0] == 0 && (d[1] < -1 || d[1] > 1))) {
+            return false;
+        }
+
+        for (Entitás e : hova.getEntitások()) {
+            if (e instanceof Gombafonal && ((Gombafonal)e).faj == faj) {
+                összekapcsolás((Gombafonal)e, );
+            }
         }
 
         Gombafonal fonal = new Gombafonal(faj);
-
-        for (int i = 0; i < gombaTestek.size(); i++)
-        {
-            fonal.gombaTestek.add(gombaTestek.get(i)); // ugyanazokhoz a gombatestekhez fog kapcsolodni az uj fonal is
+        if (!hova.entitásHozzáadás(fonal)) {
+            return false;
         }
 
         if (hova.entitásHozzáadás(fonal)) // a tektonresz eldonti, hogy lehetseges-e a novesztes

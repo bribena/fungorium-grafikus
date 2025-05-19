@@ -1,9 +1,7 @@
 package fungorium.ReModels;
 
 public class GombatestTiltóTektonrész extends Tektonrész {
-    public GombatestTiltóTektonrész(Fungorium fungorium) {
-        super(fungorium);
-    }
+    public GombatestTiltóTektonrész() {}
     public GombatestTiltóTektonrész(Tektonrész t) {
         super(t);
         for (Entitás e : entitások) {

@@ -36,16 +36,16 @@ public class Fungorium {
         // Nem akartam több ciklusra bontani, sry
         for (int i = 0; i < width / 2; ++i) {
             for (int j = 0; j < height / 2; ++j) {
-                tektonrészek[i][j] = new TöbbfonalasTektonrész(this);
+                tektonrészek[i][j] = new TöbbfonalasTektonrész();
                 tektonrészek[i][j].setTektonID(0);
 
-                tektonrészek[i + width / 2][j] = new TöbbfonalasTektonrész(this);
+                tektonrészek[i + width / 2][j] = new TöbbfonalasTektonrész();
                 tektonrészek[i + width / 2][j].setTektonID(1);
 
-                tektonrészek[i][j + height / 2] = new TöbbfonalasTektonrész(this);
+                tektonrészek[i][j + height / 2] = new TöbbfonalasTektonrész();
                 tektonrészek[i][j + height / 2].setTektonID(2);
 
-                tektonrészek[i + width / 2][j + height / 2] = new TöbbfonalasTektonrész(this);
+                tektonrészek[i + width / 2][j + height / 2] = new TöbbfonalasTektonrész();
                 tektonrészek[i + width / 2][j + height / 2].setTektonID(3);
             }
         }
@@ -75,7 +75,7 @@ public class Fungorium {
      */
     public Tektonrész getTektonrész(int x, int y) {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1) {
-            return new TöbbfonalasTektonrész(this);
+            return new TöbbfonalasTektonrész();
         }
         return tektonrészek[x][y];
     }
@@ -136,7 +136,7 @@ public class Fungorium {
                         for (Entitás e : tektonrészek[x][y].getEntitások()) {
                             if (e instanceof Gombafonal) {
                                 Gombafonal gf = (Gombafonal) e;
-                                gf.szakad(i);
+                                gf.szakít(i);
                             }
                         }
                     }

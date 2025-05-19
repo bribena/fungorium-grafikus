@@ -7,6 +7,7 @@ public class Gombatest implements Entitás {
     private int spóraszórásLehetőség = 4;
     private boolean fejlődött = false;
     private boolean kezdő = false;
+    private boolean fonalatNövesztett = false;
     private Gombafaj faj;
 
     public Gombatest(Gombafaj faj) {
@@ -24,10 +25,20 @@ public class Gombatest implements Entitás {
 
     @Override
     public boolean frissítés() {
-        if (!passzív && spóraszórásVárakozásIdő > 0) {
-            spóraszórásVárakozásIdő -= 1;
+        if (!passzív) {
+            if (spóraszórásVárakozásIdő > 0) {
+                spóraszórásVárakozásIdő -= 1;
+            }
+            fonalatNövesztett = false;
         }
         return érvényesE();
+    }
+
+    public boolean növeszthetFonalat() {
+        return !fonalatNövesztett && !passzív;
+    }
+    public void fonalatNöveszt() {
+        fonalatNövesztett = true;
     }
 
     public void passzívBeállítás(boolean p) {
@@ -48,12 +59,13 @@ public class Gombatest implements Entitás {
         return fejlődött;
     }
     public void fejleszt() {
-        if (passzív) {
+        if (passzív || spóraszórásVárakozásIdő > 0) {
             return;
         }
 
         fejlődött = true;
         spóraszórásLehetőség += 3;
+        spóraszórásVárakozásIdő = 2;
     }
 
     public void spórátSzór(Tektonrész forrás, Tektonrész cél, Fungorium fungorium) {

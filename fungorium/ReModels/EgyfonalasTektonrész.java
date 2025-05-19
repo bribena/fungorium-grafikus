@@ -10,8 +10,7 @@ import java.util.HashMap;
 public class EgyfonalasTektonrész extends Tektonrész {
     private static Map<Integer, Gombafaj> tektonFonalFaj = new HashMap<>();
 
-    public EgyfonalasTektonrész(Fungorium fungorium) {
-        super(fungorium);
+    public EgyfonalasTektonrész() {
     }
 
     public EgyfonalasTektonrész(Tektonrész tr) {
