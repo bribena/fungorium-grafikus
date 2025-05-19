@@ -2,13 +2,11 @@ package fungorium.ReControllers;
 
 import fungorium.ReModels.*;
 import fungorium.ReViews.*;
-import fungorium.Views.SporaView;
-
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 class FungoriumGombászKeyAdapter extends KeyAdapter {
     private GameController controller;
