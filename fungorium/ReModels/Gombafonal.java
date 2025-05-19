@@ -8,17 +8,15 @@ public class Gombafonal implements Entitás {
     private List<Gombatest> gombaTestek = new ArrayList<>();
     private Gombafaj faj;
     private int szakadt = 0;
+    private boolean specFrissítés = false;
 
     public Gombafonal(Gombafaj faj) {
         this.faj = faj;
     }
-    
-    public Gombafonal(Gombafaj faj, Gombafonal szomszéd, int irány) {
-        this.faj = faj;
+
+    public void gombafonalÖsszekapcsolás(Gombafonal szomszéd, int irány) {
         kapcsolódóFonalak[irány] = szomszéd;
-        irány += 2;
-        irány %= 4;
-        szomszéd.kapcsolódóFonalak[irány] = this;
+        szomszéd.kapcsolódóFonalak[(irány + 2) % 4] = this;
     }
 
     public Gombafaj getFaj() {
@@ -28,6 +26,10 @@ public class Gombafonal implements Entitás {
     @Override
     public boolean érvényesE() {
         return true;
+    }
+
+    public void specBeállítás(boolean spec) {
+        specFrissítés = spec;
     }
 
     public boolean kapcsolódikGombatesthez()
@@ -76,6 +78,12 @@ public class Gombafonal implements Entitás {
             szakadt = 0;
         }
 
+        return false;
+    }
+
+    @Override
+    public boolean speciálisFrissítés() {
+        /** TODO */
         return false;
     }
 

@@ -10,9 +10,6 @@ public class Gombatest implements Entitás {
     private boolean kezdő = false;
     private Gombafaj faj;
 
-    public Gombatest() {
-    }
-
     public Gombatest(Gombafaj faj) {
         this.faj = faj;
     }
@@ -38,6 +35,10 @@ public class Gombatest implements Entitás {
             return true;
         }
         return false;
+    }
+
+    public void passzívBeállítás(boolean p) {
+        passzív = p;
     }
 
     public boolean isKezdő() {

@@ -2,26 +2,56 @@ package fungorium.ReModels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public abstract class Tektonrész {
-    private int tektonID = -1;
-    private boolean[] tektonSzéleE = {false, false, false, false};
-    protected List<Entitás> entitások = new ArrayList<>();
+    /** tektonID - Gombatest pár, nem kell a fungoriumból kikeresni */
+    private static Map<Integer, Gombatest> tektonGombatest = new HashMap<>();
 
-    protected Tektonrész() {}
+    /** Azonos ID-jűek egy tektonon vannak */
+    private int tektonID = -1;
+    /** Szokásos sorrend:
+     * [0]: Fel
+     * [1]: Jobbra
+     * [2]: Le
+     * [3]: Balra
+     */
+    private boolean[] tektonSzéleE = {false, false, false, false};
+    /** Entitásokat tárol (lol) */
+    protected List<Entitás> entitások = new ArrayList<>();
+    /** Kell a referencia :( */
+    protected Fungorium fungorium;
+
+    /** Kell a referencia :( */
+    protected Tektonrész(Fungorium fungorium) {
+        this.fungorium = fungorium;
+    }
+    /** Copy */
     protected Tektonrész(Tektonrész tr) {
         tektonID = tr.tektonID;
         tektonSzéleE = tr.tektonSzéleE;
         entitások = tr.entitások;
+        fungorium = tr.fungorium;
+
+        for (Entitás e : entitások) {
+            if (e instanceof Gombatest) {
+                tektonGombatest.put(tektonID, (Gombatest)e);
+                ((Gombatest)e).passzívBeállítás(false);
+            }
+            else if (e instanceof Gombafonal) {
+                ((Gombafonal)e).specBeállítás(false);
+            }
+        }
     }
 
     public int getTektonID() {
         return tektonID;
     }
-
     public void setTektonID(int tektonID) {
         this.tektonID = tektonID;
     }
+    
     public boolean[] getTektonSzéleE() {
         return tektonSzéleE;
     }
@@ -30,67 +60,49 @@ public abstract class Tektonrész {
         return entitások;
     }
 
-    public boolean vanGombatest() {
-        for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i) instanceof Gombatest)
-            {
-                return true;
-            }
+    // Ha gombatest: tektononként csak 1
+    public boolean entitásHozzáadás(Gombatest gt) {
+        if (tektonGombatest.containsKey(tektonID)) {
+            return false;
         }
-        return false;
+        tektonGombatest.put(tektonID, gt);
+        return entitások.add(gt);
     }
 
-    public boolean vanSpóra() {
-        for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i) instanceof Spóra)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean vanFonal() {
-        for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i) instanceof Gombafonal)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean vanRovar() {
-        for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i) instanceof Rovar)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Gombafonal getKapcsolodoFonal(Gombafaj faj)
-    {
-        for (int i = 0; i < getGombafonalak().size(); i++)
-        {
-            if (getGombafonalak().get(i).getFaj() == faj)
-            {
-                return getGombafonalak().get(i);
-            }
-        }
-
-        return null;
-    }
-
-    public boolean entitásHozzáadás(Entitás entitás) {
-        for (int i = 0; i < entitások.size(); i++) {
-            if (vanGombatest() && (entitás instanceof Gombatest)) {
+    // Ha gombafonal: nincs másik ugyanolyan fajú
+    public boolean entitásHozzáadás(Gombafonal gf) {
+        for (Entitás e : entitások) {
+            if (e instanceof Gombafonal && ((Gombafonal)e).getFaj() == gf.getFaj()) {
                 return false;
             }
         }
-        entitások.add(entitás);
-        return true;
+        return entitások.add(gf);
+    }
+
+    // Ha spóra: hozzáaad, ha van
+    public boolean entitásHozzáadás(Spóra sp) {
+        for (Entitás e : entitások) {
+            if (e instanceof Spóra && ((Spóra)e).getFaj() == sp.getFaj()) {
+                ((Spóra)e).hozzáad(sp);
+                return true;
+            }
+        }
+        return entitások.add(sp);
+    }
+
+    // Ha rovar: semmi
+    public boolean entitásHozzáadás(Entitás entitás) {
+        // Csak hogy ne legyen kikerülhető
+        if (entitás instanceof Gombatest) {
+            return entitásHozzáadás((Gombatest)entitás);
+        }
+        if (entitás instanceof Gombafonal) {
+            return entitásHozzáadás((Gombafonal)entitás);
+        }
+        if (entitás instanceof Spóra) {
+            return entitásHozzáadás((Spóra)entitás);
+        }
+        return entitások.add(entitás);
     }
 
     public boolean entitásTörlés(Entitás entitás){
@@ -103,19 +115,12 @@ public abstract class Tektonrész {
         return false;
     }
 
-    public List<Gombafonal> getGombafonalak() {
-        List<Gombafonal> fonalak = new ArrayList<>();
-        for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i) instanceof Gombafonal) {
-                fonalak.add((Gombafonal)entitások.get(i));
-            }
-        }
-        return fonalak;
-    }
-
     public void frissítés() {
         for (int i = 0; i < entitások.size(); i++) {
-            entitások.get(i).frissítés();
+            if (!entitások.get(i).frissítés()) {
+                entitások.remove(i);
+                --i;
+            }
         }
     }
 }

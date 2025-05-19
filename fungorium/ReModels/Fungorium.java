@@ -34,23 +34,19 @@ public class Fungorium {
     /** Default konstruktor */
     public Fungorium() {
         // Nem akartam több ciklusra bontani, sry
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 10; ++j) {
-                tektonrészek[i][j] = new TöbbfonalasTektonrész();
-                // tektonrészek[i][j].setTektonID(tektonIDk.get(0));
+        for (int i = 0; i < width / 2; ++i) {
+            for (int j = 0; j < height / 2; ++j) {
+                tektonrészek[i][j] = new TöbbfonalasTektonrész(this);
                 tektonrészek[i][j].setTektonID(0);
 
-                tektonrészek[i + 10][j] = new TöbbfonalasTektonrész();
-                // tektonrészek[i + 10][j].setTektonID(tektonIDk.get(2));
-                tektonrészek[i + 10][j].setTektonID(1);
+                tektonrészek[i + width / 2][j] = new TöbbfonalasTektonrész(this);
+                tektonrészek[i + width / 2][j].setTektonID(1);
 
-                tektonrészek[i][j + 10] = new TöbbfonalasTektonrész();
-                // tektonrészek[i][j + 10].setTektonID(tektonIDk.get(1));
-                tektonrészek[i][j + 10].setTektonID(2);
+                tektonrészek[i][j + height / 2] = new TöbbfonalasTektonrész(this);
+                tektonrészek[i][j + height / 2].setTektonID(2);
 
-                tektonrészek[i + 10][j + 10] = new TöbbfonalasTektonrész();
-                // tektonrészek[i + 10][j + 10].setTektonID(tektonIDk.get(3));
-                tektonrészek[i + 10][j + 10].setTektonID(3);
+                tektonrészek[i + width / 2][j + height / 2] = new TöbbfonalasTektonrész(this);
+                tektonrészek[i + width / 2][j + height / 2].setTektonID(3);
             }
         }
 
@@ -59,14 +55,14 @@ public class Fungorium {
             // Perem
             tektonrészek[i][0].getTektonSzéleE()[0] = true;
             tektonrészek[0][i].getTektonSzéleE()[3] = true;
-            tektonrészek[i][19].getTektonSzéleE()[2] = true;
-            tektonrészek[19][i].getTektonSzéleE()[1] = true;
+            tektonrészek[i][height - 1].getTektonSzéleE()[2] = true;
+            tektonrészek[width - 1][i].getTektonSzéleE()[1] = true;
 
             // Belső
-            tektonrészek[i][9].getTektonSzéleE()[2] = true;
-            tektonrészek[i][10].getTektonSzéleE()[0] = true;
-            tektonrészek[9][i].getTektonSzéleE()[1] = true;
-            tektonrészek[10][i].getTektonSzéleE()[3] = true;
+            tektonrészek[i][height / 2 - 1].getTektonSzéleE()[2] = true;
+            tektonrészek[i][height / 2].getTektonSzéleE()[0] = true;
+            tektonrészek[width / 2 - 1][i].getTektonSzéleE()[1] = true;
+            tektonrészek[width / 2][i].getTektonSzéleE()[3] = true;
         }
     }
 
@@ -78,36 +74,21 @@ public class Fungorium {
      * @return Egy Tektonrész
      */
     public Tektonrész getTektonrész(int x, int y) {
+        if (x < 0 || x > width - 1 || y < 0 || y > height - 1) {
+            return new TöbbfonalasTektonrész(this);
+        }
         return tektonrészek[x][y];
     }
 
     public int[] getTektonrészKoordináta(Tektonrész t) {
-        for (int x = 0; x < 20; ++x) {
-            for (int y = 0; y < 20; ++y) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
                 if (tektonrészek[x][y] == t) {
                     return new int[] { x, y };
                 }
             }
         }
         return new int[] { -1, -1 };
-    }
-
-    /**
-     * x, y koordináta összefogása a töréshez.
-     */
-    public class Point {
-        public double x = 0, y = 0;
-
-        public Point(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    private double d(Point p, Point q, Point a) {
-        return ((q.y - p.y) * a.x - (q.x - p.x) * a.y + q.x * p.y - q.y * p.x)
-                /
-                Math.sqrt((q.y - p.y) * (q.y - p.y) + (q.x - p.x) * (q.x - p.x));
     }
 
     /**
@@ -121,12 +102,16 @@ public class Fungorium {
         Tektonrész[] ret = new Tektonrész[4];
         // [0]: Felfelé, [1]: Jobbra, [2]: Lefelé, [3]: Balra
 
-        ret[0] = (y > 0) ? tektonrészek[x][y - 1] : null; // Felfelé
-        ret[1] = (x < 19) ? tektonrészek[x + 1][y] : null; // Jobbra
-        ret[2] = (y < 19) ? tektonrészek[x][y + 1] : null; // Lefelé
-        ret[3] = (x > 0) ? tektonrészek[x - 1][y] : null; // Balra
+        ret[0] = getTektonrész(x, y - 1); // Felfelé
+        ret[1] = getTektonrész(x + 1, y); // Jobbra
+        ret[2] = getTektonrész(x, y + 1); // Lefelé
+        ret[3] = getTektonrész(x - 1, y); // Balra
 
         return ret;
+    }
+    public Tektonrész[] getTektonrészSzomszédok(Tektonrész tr) {
+        int[] koor = getTektonrészKoordináta(tr);
+        return getTektonrészSzomszédok(koor[0], koor[1]);
     }
 
     /**
@@ -222,6 +207,24 @@ public class Fungorium {
     }
 
     /**
+     * x, y koordináta összefogása a töréshez.
+     */
+    private class Point {
+        public double x = 0, y = 0;
+
+        public Point(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    private double d(Point p, Point q, Point a) {
+        return ((q.y - p.y) * a.x - (q.x - p.x) * a.y + q.x * p.y - q.y * p.x)
+                /
+                Math.sqrt((q.y - p.y) * (q.y - p.y) + (q.x - p.x) * (q.x - p.x));
+    }
+
+    /**
      * Végrehajtja a törést.
      */
     public void törés() {
@@ -285,11 +288,51 @@ public class Fungorium {
         }
     }
 
-    public boolean vanEGombatestTektonon(int tektonID) {
+    /**
+     * [0][0]: Az átvett tektonrész
+     * [1][i]: Környező 8
+     * [2][i]: A környező körüli 16
+     */
+    public Tektonrész[][] getSpóraTektonrészSzomszédok(int x, int y) {
+        Tektonrész[][] ret = new Tektonrész[3][];
+        ret[0] = new Tektonrész[] { tektonrészek[x][y] };
+        ret[1] = new Tektonrész[8];
+        ret[2] = new Tektonrész[16];
+
+        int i = 0;
+        for (int dx = -1; dx <= 1; ++dx) {
+            ret[1][i++] = getTektonrész(x + dx, y - 1);
+            ret[1][i++] = getTektonrész(x + dx, y + 1);
+        }
+        ret[1][i++] = getTektonrész(x - 1, y);
+        ret[1][i++] = getTektonrész(x + 1, y);
+
+        i = 0;
+        for (int dx = -2; dx <= 2; ++dx) {
+            ret[2][i++] = getTektonrész(x + dx, y - 2);
+            ret[2][i++] = getTektonrész(x + dx, y + 2);
+        }
+        for (int dy = -1; dy <= 1; ++dy) {
+            ret[2][i++] = getTektonrész(x - 2, y + dy);
+            ret[2][i++] = getTektonrész(x + 2, y + dy);
+        }
+
+        return ret;
+    }
+    public Tektonrész[][] getSpóraTektonrészSzomszédok(Tektonrész tr) {
+        int[] koor = getTektonrészKoordináta(tr);
+        return getSpóraTektonrészSzomszédok(koor[0], koor[1]);
+    }
+
+    public boolean vanMásikFajúGombafonalTektonon(int tektonID, Gombafaj faj) {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
-                if (tektonrészek[x][y].getTektonID() == tektonID && tektonrészek[x][y].vanGombatest()) {
-                    return true;
+                if (tektonrészek[x][y].getTektonID() == tektonID) {
+                    for (Entitás e : tektonrészek[x][y].getEntitások()) {
+                        if (e instanceof Gombafonal && ((Gombafonal)e).getFaj() != faj) {
+                            return true;
+                        } 
+                    }
                 }
             }
         }

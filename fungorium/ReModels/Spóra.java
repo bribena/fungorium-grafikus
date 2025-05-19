@@ -20,6 +20,10 @@ public class Spóra implements Entitás {
         return spóraSzám;
     }
 
+    public void hozzáad(Spóra spóra) {
+        spóraSzám += spóra.spóraSzám;
+    }
+
     public int[] getCoords() {
         return coords;
     }

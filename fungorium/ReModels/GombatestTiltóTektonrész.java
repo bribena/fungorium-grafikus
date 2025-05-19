@@ -1,18 +1,20 @@
 package fungorium.ReModels;
 
 public class GombatestTiltóTektonrész extends Tektonrész {
-    public GombatestTiltóTektonrész() {}
+    public GombatestTiltóTektonrész(Fungorium fungorium) {
+        super(fungorium);
+    }
     public GombatestTiltóTektonrész(Tektonrész t) {
         super(t);
+        for (Entitás e : entitások) {
+            if (e instanceof Gombatest) {
+                ((Gombatest)e).passzívBeállítás(true);
+            }
+        }
     }
 
-    public boolean entitásHozzáadás(Entitás entitás)
-    {
-        if (entitás instanceof Gombatest)
-        {
-            return false;
-        }
-        entitások.add(entitás);
-        return true;
+    @Override
+    public boolean entitásHozzáadás(Gombatest gt) {
+        return false;
     }
 }
