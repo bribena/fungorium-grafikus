@@ -372,21 +372,34 @@ public class Fungorium {
                 for (Entitás e : tektonrészek[x][y].getEntitások()) {
                     if (e instanceof Rovar) {
                         Rovar r = (Rovar)e;
-                        if (r.lassú()) {
-                            r.mozgatottFelülírás(false);
-                        }
+                        r.mozgatottFelülírás(!r.lassú());
                     }
                 }
             }
         }
     }
-    public boolean vanLassúMozgathatóRovar(Rovarfaj faj) {
+    public boolean vanMozgathatóEntitás(Rovarfaj faj) {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 for (Entitás e : tektonrészek[x][y].getEntitások()) {
                     if (e instanceof Rovar) {
                         Rovar r = (Rovar)e;
-                        if (r.getFaj() == faj && r.lassú() && !r.mozgatott()) {
+                        if (r.getFaj() == faj && !r.mozgatott()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean vanMozgathatóEntitás(Gombafaj faj) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                for (Entitás e : tektonrészek[x][y].getEntitások()) {
+                    if (e instanceof Gombatest) {
+                        Gombatest t = (Gombatest)e;
+                        if (t.getFaj() == faj && !t.mozgatott()) {
                             return true;
                         }
                     }

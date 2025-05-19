@@ -7,7 +7,7 @@ public class Gombatest implements Entitás {
     private int spóraszórásLehetőség = 4;
     private boolean fejlődött = false;
     private boolean kezdő = false;
-    private boolean fonalatNövesztett = false;
+    private boolean mozgatott = true;
     private Gombafaj faj;
 
     public Gombatest(Gombafaj faj) {
@@ -29,16 +29,19 @@ public class Gombatest implements Entitás {
             if (spóraszórásVárakozásIdő > 0) {
                 spóraszórásVárakozásIdő -= 1;
             }
-            fonalatNövesztett = false;
+            mozgatott = false;
         }
         return érvényesE();
     }
 
+    public boolean mozgatott() {
+        return mozgatott;
+    }
     public boolean növeszthetFonalat() {
-        return !fonalatNövesztett && !passzív;
+        return !mozgatott && !passzív;
     }
     public void fonalatNöveszt() {
-        fonalatNövesztett = true;
+        mozgatott = true;
     }
 
     public void passzívBeállítás(boolean p) {
@@ -59,13 +62,14 @@ public class Gombatest implements Entitás {
         return fejlődött;
     }
     public void fejleszt() {
-        if (passzív || spóraszórásVárakozásIdő > 0) {
+        if (mozgatott || passzív || spóraszórásVárakozásIdő > 0) {
             return;
         }
 
         fejlődött = true;
         spóraszórásLehetőség += 3;
         spóraszórásVárakozásIdő = 2;
+        mozgatott = true;
     }
 
     public void spórátSzór(Tektonrész forrás, Tektonrész cél, Fungorium fungorium) {
@@ -73,7 +77,8 @@ public class Gombatest implements Entitás {
             || (!fejlődött && !fungorium.getElsőfokúTektonSzomszédosságok(forrás.getTektonID()).contains(cél.getTektonID())))
             || spóraszórásVárakozásIdő > 0
             || (kezdő && spóraszórásLehetőség < 2)
-            || passzív) {
+            || passzív
+            || mozgatott) {
             return;
         }
 
@@ -87,5 +92,7 @@ public class Gombatest implements Entitás {
         }
         spóraszórásVárakozásIdő = 2;
         spóraszórásLehetőség--;
+
+        mozgatott = true;
     }
 }

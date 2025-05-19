@@ -42,7 +42,7 @@ public class Játék {
             while (aktuálisJátékos < játékosok.size()) {
                 if (getAktuálisJátékos() instanceof Rovarász) {
                     Rovarász r = (Rovarász)getAktuálisJátékos();
-                    if (fungorium.vanLassúMozgathatóRovar(r.getKezeltFaj())) {
+                    if (fungorium.vanMozgathatóEntitás(r.getKezeltFaj())) {
                         break;
                     }
                 }
@@ -51,6 +51,14 @@ public class Játék {
             if (aktuálisJátékos == játékosok.size()) {
                 léptet();
             }
+        }
+    }
+    
+    public void automataLéptetés() {
+        Játékos j = getAktuálisJátékos();
+        if (j instanceof Gombász && !fungorium.vanMozgathatóEntitás(((Gombász)j).getKezeltFaj()) ||
+            j instanceof Rovarász && !fungorium.vanMozgathatóEntitás(((Rovarász)j).getKezeltFaj())) {
+            léptet();
         }
     }
 

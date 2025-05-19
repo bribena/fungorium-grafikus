@@ -28,8 +28,7 @@ public class Rovar implements Entitás {
      */
     private int[] hatások = new int[4]; 
     private boolean él = true;
-    private boolean mozgatott = false;
-
+    private boolean mozgatott = true;
 
     public Rovar(Rovarfaj faj) {
         this.faj = faj;
