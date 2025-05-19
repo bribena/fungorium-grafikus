@@ -1,10 +1,22 @@
 package fungorium.ReModels;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Gombafonal implements Entitás {
+    private static HashMap<Gombafaj, Integer> gombatestSzám = new HashMap<>();
+
+    static {
+        for (Gombafaj f : Gombafaj.values()) {
+            gombatestSzám.put(f, 0);
+        }
+    }
+    public static int getTápérték(Gombafaj faj) {
+        return gombatestSzám.get(faj);
+    }
+
     /**
      * A szoki.
      * [0]: fel
@@ -207,6 +219,7 @@ public class Gombafonal implements Entitás {
             spórák.get(i).hozzáad(-c);
         }
         this.test = test;
+        gombatestSzám.put(faj, gombatestSzám.get(faj) + 1);
         return true;
     }
 
