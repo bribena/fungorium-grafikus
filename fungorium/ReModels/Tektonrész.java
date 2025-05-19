@@ -100,13 +100,7 @@ public abstract class Tektonrész {
     }
 
     public boolean entitásTörlés(Entitás entitás){
-        for (int i = 0; i < entitások.size(); i++) {
-            if (entitás == entitások.get(i)) {
-                entitások.remove(i);
-                return true;
-            }
-        }
-        return false;
+        return entitások.remove(entitás);
     }
 
     public boolean tartalmaz(Entitás entitás) {

@@ -24,6 +24,10 @@ public class Spóra implements Entitás {
         this.spóraSzám += spóraSzám;
     }
 
+    public void felszív() {
+        spóraSzám = 0;
+    }
+
     @Override
     public boolean érvényesE() {
         return spóraSzám > 0;

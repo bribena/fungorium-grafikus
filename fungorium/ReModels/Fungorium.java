@@ -350,4 +350,19 @@ public class Fungorium {
         }
         return ret;
     }
+    public List<Spóra> getTektonSpóraszám(int tektonID, Gombafaj faj) {
+        List<Spóra> ret = new ArrayList<>();
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                if (tektonrészek[x][y].getTektonID() == tektonID) {
+                    for (Entitás e : tektonrészek[x][y].getEntitások()) {
+                        if (e instanceof Spóra && ((Spóra)e).getFaj() == faj && ((Spóra)e).érvényesE()) {
+                            ret.add((Spóra)e);
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
+    }
 }

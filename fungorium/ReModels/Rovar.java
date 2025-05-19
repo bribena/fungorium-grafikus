@@ -8,6 +8,7 @@ public class Rovar implements Entitás {
     private Rovarfaj faj;
     private int[] hatások;
     private Tektonrész tektonresz;
+    private boolean él = true;
 
     private Random random = new Random();
 
@@ -19,9 +20,13 @@ public class Rovar implements Entitás {
         return faj;
     }
 
+    public void pusztul() {
+        él = false;
+    }
+
     @Override
     public boolean érvényesE() {
-        return true;
+        return él;
     }
 
     @Override
@@ -62,7 +67,7 @@ public class Rovar implements Entitás {
         return true;
     }
 
-    public boolean isBena() {
+    public boolean bénult() {
         return hatásaAlatt(2);
     }
 

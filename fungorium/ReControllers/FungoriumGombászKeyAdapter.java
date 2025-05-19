@@ -184,7 +184,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
             return;
         }
 
-        // Megpróbáljuk növeszteni a gombafonalat a szomszédos tektonrészre
+        // irány a szomszédosokból növesztés után
         Gombafonal ujFonal = fonal.gombafonalatNöveszt(honnan, hova, fungorium);
 
         if (ujFonal == null) {
