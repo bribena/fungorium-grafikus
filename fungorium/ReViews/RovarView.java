@@ -8,14 +8,13 @@ import fungorium.ReModels.*;
 public class RovarView extends EntitásView {
     private Rovar rovar;
 
-    public RovarView(Tektonrész tr, Rovar rovar) {
-        super(tr);
+    public RovarView(Rovar rovar) {
         this.rovar = rovar;
     }
 
     @Override
     public boolean isValid() {
-        return rovar == null ? true : rovar.érvényesE();
+        return rovar != null && rovar.érvényesE();
     }
 
     @Override

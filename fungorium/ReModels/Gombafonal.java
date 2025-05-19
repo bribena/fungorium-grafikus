@@ -12,6 +12,14 @@ public class Gombafonal implements Entitás {
     public Gombafonal(Gombafaj faj) {
         this.faj = faj;
     }
+    
+    public Gombafonal(Gombafaj faj, Gombafonal szomszéd, int irány) {
+        this.faj = faj;
+        kapcsolódóFonalak[irány] = szomszéd;
+        irány += 2;
+        irány %= 4;
+        szomszéd.kapcsolódóFonalak[irány] = this;
+    }
 
     public Gombafaj getFaj() {
         return faj;

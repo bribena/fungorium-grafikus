@@ -8,15 +8,14 @@ import fungorium.ReModels.*;
 public class SpóraView extends EntitásView {
     private Spóra spóra;
 
-    public SpóraView(Tektonrész tr, Spóra sp) {
-        super(tr);
+    public SpóraView(Spóra sp) {
         spóra = sp;
         setOpaque(false);
     }
 
     @Override
     public boolean isValid() {
-        return spóra == null ? true : spóra.érvényesE();
+        return spóra != null && spóra.érvényesE();
     }
 
     @Override

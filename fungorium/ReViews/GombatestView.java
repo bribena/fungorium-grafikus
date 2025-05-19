@@ -4,27 +4,24 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 import fungorium.ReModels.Gombatest;
-import fungorium.ReModels.Gombafaj;
-import fungorium.ReModels.Tektonrész;
 
 public class GombatestView extends EntitásView {
-    private Gombatest t;
+    private Gombatest test;
 
-    public GombatestView(Tektonrész tr, Gombatest test) {
-        super(tr);
-        t = test;
+    public GombatestView(Gombatest test) {
+        this.test = test;
     }
 
     @Override
     public boolean isValid() {
-        return t == null ? true : t.érvényesE();
+        return test != null && test.érvényesE();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        switch (t.getFaj()) {
+        switch (test.getFaj()) {
             case Amanita:
                 g.setColor(new Color(255, 225, 67));
                 break;

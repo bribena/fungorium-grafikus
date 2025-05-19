@@ -5,8 +5,7 @@ import java.util.*;
 public class Fungorium {
     /** Random szám generátor */
     private static Random r = new Random();
-    private Point törésA = null;
-    private Point törésB = null;
+    
     /** Ne változtasd meg!!! */
     private final int width = 20;
 
@@ -237,8 +236,6 @@ public class Fungorium {
 
         Point a = new Point(v[0], v[1]);
         Point b = new Point(v[2], v[3]);
-        törésA = a;
-        törésB = b;
         Map<Integer, Integer> idMap = new HashMap<>();
 
         for (int x = 0; x < width; ++x) {
@@ -267,11 +264,11 @@ public class Fungorium {
      */
     public void körtLéptet(int kör) {
         // Entitások frissítésének átadása
-        // for (int i = 0; i < 20; ++i) {
-        // for (int j = 0; j < 20; ++j) {
-        // tektonrészek[j][i].frissítés();
-        // }
-        // }
+        for (int i = 0; i < 20; ++i) {
+            for (int j = 0; j < 20; ++j) {
+                tektonrészek[j][i].frissítés();
+            }
+        }
 
         // Törés
         int random = r.nextInt((int) (1 / törésEsély));
@@ -288,11 +285,14 @@ public class Fungorium {
         }
     }
 
-    public Point getTörésA() {
-        return törésA;
-    }
-
-    public Point getTörésB() {
-        return törésB;
+    public boolean vanEGombatestTektonon(int tektonID) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                if (tektonrészek[x][y].getTektonID() == tektonID && tektonrészek[x][y].vanGombatest()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

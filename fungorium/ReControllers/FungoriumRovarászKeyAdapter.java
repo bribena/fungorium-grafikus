@@ -1,11 +1,7 @@
 package fungorium.ReControllers;
 
-//import fungorium.Controllers.GameStateManager;
 import fungorium.ReModels.*;
 import fungorium.ReViews.*;
-// import fungorium.Controllers.GameController;
-// import fungorium.Controllers.GameStateManager;
-//import fungorium.Controllers.GameStateManager;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -28,7 +24,7 @@ class FungoriumRovarászKeyAdapter extends KeyAdapter {
         Tektonrész hova = selectedView.getTektonrész();
 
         // Csak akkor lehet rovart lehelyezni, ha van már gomba
-        if (!hova.vanGomba())
+        if (!hova.vanGombatest())
             return;
 
         // ha nem rovarász a soron következő játékos, return
@@ -44,7 +40,7 @@ class FungoriumRovarászKeyAdapter extends KeyAdapter {
         hova.entitásHozzáadás(rovar);
 
         // View frissítése
-        RovarView rovarView = new RovarView(hova, rovar);
+        RovarView rovarView = new RovarView(rovar);
         selectedView.add(rovarView);
         selectedView.revalidate();
         selectedView.repaint();

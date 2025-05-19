@@ -2,7 +2,6 @@ package fungorium.ReControllers;
 
 import fungorium.ReModels.*;
 import fungorium.ReViews.*;
-import fungorium.Views.SporaView;
 
 import java.awt.Component;
 import java.util.ArrayList;
@@ -12,47 +11,40 @@ import java.awt.event.KeyEvent;
 
 class FungoriumGombászKeyAdapter extends KeyAdapter {
     private GameController controller;
-    private GameStateManager gameState;
-    private FungoriumView fungoriumView;
+    private GameStateManager stateManager;
 
-    public FungoriumGombászKeyAdapter(GameController controller, GameStateManager gameState) {
+    public FungoriumGombászKeyAdapter(GameController controller, GameStateManager stateManager) {
         this.controller = controller;
-        this.gameState = gameState;
+        this.stateManager = stateManager;
     }
 
     private void gombatestNövesztés() {
-        // kijelölt tektonrész lekérdezése + ha nincs kijelölve semmi, return
+        Fungorium fungorium = controller.getPlayerManager().getFungorium();
         TektonrészView selectedView = controller.getSelectedTektonrészView();
-        if (selectedView == null)
-            return;
-
-        // ha a tekton hatása GombatestTiltó, nem kerülhet rá gommbatest
         Tektonrész hova = selectedView.getTektonrész();
-        if (hova.vanGomba() || hova instanceof GombatestTiltóTektonrész)
-            return;
-
+        
         // Modell: Gombatest létrehozása
         Gombász player = (Gombász) controller.getPlayerManager().getAktuálisJátékos();
         Gombafaj faj = player.getKezeltFaj();
-        // tesztelésre mindig igaz
-        boolean kezdo = true;
+        
+        boolean kezdo = stateManager.getFazis() == JatekFazis.GOMBA_HELYEZES;
         Gombatest test = new Gombatest(faj, kezdo);
-        hova.entitásHozzáadás(test);
+        if (!hova.entitásHozzáadás(test) || fungorium.vanEGombatestTektonon(hova.getTektonID())) {
+            return;
+        }
 
         // View: GombatestView hozzáadása
-        GombatestView testView = new GombatestView(hova, test);
+        GombatestView testView = new GombatestView(test);
         selectedView.add(testView);
-        selectedView.revalidate();
-        selectedView.repaint();
 
         // Ha kezdő gombatest, Gombafonal is jár mellé, valamint a szomszédokba is
         if (kezdo) {
             Gombafonal fonal = new Gombafonal(faj);
             fonal.addTest(test);
             hova.entitásHozzáadás(fonal);
-            selectedView.add(new GombafonalView(hova, fonal));
+            selectedView.add(new GombafonalView(fonal));
 
-            Fungorium fungorium = controller.getPlayerManager().getFungorium();
+            
             int x = selectedView.x;
             int y = selectedView.y;
 
@@ -202,7 +194,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         // View frissítése a szomszéd tektonrészen
         for (Component c : controller.getFungoriumView().getComponents()) {
             if (c instanceof TektonrészView tv && tv.x == nx && tv.y == ny) {
-                tv.add(new GombafonalView(hova, ujFonal));
+                tv.add(new GombafonalView(ujFonal));
                 tv.revalidate();
                 tv.repaint();
                 break;
@@ -237,11 +229,15 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
                 if (test.getFaj() == player.getKezeltFaj()) {
                     sporak = test.spórátSzór(tekton, fungorium);
                     break;
-                } else {
-                    System.out.println("Nincs a jatekos fajatol test a tektonon.");
                 }
             }
         }
+
+        if (sporak.isEmpty()) {
+            System.out.println("Nincs a jatekos fajatol test a tektonon.");
+            return;
+        }
+
         System.out.println("Spórák száma: " + sporak.size());
         // View frissítése a szomszéd tektonrészen
         for (int i = 0; i < sporak.size(); i++) {
@@ -249,7 +245,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
 
             for (Component c : controller.getFungoriumView().getComponents()) {
                 if (c instanceof TektonrészView tv && tv.x == coords[0] && tv.y == coords[1]) {
-                    tv.add(new SpóraView(tekton, sporak.get(i)));
+                    tv.add(new SpóraView(sporak.get(i)));
                     tv.revalidate();
                     tv.repaint();
                     break;
@@ -306,5 +302,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
                 gombafonalNövesztés(3);
                 break;
         }
+
+        controller.getFungoriumView().revalidate();
     }
 }

@@ -10,7 +10,6 @@ public class GameController {
     private PlayerManager playerManager;
     private FungoriumView view;
     private TektonrészView selectedTektonrész;
-    private GameLogic gameLogic;
     private GameStateManager gameState;
     private GamePanel gamePanel;
 
@@ -21,7 +20,6 @@ public class GameController {
         this.gameState = gameState;
         this.playerManager = manager;
         this.view = view;
-        gameLogic = new GameLogic(playerManager);
         gombászKeyAdapter = new FungoriumGombászKeyAdapter(this, this.gameState);
         rovarászKeyAdapter = new FungoriumRovarászKeyAdapter(this, this.gameState);
         this.gamePanel = gp;

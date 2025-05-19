@@ -30,7 +30,7 @@ public abstract class Tektonrész {
         return entitások;
     }
 
-    public boolean vanGomba() {
+    public boolean vanGombatest() {
         for (int i = 0; i < entitások.size(); i++) {
             if (entitások.get(i) instanceof Gombatest)
             {
@@ -85,7 +85,7 @@ public abstract class Tektonrész {
 
     public boolean entitásHozzáadás(Entitás entitás) {
         for (int i = 0; i < entitások.size(); i++) {
-            if (vanGomba() && (entitás instanceof Gombatest)) {
+            if (vanGombatest() && (entitás instanceof Gombatest)) {
                 return false;
             }
         }

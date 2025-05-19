@@ -3,22 +3,19 @@ package fungorium.ReViews;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import fungorium.ReModels.Gombafaj;
 import fungorium.ReModels.Gombafonal;
-import fungorium.ReModels.Tektonrész;
 
 public class GombafonalView extends EntitásView {
     private Gombafonal fonal;
 
-    public GombafonalView(Tektonrész tr, Gombafonal fonal) {
-        super(tr);
+    public GombafonalView(Gombafonal fonal) {
         this.fonal = fonal;
     }
 
     @Override
     public boolean isValid() {
         // return fonal.érvényesE();
-        return fonal == null ? true : fonal.érvényesE();
+        return fonal != null && fonal.érvényesE();
     }
 
     @Override
@@ -48,6 +45,9 @@ public class GombafonalView extends EntitásView {
         }
         if (c < 2) {
             g.fillRect(getWidth() / 2 - 2, getHeight() / 2 - 2, 5, 5);
+        }
+        else {
+            g.fillRect(getWidth() / 2 - 2, getHeight() / 2 - 2, 1, 1);
         }
 
         if (fonal.getKapcsolódóFonalak()[0] != null) {

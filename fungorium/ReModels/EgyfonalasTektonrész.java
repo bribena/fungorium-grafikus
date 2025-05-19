@@ -1,7 +1,5 @@
 package fungorium.ReModels;
 
-import java.util.List;
-
 public class EgyfonalasTektonrész extends Tektonrész {
     public EgyfonalasTektonrész() {}
 
@@ -11,7 +9,7 @@ public class EgyfonalasTektonrész extends Tektonrész {
 
     public boolean entitásHozzáadás(Entitás entitás)
     {
-        if(vanGomba() && entitás.getClass() == Gombatest.class)
+        if(vanGombatest() && entitás.getClass() == Gombatest.class)
         {
             return false;
         }
