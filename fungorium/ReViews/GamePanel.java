@@ -1,6 +1,8 @@
 package fungorium.ReViews;
 
 import fungorium.ReControllers.*;
+import fungorium.ReModels.Fungorium;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -11,11 +13,11 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
     public GameController controller;
     private JLabel statusLabel;
-    private FungoriumView fungoriumView;
 
-    public GamePanel(FungoriumView fungoriumView, GameController controller) {
-        this.fungoriumView = fungoriumView;
-        this.controller = controller;
+    public GamePanel() {
+        FungoriumView fungoriumView = new FungoriumView(new Fungorium());
+        this.controller = new GameController(fungoriumView);
+
         setLayout(new BorderLayout()); 
         
         add(fungoriumView, BorderLayout.CENTER);
@@ -28,21 +30,16 @@ public class GamePanel extends JPanel {
 
         updateStatusLabel();
 
-        fungoriumView.addMouseListener(controller.getFungoriumMouseAdapter());
-        fungoriumView.addKeyListener(controller.getGombászKeyAdapter());
-        fungoriumView.addKeyListener(controller.getRovarászKeyAdapter());
+        fungoriumView.addMouseListener(new FungoriumSelectionMouseAdapter(controller));
+        fungoriumView.addKeyListener(new FungoriumGombászKeyAdapter(controller));
+        fungoriumView.addKeyListener(new FungoriumRovarászKeyAdapter(controller));
 
-        fungoriumView.setFocusable(true);
         fungoriumView.requestFocusInWindow();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-    }
-
-    public FungoriumView getFungoriumView() {
-        return fungoriumView;
     }
 
     public void updateStatusLabel() {

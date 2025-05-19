@@ -20,7 +20,14 @@ public class TektonrészView extends JLayeredPane {
     private List<EntitásView> e = new ArrayList<>();
 
     private Fungorium fungorium;
-    public int x, y;
+    private int x, y;
+
+    public int x() {
+        return x;
+    }
+    public int y() {
+        return y;
+    }
 
     private boolean selected = false;
 

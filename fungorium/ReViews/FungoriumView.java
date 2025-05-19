@@ -1,6 +1,7 @@
 package fungorium.ReViews;
 
 import java.awt.GridLayout;
+import java.awt.Component;
 
 import javax.swing.JPanel;
 
@@ -24,6 +25,10 @@ public class FungoriumView extends JPanel {
         setFocusable(true);
     }
 
+    public Fungorium getFungorium() {
+        return fungorium;
+    }
+
     public TektonrészView getTektonrészView(Tektonrész keresett) {
         for (int i = 0; i < getComponentCount(); ++i) {
             TektonrészView tv = (TektonrészView) getComponent(i);
@@ -31,6 +36,24 @@ public class FungoriumView extends JPanel {
                 return tv;
             }
         }
+        return null;
+    }
+
+    public TektonrészView getTektonrészView(int x, int y) {
+        if (x < 0 || x >= fungorium.getWidth() || y < 0
+                || y >= fungorium.getHeight()) {
+            return null;
+        }
+
+        for (Component c : getComponents()) {
+            if (c instanceof TektonrészView) {
+                TektonrészView v = (TektonrészView) c;
+                if (v.x() == x && v.y() == y) {
+                    return v;
+                }
+            }
+        }
+
         return null;
     }
 }

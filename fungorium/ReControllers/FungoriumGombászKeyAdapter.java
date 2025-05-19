@@ -9,76 +9,22 @@ import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-class FungoriumGombászKeyAdapter extends KeyAdapter {
+public class FungoriumGombászKeyAdapter extends KeyAdapter {
     private GameController controller;
-    private GameStateManager stateManager;
+    
 
-    public FungoriumGombászKeyAdapter(GameController controller, GameStateManager stateManager) {
+    public FungoriumGombászKeyAdapter(GameController controller) {
         this.controller = controller;
-        this.stateManager = stateManager;
     }
 
     private void gombatestNövesztés() {
-        Fungorium fungorium = controller.getPlayerManager().getFungorium();
-        TektonrészView selectedView = controller.getSelectedTektonrészView();
-        Tektonrész hova = selectedView.getTektonrész();
-        
-        // Modell: Gombatest létrehozása
-        Gombász player = (Gombász) controller.getPlayerManager().getAktuálisJátékos();
-        Gombafaj faj = player.getKezeltFaj();
-        
-        boolean kezdo = stateManager.getFazis() == JatekFazis.GOMBA_HELYEZES;
-        Gombatest test = new Gombatest(faj);
-        if (!hova.entitásHozzáadás(test) || fungorium.vanEGombatestTektonon(hova.getTektonID())) {
-            return;
+        TektonrészView selected = controller.getSelectedTektonrészView();
+        Tektonrész selectedTektonrész = selected.getTektonrész();
+        for (Entitás e : selectedTektonrész.getEntitások()) {
+            if (e instanceof Gombafonal && ((Gombafonal)e).getFaj()) {
+
+            }
         }
-
-        // View: GombatestView hozzáadása
-        GombatestView testView = new GombatestView(test);
-        selectedView.add(testView);
-
-        // Ha kezdő gombatest, Gombafonal is jár mellé, valamint a szomszédokba is
-        if (kezdo) {
-            test.setKezdő();
-            Gombafonal fonal = new Gombafonal(faj);
-            fonal.addTest(test);
-            hova.entitásHozzáadás(fonal);
-            selectedView.add(new GombafonalView(fonal));
-
-            
-            int x = selectedView.x;
-            int y = selectedView.y;
-
-            /*
-             * for (int i = 0; i < 4; ++i) {
-             * int dx = (i == 1) ? 1 : (i == 3) ? -1 : 0;
-             * int dy = (i == 0) ? -1 : (i == 2) ? 1 : 0;
-             * 
-             * int nx = x + dx;
-             * int ny = y + dy;
-             * 
-             * if (nx < 0 || ny < 0 || nx >= fungorium.getWidth() || ny >=
-             * fungorium.getHeight())
-             * continue;
-             * 
-             * Tektonrész szomszed = fungorium.getTektonrész(nx, ny);
-             * szomszed.entitásHozzáadás(fonal);
-             * 
-             * for (Component c : controller.getFungoriumView().getComponents()) {
-             * if (c instanceof TektonrészView tv && tv.x == nx && tv.y == ny) {
-             * tv.add(new GombafonalView(szomszed, fonal));
-             * tv.revalidate();
-             * tv.repaint();
-             * break;
-             * }
-             * }
-             * }
-             */
-        }
-
-        // Kör vége
-        controller.getPlayerManager().következőJátékos();
-        controller.getGamePanel().updateStatusLabel();
     }
 
     private void gombatestFejlesztés() {

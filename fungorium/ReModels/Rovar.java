@@ -28,6 +28,7 @@ public class Rovar implements Entitás {
      */
     private int[] hatások = new int[4]; 
     private boolean él = true;
+    private boolean mozgatott = false;
 
 
     public Rovar(Rovarfaj faj) {
@@ -47,6 +48,13 @@ public class Rovar implements Entitás {
         return él;
     }
 
+    public void mozgatottFelülírás(boolean új) {
+        mozgatott = új;
+    }
+    public boolean mozgatott() {
+        return mozgatott;
+    }
+
     @Override
     public boolean frissítés() {
         for (int i = 0; i < hatások.length; ++i) {
@@ -54,6 +62,7 @@ public class Rovar implements Entitás {
                 hatások[i]--;
             }
         }
+        mozgatott = !lassú();
         return érvényesE();
     }
 
@@ -120,7 +129,7 @@ public class Rovar implements Entitás {
     }
 
     public boolean fonalatVág(Tektonrész holVan, Tektonrész hol, Fungorium fungorium) {
-        if (bénult() || gyenge()) {
+        if (bénult() || gyenge() || mozgatott) {
             return false;
         }
 
@@ -146,29 +155,37 @@ public class Rovar implements Entitás {
                 }
             }
         }
-
+        mozgatott = true;
         return talált;
     }
 
-    public boolean mozog(Tektonrész honnan, Tektonrész hova) {
-        boolean talált = false;
+    public boolean mozog(Tektonrész honnan, Tektonrész hova, Fungorium fungorium) {
+        if (mozgatott) {
+            return false;
+        }
+
+        int irány = -1;
         for (Entitás e : honnan.getEntitások()) {
             if (e instanceof Gombafonal) {
                 Gombafonal gf = (Gombafonal)e;
-                for (Gombafonal f : gf.getKapcsolódóFonalak()) {
-                    if (hova.tartalmaz(f)) {
-                        talált = true;
+                for (int i = 0; i < 4; ++i) {
+                    if (hova.tartalmaz(gf.getKapcsolódóFonalak()[i])) {
+                        irány = i;
                     }
                 }
             }
         }
 
-        if (!talált) {
+        if (irány == -1) {
             return false;
         }
 
         if (hova.entitásHozzáadás(this)) {
             honnan.entitásTörlés(this);
+            if (gyors() && fungorium.getTektonrészSzomszédok(hova)[irány].entitásHozzáadás(this)) {
+                hova.entitásTörlés(this);
+            }
+            mozgatott = true;
             return true;
         }
         return false;

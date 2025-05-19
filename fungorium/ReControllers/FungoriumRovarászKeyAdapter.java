@@ -6,7 +6,7 @@ import fungorium.ReViews.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-class FungoriumRovarászKeyAdapter extends KeyAdapter {
+public class FungoriumRovarászKeyAdapter extends KeyAdapter {
     private GameController controller;
     private GameStateManager gameState;
 
