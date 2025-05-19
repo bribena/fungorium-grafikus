@@ -84,7 +84,17 @@ public abstract class Tektonrész {
         return entitások.add(sp);
     }
 
-    // Ha rovar: semmi
+    // Ha rovar: csak gombafonalra
+    public boolean entitásHozzáadás(Rovar rovar) {
+        for (Entitás e : entitások) {
+            if (e instanceof Gombafonal) {
+                entitások.add(rovar);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean entitásHozzáadás(Entitás entitás) {
         // Csak hogy ne legyen kikerülhető
         if (entitás instanceof Gombatest) {
@@ -95,6 +105,9 @@ public abstract class Tektonrész {
         }
         if (entitás instanceof Spóra) {
             return entitásHozzáadás((Spóra)entitás);
+        }
+        if (entitás instanceof Rovar) {
+            return entitásHozzáadás((Rovar)entitás);
         }
         return entitások.add(entitás);
     }

@@ -36,10 +36,6 @@ public class Gombafonal implements Entitás {
         }
     }
 
-    public void addTest(Gombatest test) {
-        this.test = test;
-    } 
-
     public Gombafaj getFaj() {
         return faj;
     }
