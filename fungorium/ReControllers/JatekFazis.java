@@ -4,5 +4,6 @@ public enum JatekFazis {
         GOMBA_HELYEZES,
         ROVAR_HELYEZES,
         KOROK,
-        VEGE
+        VEGE,
+        MENU
 }

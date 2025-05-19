@@ -80,13 +80,13 @@ public class Gombatest implements Entitás {
             for (int i = 0; i < marSzort.size(); i++) // vegig megyunk azokon a tektonokon ahol mar szortunk (a kozepson
                                                       // is, de nyilvan nem fog ujra szorni arra)
             {
-                tektonCoords = f.getTektonrészKoordináta(kozeliSzomszedok[i]);
+                tektonCoords = f.getTektonrészKoordináta(marSzort.get(i));
                 Tektonrész[] tavoliSzomszedok = f.getTektonrészSzomszédok(tektonCoords[0], tektonCoords[1]);
 
                 for (int j = 0; j < tavoliSzomszedok.length; j++) {
                     if (!marSzort.contains(tavoliSzomszedok[j])) // csak akkor szorunk ha itt meg nem szortunk
                     {
-                        spora = new Spóra(faj, 1, f.getTektonrészKoordináta(tavoliSzomszedok[i]));
+                        spora = new Spóra(faj, 1, f.getTektonrészKoordináta(tavoliSzomszedok[j]));
                         if (tavoliSzomszedok[j].entitásHozzáadás(spora)) {
                             sporak.add(spora);
                         }

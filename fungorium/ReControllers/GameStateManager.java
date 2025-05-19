@@ -1,13 +1,17 @@
 package fungorium.ReControllers;
 
+import fungorium.Menu.MenuController;
+
 public class GameStateManager {
     private PlayerManager playerManager;
+    private MenuController menuController;
 
     /**
      * Konstruktor.
      */
-    public GameStateManager(PlayerManager manager) {
+    public GameStateManager(PlayerManager manager, MenuController controller) {
         playerManager = manager;
+        menuController = controller;
     }
 
     private JatekFazis aktualisFazis = JatekFazis.GOMBA_HELYEZES;
@@ -33,6 +37,7 @@ public class GameStateManager {
                 break;
             case KOROK:
                 aktualisFazis = JatekFazis.VEGE;
+                menuController.showVictoryScreen();
                 break;
             default:
                 break;
@@ -44,8 +49,9 @@ public class GameStateManager {
      */
     public void kovetkezoKor() {
         korokSzama++;
-        if (korokSzama >= 24) {
+        if (korokSzama >= 2) {
             aktualisFazis = JatekFazis.VEGE;
+            menuController.showVictoryScreen();
         } else {
             playerManager.következőJátékos();
         }

@@ -1,7 +1,6 @@
 package fungorium;
 
 import fungorium.Menu.MenuController;
-import fungorium.ReControllers.PlayerManager;
 import javax.swing.JFrame;
 
 
@@ -11,8 +10,7 @@ public class Main {
         JFrame frame = new JFrame("Fungorium");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        PlayerManager playerManager = new PlayerManager();
-        MenuController menuController = new MenuController(frame, playerManager);
+        MenuController menuController = new MenuController(frame);
         menuController.showMainMenu();
 
         //frame.add(new GamePanel());
