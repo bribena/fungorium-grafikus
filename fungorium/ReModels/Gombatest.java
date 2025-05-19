@@ -72,14 +72,14 @@ public class Gombatest implements Entitás {
         mozgatott = true;
     }
 
-    public void spórátSzór(Tektonrész forrás, Tektonrész cél, Fungorium fungorium) {
+    public boolean spórátSzór(Tektonrész forrás, Tektonrész cél, Fungorium fungorium) {
         if ((fejlődött && !fungorium.getMásodfokúTektonSzomszédosságok(forrás.getTektonID()).contains(cél.getTektonID())
             || (!fejlődött && !fungorium.getElsőfokúTektonSzomszédosságok(forrás.getTektonID()).contains(cél.getTektonID())))
             || spóraszórásVárakozásIdő > 0
             || (kezdő && spóraszórásLehetőség < 2)
             || passzív
             || mozgatott) {
-            return;
+            return false;
         }
 
         Tektonrész[][] célok = fungorium.getSpóraTektonrészSzomszédok(cél);
@@ -94,5 +94,6 @@ public class Gombatest implements Entitás {
         spóraszórásLehetőség--;
 
         mozgatott = true;
+        return true;
     }
 }

@@ -25,9 +25,9 @@ public class FungoriumView extends JPanel {
         setFocusable(true);
     }
 
-    public Fungorium getFungorium() {
-        return fungorium;
-    }
+    // public Fungorium getFungorium() {
+    //     return fungorium;
+    // }
 
     public TektonrészView getTektonrészView(Tektonrész keresett) {
         for (int i = 0; i < getComponentCount(); ++i) {

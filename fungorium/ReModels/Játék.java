@@ -20,7 +20,15 @@ public class Játék {
         }
     }
 
+    public Fungorium getFungorium() {
+        return fungorium;
+    }
+
     public void léptet() {
+        if (vége()) {
+            return;
+        }
+
         aktuálisJátékos++;
         if (aktuálisJátékos <= játékosok.size()) {
             if (!utókör) {
@@ -72,4 +80,11 @@ public class Játék {
     public List<Játékos> getJátékosok() {
         return játékosok;
     } 
+
+    public boolean vége() {
+        return kör == 25;
+    }
+    public boolean kezdő() {
+        return kör == 0;
+    }
 }

@@ -128,4 +128,13 @@ public abstract class Tektonrész {
             }
         }
     }
+
+    public Spóra getEgyezőFajúSpóra(Gombafaj faj) {
+        for (Entitás e : entitások) {
+            if (e instanceof Spóra && ((Spóra)e).getFaj() == faj) {
+                return (Spóra)e;
+            }
+        }
+        return null;
+    }
 }

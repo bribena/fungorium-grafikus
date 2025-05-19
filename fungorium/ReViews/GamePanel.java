@@ -1,7 +1,7 @@
 package fungorium.ReViews;
 
 import fungorium.ReControllers.*;
-import fungorium.ReModels.Fungorium;
+import fungorium.ReModels.Játék;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,8 +15,9 @@ public class GamePanel extends JPanel {
     private JLabel statusLabel;
 
     public GamePanel() {
-        FungoriumView fungoriumView = new FungoriumView(new Fungorium());
-        this.controller = new GameController(fungoriumView);
+        Játék játék = new Játék();
+        FungoriumView fungoriumView = new FungoriumView(játék.getFungorium());
+        this.controller = new GameController(fungoriumView, játék);
 
         setLayout(new BorderLayout()); 
         
@@ -43,10 +44,8 @@ public class GamePanel extends JPanel {
     }
 
     public void updateStatusLabel() {
-        PlayerManager pm = controller.getPlayerManager();
-        int index = pm.getAktuálisJátékosIndex(); // aki most jön
-        String név = pm.getName(index);
+        String név = controller.getJáték().getAktuálisJátékos().getName();
 
-        statusLabel.setText("Következő: " + név);
+        statusLabel.setText("Aktuális játékos: " + név);
     }
 }

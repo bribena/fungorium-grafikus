@@ -1,31 +1,56 @@
 package fungorium.ReControllers;
 
+import fungorium.ReModels.Játék;
 import fungorium.ReViews.*;
 import java.awt.Point;
 
 public class GameController {
     private FungoriumView fungoriumView;
+    private Játék játék;
     private TektonrészView selectedTektonrész;
+    private boolean secondarySelect = false;
+    private TektonrészView secondarySelectedTektonrész;
 
     /**
      * Konstrukor.
      */
-    public GameController(FungoriumView view) {
+    public GameController(FungoriumView view, Játék játék) {
         this.fungoriumView = view;
+        this.játék = játék;
+    }
+
+    public boolean getSecondarySelect() {
+        return secondarySelect;
+    }
+    public void toggleSecondarySelect() {
+        secondarySelect = !secondarySelect;
+    }
+
+    public Játék getJáték() {
+        return játék;
     }
 
     /**
      * A tektonrész kiválasztásának logikája kattintást nézve.
      */
     public void selectByWindowPoint(Point p) {
-        if (selectedTektonrész != null) {
-            selectedTektonrész.toggleSelected();
+        if (!secondarySelect) {
+            if (selectedTektonrész != null) {
+                selectedTektonrész.toggleSelected();
+            }
+    
+            selectedTektonrész = (TektonrészView)fungoriumView.getComponentAt(p);
+    
+            if (selectedTektonrész != null) {
+                selectedTektonrész.toggleSelected();
+            }
         }
+        else {
+            secondarySelectedTektonrész = (TektonrészView)fungoriumView.getComponentAt(p);
 
-        selectedTektonrész = (TektonrészView)fungoriumView.getComponentAt(p);
-
-        if (selectedTektonrész != null) {
-            selectedTektonrész.toggleSelected();
+            if (selectedTektonrész != null) {
+                selectedTektonrész.toggleSelected();
+            }
         }
     }
 
@@ -57,6 +82,10 @@ public class GameController {
      */
     public TektonrészView getSelectedTektonrészView() {
         return selectedTektonrész;
+    }
+
+    public TektonrészView getSecondarySelectedTektonrészView() {
+        return secondarySelectedTektonrész;
     }
 
     public FungoriumView getFungoriumView() {

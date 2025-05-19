@@ -8,11 +8,9 @@ import java.awt.event.KeyEvent;
 
 public class FungoriumRovarászKeyAdapter extends KeyAdapter {
     private GameController controller;
-    private GameStateManager gameState;
 
-    public FungoriumRovarászKeyAdapter(GameController controller, GameStateManager gameState) {
+    public FungoriumRovarászKeyAdapter(GameController controller) {
         this.controller = controller;
-        this.gameState = gameState;
     }
 
     public void helyezRovart() {

@@ -3,12 +3,15 @@ package fungorium.ReControllers;
 import fungorium.ReModels.*;
 import fungorium.ReViews.*;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * N: Növesztés
+ * F: Fejlesztés
+ * S: Spóraszórás mód toggle
+ * Nyilak: Fonalnövesztés
+ */
 public class FungoriumGombászKeyAdapter extends KeyAdapter {
     private GameController controller;
     
@@ -17,239 +20,126 @@ public class FungoriumGombászKeyAdapter extends KeyAdapter {
         this.controller = controller;
     }
 
-    private void gombatestNövesztés() {
+    private void gombatestNövesztés(Gombafaj kezeltFaj) {
         TektonrészView selected = controller.getSelectedTektonrészView();
         Tektonrész selectedTektonrész = selected.getTektonrész();
         for (Entitás e : selectedTektonrész.getEntitások()) {
-            if (e instanceof Gombafonal && ((Gombafonal)e).getFaj()) {
-
-            }
-        }
-    }
-
-    private void gombatestFejlesztés() {
-        // kiejölt tektonrész lekérése + ha nincs kijelölve semmi, return
-        TektonrészView selectedView = controller.getSelectedTektonrészView();
-        if (selectedView == null)
-            return;
-
-        // tektonrész, ahol fejleszteni akarunk testet
-        Tektonrész hova = selectedView.getTektonrész();
-
-        // Megkeressük a gombatestet a tektonrészen
-        Gombatest targetTest = null;
-        for (Entitás e : hova.getEntitások()) {
-            if (e instanceof Gombatest gt) {
-                targetTest = gt;
-                break;
-            }
-        }
-
-        // ha nem találunk gombatestet, akkor nincs mit fejleszteni
-        if (targetTest == null) {
-            System.out.println("Nincs gombatest az adott helyen.");
-            return;
-        }
-
-        // Ellenőrizzük, hogy a gombatest a soron következő játékosé-e
-        Gombász player = (Gombász) controller.getPlayerManager().getAktuálisJátékos();
-        // És csak akkor engedjük fejleszteni, ha a saját gombatestjét próbálja
-        // fejleszteni
-        if (targetTest.getFaj() != player.getKezeltFaj()) {
-            System.out.println("Nem a saját gombatestet próbálod fejleszteni.");
-            return;
-        }
-
-        // Ha már fejlesztett, nem csinál semmit
-        if (targetTest.isFejlődött()) {
-            System.out.println("A gombatest már fejlesztett.");
-            return;
-        }
-
-        // Gombatest fejlesztése
-        targetTest.setFejlodott(true);
-        System.out.println("A gombatest fejlesztve.");
-
-        // Nézet frissítése
-        selectedView.repaint();
-
-        // Kör vége
-        controller.getPlayerManager().következőJátékos();
-        controller.getGamePanel().updateStatusLabel();
-    }
-
-    // TODO NEM JÓ, mert szarul rajzol ki, tezstelésnél nézd meg
-    private void gombafonalNövesztés(int irány) {
-        // 0: fel, 1: jobb, 2: le, 3: bal
-        TektonrészView selectedView = controller.getSelectedTektonrészView();
-        if (selectedView == null)
-            return;
-
-        int x = selectedView.x;
-        int y = selectedView.y;
-
-        Fungorium fungorium = controller.getPlayerManager().getFungorium();
-
-        // Szomszéd koordinátái
-        int nx = x;
-        int ny = y;
-
-        switch (irány) {
-            case 0:
-                ny = y - 1;
-                break; // fel
-            case 1:
-                nx = x + 1;
-                break; // jobb
-            case 2:
-                ny = y + 1;
-                break; // le
-            case 3:
-                nx = x - 1;
-                break; // bal
-        }
-
-        Tektonrész honnan = selectedView.getTektonrész();
-        Tektonrész hova = fungorium.getTektonrész(nx, ny);
-        if (hova == null) {
-            System.out.println("Nincs szomszédos tektonrész az adott irányban.");
-            return;
-        }
-
-        // Megkeressük a gombafonalat a jelenlegi tektonrészen
-        Gombafonal fonal = null;
-        for (Entitás e : honnan.getEntitások()) {
-            if (e instanceof Gombafonal gf) {
-                fonal = gf;
-                break;
-            }
-        }
-
-        if (fonal == null) {
-            System.out.println("Nincs gombafonal a kijelölt helyen.");
-            return;
-        }
-
-        // irány a szomszédosokból növesztés után
-        Gombafonal ujFonal = fonal.gombafonalatNöveszt(honnan, hova, fungorium);
-
-        if (ujFonal == null) {
-            System.out.println("Nem sikerült növeszteni a gombafonalat.");
-            return;
-        }
-
-        // View frissítése a szomszéd tektonrészen
-        for (Component c : controller.getFungoriumView().getComponents()) {
-            if (c instanceof TektonrészView tv && tv.x == nx && tv.y == ny) {
-                tv.add(new GombafonalView(ujFonal));
-                tv.revalidate();
-                tv.repaint();
-                break;
-            }
-        }
-
-        // Frissítjük az aktuális view-t is, hogy megjelenjen az új kapcsolat
-        selectedView.repaint();
-
-        // Kör vége
-        controller.getPlayerManager().következőJátékos();
-        controller.getGamePanel().updateStatusLabel();
-    }
-
-    private void spóraSzórás() {
-        Fungorium fungorium = controller.getPlayerManager().getFungorium();
-        Gombász player = (Gombász) controller.getPlayerManager().getAktuálisJátékos();
-
-        TektonrészView selectedView = controller.getSelectedTektonrészView();
-
-        int x = selectedView.x;
-        int y = selectedView.y;
-
-        Tektonrész tekton = fungorium.getTektonrész(x, y);
-        List<Entitás> entitások = tekton.getEntitások();
-
-        List<Spóra> sporak = new ArrayList<>();
-
-        for (int i = 0; i < entitások.size(); i++) {
-            if (entitások.get(i).getClass() == Gombatest.class) {
-                Gombatest test = (Gombatest) entitások.get(i);
-                if (test.getFaj() == player.getKezeltFaj()) {
-                    sporak = test.spórátSzór(tekton, fungorium);
-                    break;
+            if (e instanceof Gombafonal) {
+                Gombafonal f = (Gombafonal)e;
+                if (f.getFaj() == kezeltFaj && f.gombatestetNöveszt(selectedTektonrész, controller.getJáték().getFungorium())) {
+                    selected.add(new GombatestView(f.getKapcsolódóTest()));
                 }
             }
         }
+    }
 
-        if (sporak.isEmpty()) {
-            System.out.println("Nincs a jatekos fajatol test a tektonon.");
-            return;
-        }
-
-        System.out.println("Spórák száma: " + sporak.size());
-        // View frissítése a szomszéd tektonrészen
-        for (int i = 0; i < sporak.size(); i++) {
-            int[] coords = sporak.get(i).getCoords();
-
-            for (Component c : controller.getFungoriumView().getComponents()) {
-                if (c instanceof TektonrészView tv && tv.x == coords[0] && tv.y == coords[1]) {
-                    tv.add(new SpóraView(sporak.get(i)));
-                    tv.revalidate();
-                    tv.repaint();
-                    break;
+    private void gombatestFejlesztés(Gombafaj kezeltFaj) {
+        TektonrészView selected = controller.getSelectedTektonrészView();
+        Tektonrész selectedTektonrész = selected.getTektonrész();
+        for (Entitás e : selectedTektonrész.getEntitások()) {
+            if (e instanceof Gombatest) {
+                Gombatest t = (Gombatest)e;
+                if (t.getFaj() == kezeltFaj) {
+                    t.fejleszt();
                 }
             }
         }
+    }
 
-        selectedView.repaint();
+    private void gombafonalNövesztés(Gombafaj kezeltFaj, int irány) {
+        TektonrészView selected = controller.getSelectedTektonrészView();
+        Fungorium fungorium = controller.getJáték().getFungorium();
+        FungoriumView fungoriumView = controller.getFungoriumView();
 
-        // Kör vége
-        controller.getPlayerManager().következőJátékos();
-        controller.getGamePanel().updateStatusLabel();
+
+        Tektonrész selectedTektonrész = selected.getTektonrész();
+        for (Entitás e : selectedTektonrész.getEntitások()) {
+            if (e instanceof Gombafonal) {
+                Gombafonal f = (Gombafonal)e;
+                if (f.getFaj() == kezeltFaj && 
+                    f.gombafonalatNöveszt(selectedTektonrész, irány, fungorium)) {
+                    Gombafonal uj = f.getKapcsolódóFonalak()[irány];
+                    Tektonrész köviTektonrész = fungorium.getTektonrészSzomszédok(selectedTektonrész)[irány];
+
+                    fungoriumView.getTektonrészView(köviTektonrész).add(new GombafonalView(uj));
+
+                    if (uj.getKapcsolódóFonalak()[irány] != null) {
+                        Tektonrész köviKöviTektonrész = fungorium.getTektonrészSzomszédok(selectedTektonrész)[irány];
+                        fungoriumView.getTektonrészView(köviKöviTektonrész)
+                            .add(new GombafonalView(uj.getKapcsolódóFonalak()[irány]));
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void spóraSzórás(Gombafaj kezeltFaj) {
+        TektonrészView selected = controller.getSelectedTektonrészView();
+        Tektonrész selectedTektonrész = selected.getTektonrész();
+        for (Entitás e : selectedTektonrész.getEntitások()) {
+            if (e instanceof Gombatest) {
+                Gombatest t = (Gombatest)e;
+                if (t.getFaj() == kezeltFaj) {
+                    controller.toggleSecondarySelect();
+                }
+            }
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        Játékos j = controller.getJáték().getAktuálisJátékos();
         // ha nincs kijelölt tektonrész vagy nem gombász a játékos, return
-        if (controller.getSelectedTektonrészView() == null
-                || !(controller.getPlayerManager().getAktuálisJátékos() instanceof Gombász)) {
+        if (controller.getSelectedTektonrészView() == null || !(j instanceof Gombász)) {
             return;
         }
+        Gombász g = (Gombász)j;
 
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_N:
-                // N billentyűre gombatestet növeszt
+        if (controller.getJáték().kezdő()) {
+            if (e.getKeyCode() == KeyEvent.VK_N) {
                 System.out.println("N lenyomva");
-                gombatestNövesztés();
-                break;
-            case KeyEvent.VK_F:
-                // F billentyűre gombatestet fejleszt
-                System.out.println("F lenyomva");
-                gombatestFejlesztés();
-                break;
-            case KeyEvent.VK_S:
-                // S billentyűre spórát szór
-                System.out.println("S lenyomva");
-                spóraSzórás();
-                break;
-            // nyíl billentyűknek megfelelően gombafonal növesztés
-            case KeyEvent.VK_UP:
-                System.out.println("up");
-                gombafonalNövesztés(0);
-                break;
-            case KeyEvent.VK_DOWN:
-                System.out.println("down");
-                gombafonalNövesztés(2);
-                break;
-            case KeyEvent.VK_RIGHT:
-                System.out.println("right");
-                gombafonalNövesztés(1);
-                break;
-            case KeyEvent.VK_LEFT:
-                System.out.println("left");
-                gombafonalNövesztés(3);
-                break;
+                gombatestNövesztés(g.getKezeltFaj());
+            }
         }
-
+        else {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_N:
+                    // N billentyűre gombatestet növeszt
+                    System.out.println("N lenyomva");
+                    gombatestNövesztés(g.getKezeltFaj());
+                    break;
+                case KeyEvent.VK_F:
+                    // F billentyűre gombatestet fejleszt
+                    System.out.println("F lenyomva");
+                    gombatestFejlesztés(g.getKezeltFaj());
+                    break;
+                case KeyEvent.VK_S:
+                    // S billentyűre spórát szór
+                    System.out.println("S lenyomva");
+                    spóraSzórás(g.getKezeltFaj());
+                    break;
+                // nyíl billentyűknek megfelelően gombafonal növesztés
+                case KeyEvent.VK_UP:
+                    System.out.println("up");
+                    gombafonalNövesztés(g.getKezeltFaj(), 0);
+                    break;
+                case KeyEvent.VK_DOWN:
+                    System.out.println("down");
+                    gombafonalNövesztés(g.getKezeltFaj(), 2);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    System.out.println("right");
+                    gombafonalNövesztés(g.getKezeltFaj(), 1);
+                    break;
+                case KeyEvent.VK_LEFT:
+                    System.out.println("left");
+                    gombafonalNövesztés(g.getKezeltFaj(), 3);
+                    break;
+            }
+            controller.getJáték().automataLéptetés();
+        }
+        
         controller.getFungoriumView().revalidate();
     }
 }
