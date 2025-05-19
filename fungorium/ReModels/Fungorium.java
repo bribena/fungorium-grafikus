@@ -324,18 +324,30 @@ public class Fungorium {
         return getSpóraTektonrészSzomszédok(koor[0], koor[1]);
     }
 
-    public boolean vanMásikFajúGombafonalTektonon(int tektonID, Gombafaj faj) {
+    /** Visszaadja, hogy milyen tektonokkal szomszédos egy adott tekton, ID-k alapján */
+    public Set<Integer> getElsőfokúTektonSzomszédosságok(int tektonID) {
+        HashSet<Integer> ret = new HashSet<>();
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 if (tektonrészek[x][y].getTektonID() == tektonID) {
-                    for (Entitás e : tektonrészek[x][y].getEntitások()) {
-                        if (e instanceof Gombafonal && ((Gombafonal)e).getFaj() != faj) {
-                            return true;
-                        } 
+                    for (Tektonrész tr : getTektonrészSzomszédok(tektonrészek[x][y])) {
+                        if (tr.getTektonID() != tektonID) {
+                            ret.add(tr.getTektonID());
+                        }
                     }
                 }
             }
         }
-        return false;
+        ret.remove(-1);
+        return ret;
+    }
+    public Set<Integer> getMásodfokúTektonSzomszédosságok(int tektonID) {
+        Set<Integer> elsőfokú = getElsőfokúTektonSzomszédosságok(tektonID);
+        Set<Integer> ret = new HashSet<>();
+        ret.addAll(elsőfokú);
+        for (Integer i : ret) {
+            ret.addAll(getElsőfokúTektonSzomszédosságok(i));
+        }
+        return ret;
     }
 }

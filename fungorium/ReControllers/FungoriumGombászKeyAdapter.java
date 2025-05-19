@@ -28,7 +28,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         Gombafaj faj = player.getKezeltFaj();
         
         boolean kezdo = stateManager.getFazis() == JatekFazis.GOMBA_HELYEZES;
-        Gombatest test = new Gombatest(faj, kezdo);
+        Gombatest test = new Gombatest(faj);
         if (!hova.entitásHozzáadás(test) || fungorium.vanEGombatestTektonon(hova.getTektonID())) {
             return;
         }
@@ -39,6 +39,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
 
         // Ha kezdő gombatest, Gombafonal is jár mellé, valamint a szomszédokba is
         if (kezdo) {
+            test.setKezdő();
             Gombafonal fonal = new Gombafonal(faj);
             fonal.addTest(test);
             hova.entitásHozzáadás(fonal);
