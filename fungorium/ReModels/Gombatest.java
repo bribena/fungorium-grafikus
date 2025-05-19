@@ -48,6 +48,10 @@ public class Gombatest implements Entitás {
         return fejlődött;
     }
     public void fejleszt() {
+        if (passzív) {
+            return;
+        }
+
         fejlődött = true;
         spóraszórásLehetőség += 3;
     }
@@ -56,7 +60,8 @@ public class Gombatest implements Entitás {
         if ((fejlődött && !fungorium.getMásodfokúTektonSzomszédosságok(forrás.getTektonID()).contains(cél.getTektonID())
             || (!fejlődött && !fungorium.getElsőfokúTektonSzomszédosságok(forrás.getTektonID()).contains(cél.getTektonID())))
             || spóraszórásVárakozásIdő > 0
-            || (kezdő && spóraszórásLehetőség < 2)) {
+            || (kezdő && spóraszórásLehetőség < 2)
+            || passzív) {
             return;
         }
 
