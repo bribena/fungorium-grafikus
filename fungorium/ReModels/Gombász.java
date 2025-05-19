@@ -4,9 +4,8 @@ package fungorium.ReModels;
 public class Gombász extends Játékos {
     private Gombafaj kezeltFaj;
 
-    public Gombász(Gombafaj faj, String n) {
+    public Gombász(Gombafaj faj) {
         kezeltFaj = faj;
-        name = n;
     }
 
     public Gombafaj getKezeltFaj() {
