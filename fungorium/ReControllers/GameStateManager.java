@@ -49,7 +49,7 @@ public class GameStateManager {
      */
     public void kovetkezoKor() {
         korokSzama++;
-        if (korokSzama >= 2) {
+        if (korokSzama >= 24) {
             aktualisFazis = JatekFazis.VEGE;
             menuController.showVictoryScreen();
         } else {
