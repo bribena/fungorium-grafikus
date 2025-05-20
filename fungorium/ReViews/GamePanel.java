@@ -1,6 +1,11 @@
 package fungorium.ReViews;
 
 import fungorium.ReControllers.*;
+import fungorium.ReControllers.GombászListeners.GombászFonalNövesztésKeyAdapter;
+import fungorium.ReControllers.GombászListeners.GombászSpóraSzórásKeyAdapter;
+import fungorium.ReControllers.GombászListeners.GombászSpóraSzórásMouseAdapter;
+import fungorium.ReControllers.GombászListeners.GombászTestFejlesztésKeyAdapter;
+import fungorium.ReControllers.GombászListeners.GombászTestNövesztésKeyAdapter;
 import fungorium.ReModels.Játék;
 
 import java.awt.BorderLayout;
@@ -32,7 +37,14 @@ public class GamePanel extends JPanel {
         updateStatusLabel();
 
         fungoriumView.addMouseListener(new FungoriumSelectionMouseAdapter(controller));
-        fungoriumView.addKeyListener(new FungoriumGombászKeyAdapter(controller));
+        
+        fungoriumView.addMouseListener(new GombászSpóraSzórásMouseAdapter(controller));
+
+        fungoriumView.addKeyListener(new GombászFonalNövesztésKeyAdapter(controller));
+        fungoriumView.addKeyListener(new GombászSpóraSzórásKeyAdapter(controller));
+        fungoriumView.addKeyListener(new GombászTestFejlesztésKeyAdapter(controller));
+        fungoriumView.addKeyListener(new GombászTestNövesztésKeyAdapter(controller));
+
         fungoriumView.addKeyListener(new FungoriumRovarászKeyAdapter(controller));
 
         fungoriumView.requestFocusInWindow();

@@ -91,4 +91,9 @@ public class GameController {
     public FungoriumView getFungoriumView() {
         return fungoriumView;
     }
+
+    public void update() {
+        játék.automataLéptetés();
+        fungoriumView.revalidate();
+    }
 }
