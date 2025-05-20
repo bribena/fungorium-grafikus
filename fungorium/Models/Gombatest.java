@@ -82,12 +82,16 @@ public class Gombatest implements Entitás {
             return false;
         }
 
+        System.out.println("Spora szorasa");
+
         Tektonrész[][] célok = fungorium.getSpóraTektonrészSzomszédok(cél);
         célok[0][0].entitásHozzáadás(new Spóra(faj, 5));
         for (Tektonrész tr : célok[1]) {
+            System.out.println("Spora szorasa szomszedra");
             tr.entitásHozzáadás(new Spóra(faj, 2));
         }
         for (Tektonrész tr : célok[2]) {
+            System.out.println("Spora szorasa szomszed szomszedjara");
             tr.entitásHozzáadás(new Spóra(faj, 1));
         }
         spóraszórásVárakozásIdő = 2;

@@ -4,14 +4,12 @@ import fungorium.Controllers.*;
 import fungorium.Controllers.GombászListeners.*;
 import fungorium.Controllers.RovarászListeners.*;
 import fungorium.Models.Játék;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -60,6 +58,7 @@ public class GamePanel extends JPanel {
         });
 
         fungoriumView.requestFocusInWindow();
+        fungoriumView.setFocusable(true);
     }
 
     public GameController getController() {
@@ -75,5 +74,9 @@ public class GamePanel extends JPanel {
         String név = controller.getJáték().getAktuálisJátékos().getName();
 
         statusLabel.setText("Aktuális játékos: " + név);
+    }
+
+    public FungoriumView getFungoriumView() {
+        return controller.getFungoriumView();
     }
 }

@@ -1,8 +1,5 @@
 package fungorium.Controllers.RovarászListeners;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 import fungorium.Controllers.GameController;
 import fungorium.Models.Entitás;
 import fungorium.Models.Játékos;
@@ -12,6 +9,8 @@ import fungorium.Models.Rovarász;
 import fungorium.Models.Tektonrész;
 import fungorium.Views.RovarView;
 import fungorium.Views.TektonrészView;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class RovarászSpóraEvésKeyAdapter extends KeyAdapter {
     private GameController controller;
@@ -30,11 +29,12 @@ public class RovarászSpóraEvésKeyAdapter extends KeyAdapter {
             }
             Rovar r = (Rovar)e;
             if (r.getFaj() != faj || !r.spóraEvés(selectedTektonrész)) {
+                System.out.print("Nem sikerult az eves");
                 continue;
             }
 
             Entitás e2 = selectedTektonrész.getEntitások().get(selectedTektonrész.getEntitások().size() - 1);
-            if (!(e instanceof Rovar)) {
+            if (!(e2 instanceof Rovar)) {
                 return;
             }
             

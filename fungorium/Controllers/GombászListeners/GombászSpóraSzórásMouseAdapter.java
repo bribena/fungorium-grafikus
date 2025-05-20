@@ -1,8 +1,5 @@
 package fungorium.Controllers.GombászListeners;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import fungorium.Controllers.GameController;
 import fungorium.Models.Entitás;
 import fungorium.Models.Fungorium;
@@ -14,6 +11,8 @@ import fungorium.Models.Tektonrész;
 import fungorium.Views.FungoriumView;
 import fungorium.Views.SpóraView;
 import fungorium.Views.TektonrészView;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
     private GameController controller;
@@ -30,11 +29,13 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
 
         for (Entitás ent : honnan.getEntitások()) {
             if (!(ent instanceof Gombatest)) {
+                System.out.println("Nincs source gombatest");
                 continue;
             }
             Gombatest t = (Gombatest)ent;
 
             if (t.getFaj() != kezeltFaj || !t.spórátSzór(honnan, hova, fungorium)) {
+                System.out.println("Nem sikerult a szoras");
                 continue;
             }
 

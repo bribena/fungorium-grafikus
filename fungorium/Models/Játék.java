@@ -63,4 +63,37 @@ public class Játék {
     public boolean kezdő() {
         return kör == 0;
     }
+
+    public String getWinnerGombasz() {
+    int maxPont = -1;
+    int győztesIndex = -1;
+
+    for (int i = 0; i < 4; i++) {
+        Gombafaj faj = ((Gombász) játékosok.get(i)).getKezeltFaj();
+        int pont = Gombafonal.getGombatestSzám(faj);
+        if (pont > maxPont) {
+            maxPont = pont;
+            győztesIndex = i;
+        }
+    }
+
+    // Nincs ellenőrzés, simán visszaadjuk a győztes nevét
+    return játékosok.get(győztesIndex).getName();
+    }
+
+    public String getWinnerRovarasz() {
+        int maxPont = -1;
+        int győztesIndex = -1;
+
+        for (int i = 4; i < 8; i++) {
+            Rovarfaj faj = ((Rovarász) játékosok.get(i)).getKezeltFaj();
+            int pont = Rovar.getTápérték(faj);
+            if (pont > maxPont) {
+                maxPont = pont;
+                győztesIndex = i;
+            }
+        }
+
+        return játékosok.get(győztesIndex).getName();
+    }
 }

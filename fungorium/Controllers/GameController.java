@@ -2,7 +2,6 @@ package fungorium.Controllers;
 
 import fungorium.Models.Játék;
 import fungorium.Views.*;
-
 import java.awt.Point;
 
 public class GameController {
@@ -63,6 +62,7 @@ public class GameController {
         if (tw == null) {
             return;
         }
+
         selectedTektonrész.toggleSelected();
         selectedTektonrész = tw;
         selectedTektonrész.toggleSelected();

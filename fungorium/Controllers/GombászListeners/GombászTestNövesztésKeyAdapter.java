@@ -1,8 +1,5 @@
 package fungorium.Controllers.GombászListeners;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 import fungorium.Controllers.GameController;
 import fungorium.Models.Entitás;
 import fungorium.Models.Gombafaj;
@@ -15,6 +12,8 @@ import fungorium.Views.FungoriumView;
 import fungorium.Views.GombafonalView;
 import fungorium.Views.GombatestView;
 import fungorium.Views.TektonrészView;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GombászTestNövesztésKeyAdapter extends KeyAdapter {
     private GameController controller;

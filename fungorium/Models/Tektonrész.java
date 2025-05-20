@@ -1,9 +1,9 @@
 package fungorium.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public abstract class Tektonrész {
     /** tektonID - Gombatest pár, nem kell a fungoriumból kikeresni */
