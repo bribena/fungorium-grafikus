@@ -44,7 +44,7 @@ public class GombászSpóraSzórásKeyAdapter extends KeyAdapter {
 
          if (controller.getSelectedTektonrészView() == null || !(j instanceof Gombász) 
             || controller.getJáték().kezdő() || controller.getJáték().vége()
-            || e.getKeyCode() != KeyEvent.VK_F) {
+            || e.getKeyCode() != KeyEvent.VK_S) {
             return;
         }
 

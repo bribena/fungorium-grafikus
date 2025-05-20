@@ -1,21 +1,17 @@
 package fungorium.Menu;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
 
-public class MainMenuView extends JPanel {
+import fungorium.Menu.MenuComponents.MainMenuButton;
+import fungorium.Views.GamePanel;
 
-    public MainMenuView(MenuController controller) {
+public class MainMenuView extends JFrame {
+    private GamePanel gamePanel = new GamePanel();
+    public MainMenuView(String title) {
+        super(title);
         // elhelyezkedés, méret beállítása
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(400, 300));
+        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         // Menü felirat
         JLabel titleLabel = new JLabel("Menü", JLabel.CENTER);
@@ -26,14 +22,23 @@ public class MainMenuView extends JPanel {
         Dimension buttonSize = new Dimension(170, 40);
 
         // Játékosok gomb
-        JButton playerBtn = new JButton("Játékosok");
-        styleButton(playerBtn, buttonSize);
-        playerBtn.addActionListener(e -> controller.showPlayerEdit());
+        JButton playerBtn = new MainMenuButton("Játékosok", buttonSize);
+        PlayerEditView pew = new PlayerEditView(this, gamePanel.getController().getJáték());
+        add(pew);
+        pew.setVisible(false);
+        playerBtn.addActionListener(e -> {
+            setContentPane(pew);
+            pew.setVisible(true);
+        });
 
         // Játék kezdése gomb
-        JButton startBtn = new JButton("Játék kezdése");
-        styleButton(startBtn, buttonSize);
-        startBtn.addActionListener(e -> controller.startGame());
+        JButton startBtn = new MainMenuButton("Játék kezdése", buttonSize);
+        add(gamePanel);
+        gamePanel.setVisible(false);
+        startBtn.addActionListener(e -> {
+            setContentPane(gamePanel);
+            gamePanel.setVisible(true);
+        });
 
         // Hozzáadás (tetejéről indulva)
         add(Box.createRigidArea(new Dimension(0, 20)));
@@ -42,20 +47,5 @@ public class MainMenuView extends JPanel {
         add(playerBtn);
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(startBtn);
-    }
-
-    private void styleButton(JButton button, Dimension size) {
-        // Gomb háttere és betű színe, típusa
-        button.setBackground(Color.BLACK);
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.PLAIN, 18));
-        // Elhelyezkedés
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // Méretek beállítása
-        button.setPreferredSize(size);
-        button.setMaximumSize(size);
-        button.setMinimumSize(size);
-        // ne legyen körvonala szövegnek
-        button.setFocusPainted(false);
     }
 }

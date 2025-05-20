@@ -9,6 +9,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -48,6 +51,13 @@ public class GamePanel extends JPanel {
         fungoriumView.addKeyListener(new RovarászMozgatásKeyAdapter(controller));
         fungoriumView.addKeyListener(new RovarászSpóraEvésKeyAdapter(controller));
         fungoriumView.addKeyListener(new RovarászVágásKeyAdapter(controller));
+
+        fungoriumView.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                updateStatusLabel();
+            }
+        });
 
         fungoriumView.requestFocusInWindow();
     }

@@ -41,7 +41,7 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
             Tektonrész[][] targets = fungorium.getSpóraTektonrészSzomszédok(hova);
 
             for (int i = 0; i < 3; ++i) {
-                for (int l = 0; l < targets[i].length; ++i) {
+                for (int l = 0; l < targets[i].length; ++l) {
                     TektonrészView v = fungoriumView.getTektonrészView(targets[i][l]);
 
                     if (v == null) {

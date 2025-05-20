@@ -11,6 +11,8 @@ import fungorium.Models.Gombatest;
 import fungorium.Models.Gombász;
 import fungorium.Models.Játékos;
 import fungorium.Models.Tektonrész;
+import fungorium.Views.FungoriumView;
+import fungorium.Views.GombafonalView;
 import fungorium.Views.GombatestView;
 import fungorium.Views.TektonrészView;
 
@@ -33,6 +35,24 @@ public class GombászTestNövesztésKeyAdapter extends KeyAdapter {
         
         selected.add(new GombatestView(gt));
         gt.setKezdő();
+
+        Gombafonal a = new Gombafonal(kezeltFaj);
+        selectedTektonrész.entitásHozzáadás(a);
+        a.setKapcsolódóTest(gt);
+        selected.add(new GombafonalView(a));
+
+        Tektonrész[] szomszédok = controller.getJáték().getFungorium().getTektonrészSzomszédok(selectedTektonrész);
+        FungoriumView fungoriumView = controller.getFungoriumView();
+
+        for (int i = 0; i < 4; ++i) {
+            if (szomszédok[i].getTektonID() != -1) {
+                Gombafonal f = new Gombafonal(kezeltFaj);
+                szomszédok[i].entitásHozzáadás(f);
+                a.összekapcsolás(f, i);
+                fungoriumView.getTektonrészView(szomszédok[i]).add(new GombafonalView(f));
+            }
+        }
+
         controller.update();
     }
 

@@ -39,6 +39,9 @@ public class Gombafonal implements Entitás {
         szomszéd.kapcsolódóFonalak[(irány + 2) % 4] = this;
     }
 
+    public void setKapcsolódóTest(Gombatest test) {
+        this.test = test;
+    }
     public Gombatest getKapcsolódóTest() {
         return test;
     }

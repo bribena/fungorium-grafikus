@@ -30,35 +30,11 @@ public class Játék {
         }
 
         aktuálisJátékos++;
-        if (aktuálisJátékos <= játékosok.size()) {
-            if (!utókör) {
-                fungorium.lassúRovarokMozgathatása();
-            }
 
-            utókörVége = utókör;
-            utókör = true;
-        }
-        aktuálisJátékos = 0;
-
-        if (utókörVége) {
-            fungorium.körtLéptet(kör);
+        if (aktuálisJátékos >= játékosok.size()) {
+            aktuálisJátékos = 0;
             kör++;
-            utókör = false;
-            utókörVége = false;
-        }
-        if (utókör) {
-            while (aktuálisJátékos < játékosok.size()) {
-                if (getAktuálisJátékos() instanceof Rovarász) {
-                    Rovarász r = (Rovarász)getAktuálisJátékos();
-                    if (fungorium.vanMozgathatóEntitás(r.getKezeltFaj())) {
-                        break;
-                    }
-                }
-                aktuálisJátékos++;
-            }
-            if (aktuálisJátékos == játékosok.size()) {
-                léptet();
-            }
+            fungorium.körtLéptet(kör);
         }
     }
     
