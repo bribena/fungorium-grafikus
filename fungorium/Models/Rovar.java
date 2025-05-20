@@ -73,10 +73,10 @@ public class Rovar implements Entitás {
         for (int i = 0; i < holVan.getEntitások().size(); ++i) {
             Entitás e = holVan.getEntitások().get(i);
             if (e instanceof Spóra) {
+                 System.out.println("Sporaszam hozzaadva");
                 Spóra s = (Spóra)e;
                 spóraszám += s.getSpóraSzám();
                 s.felszív();
-                --i;
             }
         }
 
