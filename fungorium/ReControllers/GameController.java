@@ -93,6 +93,7 @@ public class GameController {
     }
 
     public void update() {
+        deselect();
         játék.automataLéptetés();
         fungoriumView.revalidate();
     }

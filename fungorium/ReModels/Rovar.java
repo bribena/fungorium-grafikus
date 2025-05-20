@@ -51,7 +51,7 @@ public class Rovar implements Entitás {
         mozgatott = új;
     }
     public boolean mozgatott() {
-        return mozgatott;
+        return mozgatott || bénult();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Rovar implements Entitás {
     }
 
     public boolean spóraEvés(Tektonrész holVan) {
-        if (bénult()) {
+        if (bénult() || mozgatott) {
             return false;
         }
         int spóraszám = 0;
@@ -158,26 +158,13 @@ public class Rovar implements Entitás {
         return talált;
     }
 
-    public boolean mozog(Tektonrész honnan, Tektonrész hova, Fungorium fungorium) {
+    public boolean mozog(Tektonrész honnan, int irány, Fungorium fungorium) {
         if (mozgatott) {
             return false;
         }
 
-        int irány = -1;
-        for (Entitás e : honnan.getEntitások()) {
-            if (e instanceof Gombafonal) {
-                Gombafonal gf = (Gombafonal)e;
-                for (int i = 0; i < 4; ++i) {
-                    if (hova.tartalmaz(gf.getKapcsolódóFonalak()[i])) {
-                        irány = i;
-                    }
-                }
-            }
-        }
-
-        if (irány == -1) {
-            return false;
-        }
+        Tektonrész[] szomszédok = fungorium.getTektonrészSzomszédok(honnan);
+        Tektonrész hova = szomszédok[irány];
 
         if (hova.entitásHozzáadás(this)) {
             honnan.entitásTörlés(this);

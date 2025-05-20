@@ -3,6 +3,7 @@ package fungorium.ReViews;
 import java.awt.Graphics;
 import java.awt.Color;
 
+import fungorium.ReModels.Entitás;
 import fungorium.ReModels.Gombatest;
 
 public class GombatestView extends EntitásView {
@@ -40,5 +41,10 @@ public class GombatestView extends EntitásView {
         
         g.setColor(Color.BLACK);
         g.drawOval((getWidth() - 20) / 2, (getHeight() - 20) / 2, 20, 20);
+    }
+
+    @Override
+    public boolean contains(Entitás e) {
+        return test.equals(e);
     }
 }

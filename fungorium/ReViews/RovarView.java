@@ -47,4 +47,9 @@ public class RovarView extends EntitásView {
     public Rovar getRovar() {
         return rovar;
     }
+
+    @Override
+    public boolean contains(Entitás e) {
+        return rovar.equals(e);
+    }
 }

@@ -75,6 +75,21 @@ public class TektonrészView extends JLayeredPane {
         return add((Component) comp);
     }
 
+    public void removeComponentContaining(Entitás e) {
+        EntitásView ew = null;
+        for (EntitásView v : this.e) {
+            if (v.contains(e)) {
+                ew = v;
+                break;
+            }
+        }
+        if (ew == null) {
+            return;
+        }
+        this.e.remove(ew);
+        remove(ew);
+    }
+
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(TILE_SIZE, TILE_SIZE);

@@ -62,7 +62,7 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         Játékos j = controller.getJáték().getAktuálisJátékos();
-        if (!controller.getSecondarySelect() || !(j instanceof Gombász) || controller.getJáték().vége()) {
+        if (!controller.getSecondarySelect() || !(j instanceof Gombász) || controller.getJáték().vége() || controller.getJáték().kezdő()) {
             return;
         }
         
