@@ -34,9 +34,14 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
             }
             Gombatest t = (Gombatest)ent;
 
-            if (t.getFaj() != kezeltFaj || !t.spórátSzór(honnan, hova, fungorium)) {
-                System.out.println("Nem sikerult a szoras");
+            if (t.getFaj() != kezeltFaj) {
+                System.out.println("Nem a kezelt faj");
                 continue;
+            }
+            if (!t.spórátSzór(honnan, hova, fungorium)) {
+                System.out.println("Nem sikerult a szoras");
+                controller.update();
+                return;
             }
 
             Tektonrész[][] targets = fungorium.getSpóraTektonrészSzomszédok(hova);
@@ -55,7 +60,6 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
                 }
             }
             controller.update();
-            controller.toggleSecondarySelect();
             return;
         }
     }
@@ -63,7 +67,7 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         Játékos j = controller.getJáték().getAktuálisJátékos();
-        if (!controller.getSecondarySelect() || !(j instanceof Gombász) || controller.getJáték().vége() || controller.getJáték().kezdő()) {
+        if (controller.getSelectedTektonrészView() == null || !controller.getSecondarySelect() || !(j instanceof Gombász) || controller.getJáték().vége() || controller.getJáték().kezdő()) {
             return;
         }
         

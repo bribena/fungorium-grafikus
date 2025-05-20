@@ -10,7 +10,7 @@ public class Gombafonal implements Entitás {
 
     static {
         for (Gombafaj f : Gombafaj.values()) {
-            gombatestSzám.put(f, 0);
+            gombatestSzám.put(f, 1);
         }
     }
     public static int getGombatestSzám(Gombafaj faj) {

@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
+<<<<<<< HEAD
     private GameController controller; // A játék vezérlő objektuma, amely a logikát irányítja
     private JLabel statusLabel; // Az aktuális játékos nevét mutató státuszcímke
 
@@ -21,6 +22,21 @@ public class GamePanel extends JPanel {
         Játék játék = new Játék(); // Új játék példány létrehozása
         FungoriumView fungoriumView = new FungoriumView(játék.getFungorium()); // A fungórium megjelenítését szolgáló nézet
         this.controller = new GameController(fungoriumView, játék); // A vezérlő összekapcsolása a nézettel és a játékkal
+=======
+    private GameController controller;
+    private JLabel statusLabel;
+    private Runnable showVictoryScreen;
+
+    public GamePanel() {
+        this(null);
+    }
+    
+    public GamePanel(Runnable showVictoryScreen) {
+        this.showVictoryScreen = showVictoryScreen;
+        Játék játék = new Játék();
+        FungoriumView fungoriumView = new FungoriumView(játék.getFungorium());
+        this.controller = new GameController(fungoriumView, játék);
+>>>>>>> fdde37d0261b0411e39e250832773c43362ef950
 
         setLayout(new BorderLayout()); 
         
@@ -75,8 +91,11 @@ public class GamePanel extends JPanel {
 
     public void updateStatusLabel() {
         String név = controller.getJáték().getAktuálisJátékos().getName();
-
         statusLabel.setText("Aktuális játékos: " + név);
+
+        if (controller.getJáték().vége() && showVictoryScreen != null) {
+            showVictoryScreen.run();
+        }
     }
 
     public FungoriumView getFungoriumView() {

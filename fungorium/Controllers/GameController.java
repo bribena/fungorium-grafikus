@@ -47,10 +47,6 @@ public class GameController {
         }
         else {
             secondarySelectedTektonrész = (TektonrészView)fungoriumView.getComponentAt(p);
-
-            if (selectedTektonrész != null) {
-                selectedTektonrész.toggleSelected();
-            }
         }
     }
 
@@ -75,6 +71,10 @@ public class GameController {
         if (selectedTektonrész != null) {
             selectedTektonrész.toggleSelected();
             selectedTektonrész = null;
+        }
+        if (secondarySelectedTektonrész != null) {
+            secondarySelectedTektonrész = null;
+            secondarySelect = false;
         }
     }
 
