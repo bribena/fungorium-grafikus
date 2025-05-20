@@ -1,12 +1,15 @@
 package fungorium.Menu;
 
+import fungorium.Menu.MenuComponents.MainMenuButton;
 import fungorium.Models.Játék;
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -14,21 +17,35 @@ import javax.swing.JPanel;
 
 public class VictoryScreenView extends JPanel {
     public VictoryScreenView(Játék játék, Runnable visszaFőmenü) {
-        JLabel gombaszLabel = new JLabel("Gombász nyertes: " + játék.getWinnerGombasz());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setAlignmentX(CENTER_ALIGNMENT);
+
+        // Felül: "Győztesek" cím
+        JLabel headerLabel = new JLabel("Győztesek", JLabel.CENTER);
+        headerLabel.setFont(new Font("SansSerif", Font.BOLD, 26));
+        headerLabel.setAlignmentX(CENTER_ALIGNMENT);
+        add(headerLabel);
+
+        add(Box.createRigidArea(new Dimension(0, 20))); // térköz a cím és a nevek között
+
+        // Panel a két győztesnek vízszintesen egymás mellett
+        JPanel winnersPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
+        winnersPanel.setAlignmentX(CENTER_ALIGNMENT);
+
+        JLabel gombaszLabel = new JLabel(játék.getWinnerGombasz());
         gombaszLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-        add(gombaszLabel);
+        winnersPanel.add(gombaszLabel);
 
-        JLabel rovaraszLabel = new JLabel("Rovarász nyertes: " + játék.getWinnerRovarasz());
+        JLabel rovaraszLabel = new JLabel(játék.getWinnerRovarasz());
         rovaraszLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-        add(rovaraszLabel);
+        winnersPanel.add(rovaraszLabel);
 
-        JButton backBtn = new JButton("Főmenü");
-        backBtn.setPreferredSize(new Dimension(120, 40));
-        backBtn.setFont(new Font("SansSerif", Font.PLAIN, 18));
-        backBtn.setBackground(Color.BLACK);
-        backBtn.setForeground(Color.WHITE);
-        backBtn.setFocusPainted(false);
-        
+        add(winnersPanel);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
+
+        JButton backBtn = new MainMenuButton("Főmenü", new Dimension(120, 40));
         backBtn.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
             @Override
             public void paint(Graphics g, JComponent c) {
@@ -47,9 +64,9 @@ public class VictoryScreenView extends JPanel {
                 g2.dispose();
             }
         });
-
         backBtn.addActionListener(e -> visszaFőmenü.run());
 
-        add(backBtn);
+        buttonPanel.add(backBtn);
+        add(buttonPanel);
     }
 }
