@@ -50,6 +50,8 @@ public class GamePanel extends JPanel {
         fungoriumView.addKeyListener(new RovarászSpóraEvésKeyAdapter(controller));
         fungoriumView.addKeyListener(new RovarászVágásKeyAdapter(controller));
 
+        fungoriumView.addKeyListener(new KörVégeKeyAdapter(controller));
+
         fungoriumView.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {

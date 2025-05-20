@@ -72,8 +72,10 @@ public class GameController {
      * A tektonrész már nem "aktív", ne legyen kiválasztva.
      */
     public void deselect() {
-        selectedTektonrész.toggleSelected();
-        selectedTektonrész = null;
+        if (selectedTektonrész != null) {
+            selectedTektonrész.toggleSelected();
+            selectedTektonrész = null;
+        }
     }
 
     /**
