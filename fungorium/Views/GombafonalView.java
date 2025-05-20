@@ -6,12 +6,13 @@ import java.awt.Graphics;
 import fungorium.Models.Entitás;
 import fungorium.Models.Gombafonal;
 
+//gombafonal nézete, az entitás nézetéből származik
 public class GombafonalView extends EntitásView {
     private Gombafonal fonal;
 
     public GombafonalView(Gombafonal fonal) {
         this.fonal = fonal;
-    }
+    } //konstruktor
 
     @Override
     public boolean isValid() {
@@ -23,6 +24,7 @@ public class GombafonalView extends EntitásView {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        //aszerint, hogy milyen fajú a gombafonal, más színűek
         switch (fonal.getFaj()) {
             case Amanita:
                 g.setColor(Color.YELLOW);
