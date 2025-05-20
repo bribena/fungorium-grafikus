@@ -135,9 +135,9 @@ public class Gombafonal implements Entitás {
             szakadt = 0;
         }
         if (!érvényesE()) {
-            for (int i = 0; i < 4; ++i) {
+            /*for (int i = 0; i < 4; ++i) {
                 szakít(i);
-            }
+            }*/
             return false;
         }
         return true;
@@ -146,11 +146,13 @@ public class Gombafonal implements Entitás {
     public boolean gombafonalatNöveszt(Tektonrész honnan, int irány, Fungorium fungorium) {
         Gombatest t = getÉrvényesNövesztőGombatest();
         if (t == null || !honnan.tartalmaz(this)) {
+            System.out.println("Nincs ervenyes gombatest");
             return false;
         }
 
         Tektonrész hova = fungorium.getTektonrészSzomszédok(honnan)[irány];
         if (hova.getTektonID() == -1) {
+            System.out.println("Nincs ervenyes tekton ebben az iranyban");
             return false;
         }
 
@@ -167,9 +169,11 @@ public class Gombafonal implements Entitás {
 
         Gombafonal fonal = new Gombafonal(faj);
         if (!hova.entitásHozzáadás(fonal)) {
+            System.out.println("Nem sikerult hozzaadni a tektonhoz");
             return false;
         }
 
+        t.fonalatNöveszt();
         összekapcsolás(fonal, irány);
 
         if (spórás) {

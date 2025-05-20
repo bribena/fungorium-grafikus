@@ -123,7 +123,6 @@ public abstract class Tektonrész {
     public void frissítés() {
         for (int i = 0; i < entitások.size(); i++) {
             if (!entitások.get(i).frissítés()) {
-                System.out.println(entitások.get(i).toString());
                 entitások.remove(i);
                 --i;
             }

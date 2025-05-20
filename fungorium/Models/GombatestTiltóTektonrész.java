@@ -6,7 +6,11 @@ public class GombatestTiltóTektonrész extends Tektonrész {
         super(t);
         for (Entitás e : entitások) {
             if (e instanceof Gombatest) {
-                ((Gombatest)e).passzívBeállítás(true);
+                Gombatest test = (Gombatest)e;
+                if (!test.isKezdő())
+                {
+                    ((Gombatest)e).passzívBeállítás(true);
+                }
             }
         }
     }
