@@ -316,6 +316,13 @@ public class Fungorium {
             ret[2][i++] = getTektonrész(x - 2, y + dy);
             ret[2][i++] = getTektonrész(x + 2, y + dy);
         }
+        for (int k = 1; k < ret.length; ++k) {
+            for (int j = 0; j < ret[k].length; ++j) {
+                if (ret[k][j].getTektonID() != ret[0][0].getTektonID()) {
+                    ret[k][j] = new TöbbfonalasTektonrész();
+                }
+            }
+        }
 
         return ret;
     }

@@ -24,6 +24,7 @@ public class Játék {
         return fungorium;
     }
 
+    /** TODO: CSINÁLD MEG */
     public void léptet() {
         if (vége()) {
             return;
