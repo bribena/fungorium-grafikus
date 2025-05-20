@@ -61,7 +61,7 @@ public class Gombafonal implements Entitás {
 
     @Override
     public boolean érvényesE() {
-        return szakadt > 2;
+        return szakadt < 2;
     }
 
     public void specBeállítás(boolean spec) {

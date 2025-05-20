@@ -2,7 +2,6 @@ package fungorium.Controllers;
 
 import fungorium.Models.Játék;
 import fungorium.Views.*;
-
 import java.awt.Point;
 
 public class GameController {
