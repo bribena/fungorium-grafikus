@@ -334,6 +334,7 @@ public class Fungorium {
     /** Visszaadja, hogy milyen tektonokkal szomszédos egy adott tekton, ID-k alapján */
     public Set<Integer> getElsőfokúTektonSzomszédosságok(int tektonID) {
         HashSet<Integer> ret = new HashSet<>();
+        ret.add(tektonID);
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 if (tektonrészek[x][y].getTektonID() == tektonID) {
@@ -352,7 +353,7 @@ public class Fungorium {
         Set<Integer> elsőfokú = getElsőfokúTektonSzomszédosságok(tektonID);
         Set<Integer> ret = new HashSet<>();
         ret.addAll(elsőfokú);
-        for (Integer i : ret) {
+        for (Integer i : elsőfokú) {
             ret.addAll(getElsőfokúTektonSzomszédosságok(i));
         }
         return ret;

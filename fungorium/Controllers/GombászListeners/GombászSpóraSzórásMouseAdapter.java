@@ -60,7 +60,6 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
                 }
             }
             controller.update();
-            controller.toggleSecondarySelect();
             return;
         }
     }
@@ -68,7 +67,7 @@ public class GombászSpóraSzórásMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         Játékos j = controller.getJáték().getAktuálisJátékos();
-        if (!controller.getSecondarySelect() || !(j instanceof Gombász) || controller.getJáték().vége() || controller.getJáték().kezdő()) {
+        if (controller.getSelectedTektonrészView() == null || !controller.getSecondarySelect() || !(j instanceof Gombász) || controller.getJáték().vége() || controller.getJáték().kezdő()) {
             return;
         }
         
