@@ -16,8 +16,14 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
     private GameController controller;
     private JLabel statusLabel;
+    private Runnable showVictoryScreen;
 
     public GamePanel() {
+        this(null);
+    }
+    
+    public GamePanel(Runnable showVictoryScreen) {
+        this.showVictoryScreen = showVictoryScreen;
         Játék játék = new Játék();
         FungoriumView fungoriumView = new FungoriumView(játék.getFungorium());
         this.controller = new GameController(fungoriumView, játék);
@@ -74,8 +80,11 @@ public class GamePanel extends JPanel {
 
     public void updateStatusLabel() {
         String név = controller.getJáték().getAktuálisJátékos().getName();
-
         statusLabel.setText("Aktuális játékos: " + név);
+
+        if (controller.getJáték().vége() && showVictoryScreen != null) {
+            showVictoryScreen.run();
+        }
     }
 
     public FungoriumView getFungoriumView() {

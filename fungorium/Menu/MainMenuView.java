@@ -7,6 +7,7 @@ import javax.swing.*;
 
 public class MainMenuView extends JFrame {
     private GamePanel gamePanel = new GamePanel();
+    private JPanel mainMenuPanel;
     public MainMenuView(String title) {
         super(title);
         // elhelyezkedés, méret beállítása
@@ -19,6 +20,18 @@ public class MainMenuView extends JFrame {
 
         // Gombméret
         Dimension buttonSize = new Dimension(170, 40);
+
+        gamePanel = new GamePanel(() -> {
+            // Játék vége -> győztes képernyő megjelenítése
+            VictoryScreenView victoryScreen = new VictoryScreenView(gamePanel.getController().getJáték(), () -> {
+                setContentPane(MainMenuView.this.getContentPane()); // vissza főmenübe
+                revalidate();
+                repaint();
+            });
+            setContentPane(victoryScreen);
+            revalidate();
+            repaint();
+        });
 
         // Játékosok gomb
         JButton playerBtn = new MainMenuButton("Játékosok", buttonSize);
@@ -42,12 +55,23 @@ public class MainMenuView extends JFrame {
             gamePanel.getFungoriumView().requestFocusInWindow();
         });
 
-        // Hozzáadás (tetejéről indulva)
+        /*// Hozzáadás (tetejéről indulva)
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(titleLabel);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(playerBtn);
         add(Box.createRigidArea(new Dimension(0, 10)));
-        add(startBtn);
+        add(startBtn);*/
+        mainMenuPanel = new JPanel();
+        mainMenuPanel.setLayout(new BoxLayout(mainMenuPanel, BoxLayout.Y_AXIS));
+        getContentPane().setLayout(new BorderLayout()); // így középre tehető a mainMenuPanel
+        getContentPane().add(mainMenuPanel, BorderLayout.CENTER);
+
+        mainMenuPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainMenuPanel.add(titleLabel);
+        mainMenuPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainMenuPanel.add(playerBtn);
+        mainMenuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainMenuPanel.add(startBtn);
     }
 }
