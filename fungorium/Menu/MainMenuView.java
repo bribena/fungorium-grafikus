@@ -1,10 +1,9 @@
 package fungorium.Menu;
 
-import java.awt.*;
-import javax.swing.*;
-
 import fungorium.Menu.MenuComponents.MainMenuButton;
 import fungorium.Views.GamePanel;
+import java.awt.*;
+import javax.swing.*;
 
 public class MainMenuView extends JFrame {
     private GamePanel gamePanel = new GamePanel();
@@ -37,7 +36,10 @@ public class MainMenuView extends JFrame {
         gamePanel.setVisible(false);
         startBtn.addActionListener(e -> {
             setContentPane(gamePanel);
+            revalidate();
+            repaint();
             gamePanel.setVisible(true);
+            gamePanel.getFungoriumView().requestFocusInWindow();
         });
 
         // Hozzáadás (tetejéről indulva)
