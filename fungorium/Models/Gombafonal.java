@@ -13,7 +13,7 @@ public class Gombafonal implements Entitás {
             gombatestSzám.put(f, 0);
         }
     }
-    public static int getTápérték(Gombafaj faj) {
+    public static int getGombatestSzám(Gombafaj faj) {
         return gombatestSzám.get(faj);
     }
 
