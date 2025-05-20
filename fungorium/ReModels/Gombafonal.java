@@ -24,7 +24,7 @@ public class Gombafonal implements Entitás {
      * [2]: le
      * [3]: balra
      */
-    private Gombafonal[] kapcsolódóFonalak = new Gombafonal[4];
+    private Gombafonal[] kapcsolódóFonalak = new Gombafonal[] { null, null, null, null };
     private Gombatest test = null;
     private Gombafaj faj;
     private int szakadt = 0;
@@ -37,6 +37,10 @@ public class Gombafonal implements Entitás {
     public void összekapcsolás(Gombafonal szomszéd, int irány) {
         kapcsolódóFonalak[irány] = szomszéd;
         szomszéd.kapcsolódóFonalak[(irány + 2) % 4] = this;
+    }
+
+    public Gombatest getKapcsolódóTest() {
+        return test;
     }
 
     public void szakít(int irany) {
@@ -136,27 +140,21 @@ public class Gombafonal implements Entitás {
         return true;
     }
 
-    public boolean gombafonalatNöveszt(Tektonrész honnan, Tektonrész hova, Fungorium fungorium) {
+    public boolean gombafonalatNöveszt(Tektonrész honnan, int irány, Fungorium fungorium) {
         Gombatest t = getÉrvényesNövesztőGombatest();
         if (t == null || !honnan.tartalmaz(this)) {
             return false;
         }
 
-        Tektonrész[] szomsz = fungorium.getTektonrészSzomszédok(honnan);
-        int i = 0;
-        for (i = 0; i < 4; ++i) {
-            if (szomsz[i] == hova) {
-                break;
-            }
-        }
-        if (i == 4) {
+        Tektonrész hova = fungorium.getTektonrészSzomszédok(honnan)[irány];
+        if (hova.getTektonID() == -1) {
             return false;
         }
 
         boolean spórás = false;
         for (Entitás e : hova.getEntitások()) {
             if (e instanceof Gombafonal && ((Gombafonal)e).faj == faj) {
-                összekapcsolás((Gombafonal)e, i);
+                összekapcsolás((Gombafonal)e, irány);
                 return true;
             }
             if (e instanceof Spóra && ((Spóra)e).getFaj() == faj) {
@@ -169,13 +167,13 @@ public class Gombafonal implements Entitás {
             return false;
         }
 
-        összekapcsolás(fonal, i);
+        összekapcsolás(fonal, irány);
 
         if (spórás) {
             Gombafonal fonal2 = new Gombafonal(faj);
-            Tektonrész tr = fungorium.getTektonrészSzomszédok(hova)[i];
+            Tektonrész tr = fungorium.getTektonrészSzomszédok(hova)[irány];
             if (tr.getTektonID() != -1 && tr.entitásHozzáadás(fonal2)) {
-                fonal.összekapcsolás(fonal2, i);
+                fonal.összekapcsolás(fonal2, irány);
             }
         }
 

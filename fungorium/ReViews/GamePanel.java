@@ -1,6 +1,10 @@
 package fungorium.ReViews;
 
 import fungorium.ReControllers.*;
+import fungorium.ReControllers.GombászListeners.*;
+import fungorium.ReControllers.RovarászListeners.*;
+import fungorium.ReModels.Játék;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -11,11 +15,12 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
     public GameController controller;
     private JLabel statusLabel;
-    private FungoriumView fungoriumView;
 
-    public GamePanel(FungoriumView fungoriumView, GameController controller) {
-        this.fungoriumView = fungoriumView;
-        this.controller = controller;
+    public GamePanel() {
+        Játék játék = new Játék();
+        FungoriumView fungoriumView = new FungoriumView(játék.getFungorium());
+        this.controller = new GameController(fungoriumView, játék);
+
         setLayout(new BorderLayout()); 
         
         add(fungoriumView, BorderLayout.CENTER);
@@ -28,11 +33,22 @@ public class GamePanel extends JPanel {
 
         updateStatusLabel();
 
-        fungoriumView.addMouseListener(controller.getFungoriumMouseAdapter());
-        fungoriumView.addKeyListener(controller.getGombászKeyAdapter());
-        fungoriumView.addKeyListener(controller.getRovarászKeyAdapter());
+        fungoriumView.addMouseListener(new FungoriumSelectionMouseAdapter(controller));
 
-        fungoriumView.setFocusable(true);
+        fungoriumView.addMouseListener(new GombászSpóraSzórásMouseAdapter(controller));
+
+        fungoriumView.addKeyListener(new GombászFonalNövesztésKeyAdapter(controller));
+        fungoriumView.addKeyListener(new GombászSpóraSzórásKeyAdapter(controller));
+        fungoriumView.addKeyListener(new GombászTestFejlesztésKeyAdapter(controller));
+        fungoriumView.addKeyListener(new GombászTestNövesztésKeyAdapter(controller));
+
+        fungoriumView.addMouseListener(new RovarászVágásMouseAdapter(controller));
+        
+        fungoriumView.addKeyListener(new RovarászElhelyezésKeyAdapter(controller));
+        fungoriumView.addKeyListener(new RovarászMozgatásKeyAdapter(controller));
+        fungoriumView.addKeyListener(new RovarászSpóraEvésKeyAdapter(controller));
+        fungoriumView.addKeyListener(new RovarászVágásKeyAdapter(controller));
+
         fungoriumView.requestFocusInWindow();
     }
 
@@ -41,15 +57,9 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
     }
 
-    public FungoriumView getFungoriumView() {
-        return fungoriumView;
-    }
-
     public void updateStatusLabel() {
-        PlayerManager pm = controller.getPlayerManager();
-        int index = pm.getAktuálisJátékosIndex(); // aki most jön
-        String név = pm.getName(index);
+        String név = controller.getJáték().getAktuálisJátékos().getName();
 
-        statusLabel.setText("Következő: " + név);
+        statusLabel.setText("Aktuális játékos: " + név);
     }
 }

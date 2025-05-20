@@ -3,10 +3,10 @@ package fungorium.ReControllers;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-class FungoriumMouseAdapter extends MouseAdapter {
+public class FungoriumSelectionMouseAdapter extends MouseAdapter {
     private GameController controller;
 
-    public FungoriumMouseAdapter(GameController controller) {
+    public FungoriumSelectionMouseAdapter(GameController controller) {
         this.controller = controller;
     }
 

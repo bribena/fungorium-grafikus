@@ -227,7 +227,7 @@ public class Fungorium {
     /**
      * Végrehajtja a törést.
      */
-    public void törés() {
+    private void törés() {
         // x1, x2, y1, y2
         int[] v = new int[4];
         for (int i = 0; i < 4; ++i) {
@@ -350,6 +350,7 @@ public class Fungorium {
         }
         return ret;
     }
+
     public List<Spóra> getTektonSpóraszám(int tektonID, Gombafaj faj) {
         List<Spóra> ret = new ArrayList<>();
         for (int x = 0; x < width; ++x) {
@@ -364,5 +365,47 @@ public class Fungorium {
             }
         }
         return ret;
+    }
+    public void lassúRovarokMozgathatása() {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                for (Entitás e : tektonrészek[x][y].getEntitások()) {
+                    if (e instanceof Rovar) {
+                        Rovar r = (Rovar)e;
+                        r.mozgatottFelülírás(!r.lassú());
+                    }
+                }
+            }
+        }
+    }
+    public boolean vanMozgathatóEntitás(Rovarfaj faj) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                for (Entitás e : tektonrészek[x][y].getEntitások()) {
+                    if (e instanceof Rovar) {
+                        Rovar r = (Rovar)e;
+                        if (r.getFaj() == faj && !r.mozgatott()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean vanMozgathatóEntitás(Gombafaj faj) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                for (Entitás e : tektonrészek[x][y].getEntitások()) {
+                    if (e instanceof Gombatest) {
+                        Gombatest t = (Gombatest)e;
+                        if (t.getFaj() == faj && !t.mozgatott()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

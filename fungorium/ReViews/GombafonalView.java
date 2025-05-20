@@ -3,6 +3,7 @@ package fungorium.ReViews;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import fungorium.ReModels.Entitás;
 import fungorium.ReModels.Gombafonal;
 
 public class GombafonalView extends EntitásView {
@@ -62,5 +63,10 @@ public class GombafonalView extends EntitásView {
         if (fonal.getKapcsolódóFonalak()[1] != null) {
             g.fillRect(getWidth() / 2 + 1, getHeight() / 2, getWidth() / 2, 1);
         }
+    }
+
+    @Override
+    public boolean contains(Entitás e) {
+        return fonal.equals(e);
     }
 }

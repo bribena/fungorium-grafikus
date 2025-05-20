@@ -56,4 +56,9 @@ public class SpóraView extends EntitásView {
         g.drawOval((getWidth() - 12) / 4, (getHeight() - 12) / 4 + (getHeight()) / 2, 10, 10);
         g.drawOval((getWidth() - 8) / 4 + (getWidth()) / 2, (getHeight() - 8) / 4 + (getHeight()) / 2, 8, 8);
     }
+
+    @Override
+    public boolean contains(Entitás e) {
+        return spóra.equals(e);
+    }
 }
