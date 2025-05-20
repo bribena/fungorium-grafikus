@@ -4,10 +4,10 @@ import fungorium.ReModels.*;
 import fungorium.ReViews.*;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 class FungoriumGombászKeyAdapter extends KeyAdapter {
     private GameController controller;
@@ -77,7 +77,14 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         }
 
         // Kör vége
-        controller.getPlayerManager().következőJátékos();
+        int prevPlayerIndex = controller.getPlayerManager().getAktuálisJátékosIndex();
+        // ha utolsó játékos lépett, kövi kör jön
+        if (prevPlayerIndex == 7) {
+            gameState.kovetkezoKor();
+        } else {
+            // amúgy kövi játékos
+            controller.getPlayerManager().következőJátékos();
+        }
         controller.getGamePanel().updateStatusLabel();
     }
 
@@ -128,11 +135,17 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         selectedView.repaint();
 
         // Kör vége
-        controller.getPlayerManager().következőJátékos();
+        int prevPlayerIndex = controller.getPlayerManager().getAktuálisJátékosIndex();
+        // ha utolsó játékos lépett, kövi kör jön
+        if (prevPlayerIndex == 7) {
+            gameState.kovetkezoKor();
+        } else {
+            // amúgy kövi játékos
+            controller.getPlayerManager().következőJátékos();
+        }
         controller.getGamePanel().updateStatusLabel();
     }
 
-    // TODO NEM JÓ, mert szarul rajzol ki, tezstelésnél nézd meg
     private void gombafonalNövesztés(int irány) {
         // 0: fel, 1: jobb, 2: le, 3: bal
         TektonrészView selectedView = controller.getSelectedTektonrészView();
@@ -143,6 +156,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         int y = selectedView.y;
 
         Fungorium fungorium = controller.getPlayerManager().getFungorium();
+        Gombász player = (Gombász) controller.getPlayerManager().getAktuálisJátékos();
 
         // Szomszéd koordinátái
         int nx = x;
@@ -173,7 +187,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         // Megkeressük a gombafonalat a jelenlegi tektonrészen
         Gombafonal fonal = null;
         for (Entitás e : honnan.getEntitások()) {
-            if (e instanceof Gombafonal gf) {
+            if (e instanceof Gombafonal gf && gf.getFaj() == player.getKezeltFaj()) {
                 fonal = gf;
                 break;
             }
@@ -206,7 +220,14 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         selectedView.repaint();
 
         // Kör vége
-        controller.getPlayerManager().következőJátékos();
+        int prevPlayerIndex = controller.getPlayerManager().getAktuálisJátékosIndex();
+        // ha utolsó játékos lépett, kövi kör jön
+        if (prevPlayerIndex == 7) {
+            gameState.kovetkezoKor();
+        } else {
+            // amúgy kövi játékos
+            controller.getPlayerManager().következőJátékos();
+        }
         controller.getGamePanel().updateStatusLabel();
     }
 
@@ -257,7 +278,14 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
         selectedView.repaint();
 
         // Kör vége
-        controller.getPlayerManager().következőJátékos();
+        int prevPlayerIndex = controller.getPlayerManager().getAktuálisJátékosIndex();
+        // ha utolsó játékos lépett, kövi kör jön
+        if (prevPlayerIndex == 7) {
+            gameState.kovetkezoKor();
+        } else {
+            // amúgy kövi játékos
+            controller.getPlayerManager().következőJátékos();
+        }
         controller.getGamePanel().updateStatusLabel();
     }
 
@@ -265,7 +293,7 @@ class FungoriumGombászKeyAdapter extends KeyAdapter {
     public void keyReleased(KeyEvent e) {
         // ha nincs kijelölt tektonrész vagy nem gombász a játékos, return
         if (controller.getSelectedTektonrészView() == null
-                || !(controller.getPlayerManager().getAktuálisJátékos() instanceof Gombász)) {
+                || !(controller.getPlayerManager().getAktuálisJátékos() instanceof Gombász) || gameState.isVege()) {
             return;
         }
 

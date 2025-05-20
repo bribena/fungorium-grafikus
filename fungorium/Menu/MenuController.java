@@ -18,9 +18,8 @@ public class MenuController {
         this.controller = controller;
     }
 
-    public MenuController(JFrame frame, PlayerManager playerManager) {
+    public MenuController(JFrame frame) {
         this.frame = frame;
-        this.playerManager = playerManager;
         this.controller = null;
     }
 
@@ -43,8 +42,9 @@ public class MenuController {
     }
 
     public void startGame() {
+        playerManager = new PlayerManager();
         FungoriumView fungView = new FungoriumView(playerManager.getFungorium());
-        GameStateManager gameState = new GameStateManager(playerManager);
+        GameStateManager gameState = new GameStateManager(playerManager, this);
         GameController controller = new GameController(gameState, playerManager, fungView, null);
 
         GamePanel panel = new GamePanel(fungView, controller);  // ÁTADÁS
