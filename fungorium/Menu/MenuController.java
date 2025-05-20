@@ -1,10 +1,11 @@
 package fungorium.Menu;
 
-import fungorium.ReControllers.GameController;
-import fungorium.ReControllers.GameStateManager;
-import fungorium.ReControllers.PlayerManager;
-import fungorium.ReViews.FungoriumView;
-import fungorium.ReViews.GamePanel;
+import fungorium.Controllers.GameController;
+import fungorium.Controllers.GameStateManager;
+import fungorium.Controllers.PlayerManager;
+import fungorium.Views.FungoriumView;
+import fungorium.Views.GamePanel;
+
 import javax.swing.JFrame;
 
 public class MenuController {
