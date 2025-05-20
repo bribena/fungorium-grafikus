@@ -14,13 +14,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
-    private GameController controller;
-    private JLabel statusLabel;
+    private GameController controller; // A játék vezérlő objektuma, amely a logikát irányítja
+    private JLabel statusLabel; // Az aktuális játékos nevét mutató státuszcímke
 
     public GamePanel() {
-        Játék játék = new Játék();
-        FungoriumView fungoriumView = new FungoriumView(játék.getFungorium());
-        this.controller = new GameController(fungoriumView, játék);
+        Játék játék = new Játék(); // Új játék példány létrehozása
+        FungoriumView fungoriumView = new FungoriumView(játék.getFungorium()); // A fungórium megjelenítését szolgáló nézet
+        this.controller = new GameController(fungoriumView, játék); // A vezérlő összekapcsolása a nézettel és a játékkal
 
         setLayout(new BorderLayout()); 
         
@@ -32,8 +32,9 @@ public class GamePanel extends JPanel {
         statusLabel.setForeground(Color.BLACK);
         add(statusLabel, BorderLayout.SOUTH);
 
-        updateStatusLabel();
+        updateStatusLabel(); // A státusz címke frissítése az aktuális játékszemélyre vonatkozó adatokkal
 
+        // MouseListener hozzáadása a fungórium nézethez, a felhasználói interakciók kezeléséhez
         fungoriumView.addMouseListener(new FungoriumSelectionMouseAdapter(controller));
 
         fungoriumView.addMouseListener(new GombászSpóraSzórásMouseAdapter(controller));
