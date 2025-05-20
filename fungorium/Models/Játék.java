@@ -7,7 +7,6 @@ public class Játék {
     private int kör = 0;
     private int aktuálisJátékos = 0;
     private boolean utókör = false;
-    private boolean utókörVége = false;
     private List<Játékos> játékosok = new ArrayList<>();
     private Fungorium fungorium = new Fungorium();
 
@@ -32,8 +31,20 @@ public class Játék {
 
         aktuálisJátékos++;
 
-        if (aktuálisJátékos >= játékosok.size()) {
+        if (!utókör && aktuálisJátékos >= játékosok.size()) {
+            aktuálisJátékos = 4;
+            utókör = true;
+            fungorium.lassúRovarokMozgathatása();
+        }
+        if (utókör) {
+            while (!fungorium.vanMozgathatóEntitás(((Rovarász)getAktuálisJátékos()).getKezeltFaj()) 
+                && aktuálisJátékos < játékosok.size()) {
+                aktuálisJátékos++;
+            }
+        }
+        if (utókör && aktuálisJátékos >= játékosok.size()) {
             aktuálisJátékos = 0;
+            utókör = false;
             kör++;
             fungorium.körtLéptet(kör);
         }
@@ -48,7 +59,7 @@ public class Játék {
     }
 
     public Játékos getAktuálisJátékos() {
-        if (aktuálisJátékos > játékosok.size()) {
+        if (aktuálisJátékos >= játékosok.size()) {
             return játékosok.get(játékosok.size() - 1);
         }
         return játékosok.get(aktuálisJátékos);
