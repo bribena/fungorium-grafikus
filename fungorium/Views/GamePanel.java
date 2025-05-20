@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
-    public GameController controller;
+    private GameController controller;
     private JLabel statusLabel;
 
     public GamePanel() {
@@ -50,6 +50,10 @@ public class GamePanel extends JPanel {
         fungoriumView.addKeyListener(new RovarászVágásKeyAdapter(controller));
 
         fungoriumView.requestFocusInWindow();
+    }
+
+    public GameController getController() {
+        return controller;
     }
 
     @Override
