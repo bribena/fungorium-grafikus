@@ -8,9 +8,12 @@ import javax.swing.JPanel;
 import fungorium.Models.Fungorium;
 import fungorium.Models.Tektonrész;
 
+//fungorium, azaz a játéktér megjelenítése
 public class FungoriumView extends JPanel {
+    //fungorium a modellből
     private Fungorium fungorium;
 
+    //konstruktor, léterhoz egy alap pályát, összes tekton zökld, nincs rajtuk semmilyen entitás
     public FungoriumView(Fungorium f) {
         fungorium = f;
 
@@ -29,6 +32,7 @@ public class FungoriumView extends JPanel {
     //     return fungorium;
     // }
 
+    //egy adott (keresett) tektonrész nézetét visszaadja a fungoriumról
     public TektonrészView getTektonrészView(Tektonrész keresett) {
         for (int i = 0; i < getComponentCount(); ++i) {
             TektonrészView tv = (TektonrészView) getComponent(i);
@@ -39,6 +43,7 @@ public class FungoriumView extends JPanel {
         return null;
     }
 
+    //egy adott (keresett) tektonrész nézetét visszaadja a fungoriumról a koordinátái alapján
     public TektonrészView getTektonrészView(int x, int y) {
         if (x < 0 || x >= fungorium.getWidth() || y < 0
                 || y >= fungorium.getHeight()) {
