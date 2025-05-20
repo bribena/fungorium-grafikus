@@ -1,8 +1,5 @@
 package fungorium.Controllers.RovarászListeners;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 import fungorium.Controllers.GameController;
 import fungorium.Models.Entitás;
 import fungorium.Models.Fungorium;
@@ -14,6 +11,8 @@ import fungorium.Models.Tektonrész;
 import fungorium.Views.FungoriumView;
 import fungorium.Views.RovarView;
 import fungorium.Views.TektonrészView;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class RovarászMozgatásKeyAdapter extends KeyAdapter {
     private GameController controller;
@@ -35,6 +34,7 @@ public class RovarászMozgatásKeyAdapter extends KeyAdapter {
 
             Rovar r = (Rovar)e;
             if (r.getFaj() != faj || !r.mozog(selectedTektonrész, irány, fungorium)) {
+                System.out.println("Nem sikerult a rovar mozgatas");
                 continue;
             }
 
@@ -48,6 +48,8 @@ public class RovarászMozgatásKeyAdapter extends KeyAdapter {
                 selected.removeComponentContaining(r);
                 fungoriumView.getTektonrészView(sz).add(new RovarView(r));
             }
+
+            controller.update();
             return;
         }
     }

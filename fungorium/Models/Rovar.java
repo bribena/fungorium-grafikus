@@ -61,7 +61,7 @@ public class Rovar implements Entitás {
                 hatások[i]--;
             }
         }
-        mozgatott = !lassú();
+        mozgatott = lassú();
         return érvényesE();
     }
 
@@ -160,6 +160,7 @@ public class Rovar implements Entitás {
 
     public boolean mozog(Tektonrész honnan, int irány, Fungorium fungorium) {
         if (mozgatott) {
+            System.out.println("Mar mozgott ez a rovar");
             return false;
         }
 
@@ -174,6 +175,7 @@ public class Rovar implements Entitás {
             mozgatott = true;
             return true;
         }
+        System.out.println("Nem sikerult a tektonhoz hozzaadni a rovart");
         return false;
     }
 }

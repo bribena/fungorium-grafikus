@@ -1,8 +1,5 @@
 package fungorium.Controllers.GombászListeners;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 import fungorium.Controllers.GameController;
 import fungorium.Models.Entitás;
 import fungorium.Models.Gombafaj;
@@ -11,6 +8,8 @@ import fungorium.Models.Gombász;
 import fungorium.Models.Játékos;
 import fungorium.Models.Tektonrész;
 import fungorium.Views.TektonrészView;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GombászSpóraSzórásKeyAdapter extends KeyAdapter {
     private GameController controller;
@@ -22,6 +21,7 @@ public class GombászSpóraSzórásKeyAdapter extends KeyAdapter {
     private void spóraSzórás(Gombafaj kezeltFaj) {
         TektonrészView selected = controller.getSelectedTektonrészView();
         Tektonrész selectedTektonrész = selected.getTektonrész();
+
         for (Entitás e : selectedTektonrész.getEntitások()) {
             if (!(e instanceof Gombatest)) {
                 continue;

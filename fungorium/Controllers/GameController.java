@@ -62,6 +62,7 @@ public class GameController {
         if (tw == null) {
             return;
         }
+
         selectedTektonrész.toggleSelected();
         selectedTektonrész = tw;
         selectedTektonrész.toggleSelected();
